@@ -61,3 +61,6 @@ artifacts/
 # SQLite
 prisma/dev.db
 prisma/dev.db-journal
+
+# Specific files
+CLAUDE.md
