@@ -1,0 +1,63 @@
+# dependencies
+node_modules
+.pnp
+.pnp.js
+.pnpm-debug.log*
+
+# testing
+coverage
+
+# next.js
+.next/
+out/
+build/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# agents related files
+.gemini/
+.antigravity/
+agents.md
+knowledge/
+brain/
+scratch/
+implementation_plan.md
+task.md
+walkthrough.md
+research_notes.md
+analysis_results.md
+experiment_results.md
+*.md.tmp
+*agent-rules*
+.system_generated/
+overview.txt
+logs/
+artifacts/
+*.webp
+*.png
+*.jpg
+*.jpeg
+*.mp4
+*.mov
+
+# SQLite
+prisma/dev.db
+prisma/dev.db-journal

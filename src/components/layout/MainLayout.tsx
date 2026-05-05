@@ -1,0 +1,141 @@
+'use client';
+
+import { ReactNode, useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Calculator, 
+  Search, 
+  Bookmark, 
+  History, 
+  LayoutDashboard, 
+  ChevronRight,
+  Menu,
+  X,
+  Compass,
+  Zap,
+  Info,
+  Layers,
+  Sparkles,
+  Hash
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+interface MainLayoutProps {
+  children: ReactNode;
+}
+
+const navLinks = [
+  { name: 'Home', href: '/', icon: LayoutDashboard },
+  { name: 'Library', href: '/formulas', icon: Compass },
+  { name: 'Kids Corner', href: '/kids', icon: Sparkles },
+  { name: 'Roman Numerals', href: '/roman-numerals', icon: Hash },
+  { name: 'Units & Measures', href: '/units', icon: Layers },
+  { name: 'My Saved', href: '/bookmarks', icon: Bookmark },
+  { name: 'Recent', href: '/recent', icon: History },
+];
+
+export default function MainLayout({ children }: MainLayoutProps) {
+  const pathname = usePathname();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  return (
+    <div className="flex min-h-screen bg-[#0a0c14] text-slate-300 font-sans selection:bg-primary/20">
+      {/* Sidebar */}
+      <aside 
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-white/5 bg-[#0a0c14]/80 backdrop-blur-3xl",
+          isSidebarOpen ? "w-72" : "w-24"
+        )}
+      >
+        <div className="p-8 flex items-center justify-between">
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="w-10 h-10 bg-gradient-to-tr from-primary via-secondary to-accent rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">
+              <Calculator className="text-white w-6 h-6" />
+            </div>
+            {isSidebarOpen && (
+              <motion.span 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-xl font-heading font-black tracking-tighter text-white"
+              >
+                MATH<span className="text-primary">VERSE</span>
+              </motion.span>
+            )}
+          </Link>
+        </div>
+
+        <nav className="flex-grow px-4 py-8 space-y-2">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={cn(
+                  "flex items-center space-x-4 px-4 py-4 rounded-2xl transition-all duration-300 group relative",
+                  isActive 
+                    ? "bg-white/5 text-white" 
+                    : "text-slate-500 hover:text-white hover:bg-white/5"
+                )}
+              >
+                <Icon className={cn("w-6 h-6 shrink-0", isActive ? "text-primary" : "group-hover:text-primary transition-colors")} />
+                {isSidebarOpen && (
+                  <motion.span 
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="font-bold text-sm tracking-wide"
+                  >
+                    {link.name}
+                  </motion.span>
+                )}
+                {isActive && (
+                  <motion.div 
+                    layoutId="active-nav"
+                    className="absolute left-0 w-1 h-6 bg-primary rounded-r-full"
+                  />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="p-6">
+          <button 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="w-full flex items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all group"
+          >
+            {isSidebarOpen ? <X className="w-5 h-5 text-slate-500 group-hover:text-white" /> : <Menu className="w-5 h-5 text-slate-500 group-hover:text-white" />}
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main 
+        className={cn(
+          "flex-grow transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] relative",
+          isSidebarOpen ? "ml-72" : "ml-24"
+        )}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={pathname}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+            className="max-w-7xl mx-auto p-12"
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
+      </main>
+
+      {/* Background Orbs */}
+      <div className="fixed top-[-10%] right-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] -z-10 animate-pulse-slow" />
+      <div className="fixed bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[150px] -z-10 animate-pulse-slow" />
+    </div>
+  );
+}
