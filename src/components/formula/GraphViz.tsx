@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -22,6 +23,12 @@ interface GraphVizProps {
 }
 
 export default function GraphViz({ formula }: GraphVizProps) {
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  useEffect(() => {
+    setHasHydrated(true);
+  }, []);
+
   const generateData = () => {
     const data = [];
     switch (formula.slug) {
@@ -53,8 +60,9 @@ export default function GraphViz({ formula }: GraphVizProps) {
   return (
     <div className="w-full">
       <div className="h-[350px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
+        {hasHydrated ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="colorY" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
@@ -104,7 +112,12 @@ export default function GraphViz({ formula }: GraphVizProps) {
             />
           </AreaChart>
         </ResponsiveContainer>
-      </div>
+      ) : (
+        <div className="w-full h-[350px] bg-black/20 rounded-[40px] animate-pulse flex items-center justify-center border border-white/5">
+          <div className="w-12 h-12 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+        </div>
+      )}
+    </div>
 
       <div className="mt-10 flex items-center justify-center space-x-12 text-[10px] text-slate-500 font-black uppercase tracking-[0.4em]">
         <div className="flex items-center">

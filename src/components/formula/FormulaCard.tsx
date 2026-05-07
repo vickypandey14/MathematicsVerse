@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bookmark, Eye, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -23,7 +24,13 @@ interface FormulaCardProps {
 
 export default function FormulaCard({ formula, index }: FormulaCardProps) {
   const { toggleBookmark, isBookmarked } = useUserStore();
-  const bookmarked = isBookmarked(formula.id);
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  useEffect(() => {
+    setHasHydrated(true);
+  }, []);
+
+  const bookmarked = hasHydrated ? isBookmarked(formula.id) : false;
 
   return (
     <motion.div
