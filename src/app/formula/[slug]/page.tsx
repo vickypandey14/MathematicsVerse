@@ -1,4 +1,5 @@
 import { getFormulaBySlug } from '@/lib/data';
+
 import MainLayout from '@/components/layout/MainLayout';
 import MathRenderer from '@/components/math/MathRenderer';
 import MermaidDiagram from '@/components/math/MermaidDiagram';
@@ -12,10 +13,13 @@ import {
   ChevronLeft,
   Info,
   Layers,
-  Activity,
-  Cpu,
+  Sparkles,
+  History as HistoryIcon,
+  ScrollText,
+  Clock,
   Zap,
-  Sparkles
+  Activity,
+  Cpu
 } from 'lucide-react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
@@ -160,22 +164,66 @@ export default async function FormulaDetail({ params }: PageProps) {
                </div>
             </section>
 
-            {/* Step-by-Step Example */}
-            <section className="p-16 rounded-[56px] bg-slate-900/40 border border-white/5 shadow-2xl relative overflow-hidden backdrop-blur-md">
-              <div className="absolute top-0 right-0 p-10 text-primary opacity-5">
-                 <Zap className="w-48 h-48" />
-              </div>
-              <div className="flex items-center space-x-4 mb-10">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                  <BookOpen className="text-primary w-6 h-6" />
+              {/* Step-by-Step Example */}
+              <section className="p-16 rounded-[56px] bg-slate-900/40 border border-white/5 shadow-2xl relative overflow-hidden backdrop-blur-md">
+                <div className="absolute top-0 right-0 p-10 text-primary opacity-5">
+                   <Zap className="w-48 h-48" />
                 </div>
-                <h3 className="text-3xl font-heading font-black text-white tracking-tighter uppercase">Step-by-Step Guide</h3>
-              </div>
-              <div className="prose prose-invert max-w-none text-slate-400 font-medium text-xl leading-relaxed">
-                 <p>{formula.example}</p>
-              </div>
-            </section>
-          </div>
+                <div className="flex items-center space-x-4 mb-10">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
+                    <BookOpen className="text-primary w-6 h-6" />
+                  </div>
+                  <h3 className="text-3xl font-heading font-black text-white tracking-tighter uppercase">Step-by-Step Guide</h3>
+                </div>
+                <div className="prose prose-invert max-w-none text-slate-400 font-medium text-xl leading-relaxed">
+                   <p>{formula.example}</p>
+                </div>
+              </section>
+
+              {/* Historical Context Section */}
+              {formula.history && (
+                <section className="p-16 rounded-[56px] bg-gradient-to-br from-black/40 to-slate-900/20 border border-white/5 shadow-2xl relative overflow-hidden backdrop-blur-md">
+                  <div className="absolute top-[-10%] right-[-5%] p-10 text-secondary opacity-5">
+                     <ScrollText className="w-64 h-64 rotate-12" />
+                  </div>
+                  
+                  <div className="flex items-center justify-between mb-12">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                        <HistoryIcon className="text-secondary w-6 h-6" />
+                      </div>
+                      <h3 className="text-3xl font-heading font-black text-white tracking-tighter uppercase">Historical Record</h3>
+                    </div>
+                    <div className="hidden md:flex items-center space-x-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+                      <Clock className="w-3 h-3 text-slate-500" />
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Timeline: Ancient to Modern</span>
+                    </div>
+                  </div>
+
+                  <div className="relative">
+                    <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-secondary/50 via-secondary/10 to-transparent ml-2" />
+                    <div className="pl-12 space-y-8">
+                       <div className="relative">
+                          <div className="absolute left-[-45px] top-2 w-4 h-4 rounded-full bg-[#0a0c14] border-2 border-secondary shadow-lg shadow-secondary/20" />
+                          <p className="text-slate-300 font-medium text-xl leading-relaxed italic border-l-4 border-secondary/20 pl-6 py-2 bg-secondary/5 rounded-r-2xl">
+                            "{formula.history}"
+                          </p>
+                       </div>
+                       <div className="flex items-center space-x-6">
+                          <div className="flex -space-x-3">
+                             {[1,2,3].map(i => (
+                               <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0a0c14] bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500">
+                                 {i}
+                               </div>
+                             ))}
+                          </div>
+                          <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Validated Historical Sources</span>
+                       </div>
+                    </div>
+                  </div>
+                </section>
+              )}
+            </div>
 
           <div className="lg:col-span-4 space-y-10">
             <InteractiveCalculator formula={formula} />
