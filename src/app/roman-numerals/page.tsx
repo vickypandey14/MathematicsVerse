@@ -197,29 +197,31 @@ export default function RomanNumeralsPage() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-12"
             >
-              {/* Tool Selector (Sub-tabs) */}
-              <div className="flex space-x-4 border-b border-white/5 pb-6">
-                <button 
-                  onClick={() => setActiveTool('number')}
-                  className={cn(
-                    "text-xs font-black uppercase tracking-[0.2em] transition-all pb-2 border-b-2",
-                    activeTool === 'number' ? "text-primary border-primary" : "text-slate-600 border-transparent hover:text-slate-400"
-                  )}
-                >
-                  Number Converter
-                </button>
-                <button 
-                  onClick={() => setActiveTool('sentence')}
-                  className={cn(
-                    "text-xs font-black uppercase tracking-[0.2em] transition-all pb-2 border-b-2",
-                    activeTool === 'sentence' ? "text-secondary border-secondary" : "text-slate-600 border-transparent hover:text-slate-400"
-                  )}
-                >
-                  Sentence Converter
-                </button>
+              {/* Tool Selector (Segmented Control) */}
+              <div className="flex justify-start mb-8">
+                <div className="inline-flex bg-white/5 p-1.5 rounded-[24px] border border-white/10 backdrop-blur-md">
+                  <button 
+                    onClick={() => setActiveTool('number')}
+                    className={cn(
+                      "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
+                      activeTool === 'number' ? "bg-white text-black shadow-xl scale-100" : "text-slate-400 hover:text-white scale-95 opacity-60 hover:opacity-100"
+                    )}
+                  >
+                    Number Converter
+                  </button>
+                  <button 
+                    onClick={() => setActiveTool('sentence')}
+                    className={cn(
+                      "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
+                      activeTool === 'sentence' ? "bg-white text-black shadow-xl scale-100" : "text-slate-400 hover:text-white scale-95 opacity-60 hover:opacity-100"
+                    )}
+                  >
+                    Sentence Converter
+                  </button>
+                </div>
               </div>
 
-              <div className="bg-slate-900/20 rounded-[48px] p-2 border border-white/5">
+              <div className="">
                 {activeTool === 'number' ? (
                   <ChronosCalculator />
                 ) : (

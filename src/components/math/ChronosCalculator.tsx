@@ -80,13 +80,8 @@ export default function ChronosCalculator() {
   }, [inputValue, mode]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <div className="p-12 rounded-[56px] bg-slate-900/40 border border-white/5 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-        {/* Decorative Background Element */}
-        <div className="absolute top-[-10%] left-[-10%] opacity-5 pointer-events-none">
-          <Layers className="w-96 h-96 text-primary" />
-        </div>
-
+    <div className="w-full max-w-6xl mx-auto">
+      <div className="p-10 md:p-16 rounded-[64px] bg-white/[0.03] border border-white/10 shadow-2xl backdrop-blur-2xl relative overflow-hidden">
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between mb-12 space-y-6 md:space-y-0">
             <div className="flex items-center space-x-4">
@@ -99,24 +94,24 @@ export default function ChronosCalculator() {
               </div>
             </div>
 
-            <div className="flex bg-black/40 p-1.5 rounded-2xl border border-white/5">
+            <div className="flex bg-white/5 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md">
               <button 
                 onClick={() => { setMode('decimal'); setInputValue(''); }}
                 className={cn(
-                  "px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  mode === 'decimal' ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-slate-500 hover:text-slate-300"
+                  "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                  mode === 'decimal' ? "bg-white text-black shadow-xl" : "text-slate-400 hover:text-white"
                 )}
               >
-                Decimal
+                Numbers
               </button>
               <button 
                 onClick={() => { setMode('roman'); setInputValue(''); }}
                 className={cn(
-                  "px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  mode === 'roman' ? "bg-secondary text-white shadow-lg shadow-secondary/20" : "text-slate-500 hover:text-slate-300"
+                  "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                  mode === 'roman' ? "bg-white text-black shadow-xl" : "text-slate-400 hover:text-white"
                 )}
               >
-                Roman
+                Roman Numerals
               </button>
             </div>
           </div>
@@ -134,7 +129,7 @@ export default function ChronosCalculator() {
                     placeholder={mode === 'decimal' ? 'e.g. 2024' : 'e.g. MMXXIV'}
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value.toUpperCase())}
-                    className="w-full bg-black/40 border border-white/5 rounded-3xl py-8 px-10 text-4xl font-heading font-black text-white placeholder:text-slate-800 focus:outline-none focus:border-primary focus:bg-black/60 transition-all shadow-inner uppercase"
+                    className="w-full bg-white/5 border border-white/10 rounded-[32px] py-10 px-10 text-5xl font-heading font-black text-white placeholder:text-white/10 focus:outline-none focus:border-white/30 focus:bg-white/[0.08] transition-all shadow-2xl uppercase"
                   />
                   <div className="absolute right-6 top-1/2 -translate-y-1/2">
                     <button 
@@ -185,12 +180,12 @@ export default function ChronosCalculator() {
                     </div>
 
                     <div className="space-y-4">
-                      <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em] block">How it works</span>
+                      <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] block">How it works</span>
                       <div className="flex flex-wrap gap-2">
                         {output.steps.map((step, i) => (
-                          <div key={i} className="flex items-center space-x-2 px-4 py-2 bg-black/40 border border-white/5 rounded-xl">
+                          <div key={i} className="flex items-center space-x-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
                             <span className="text-sm font-black text-white">{step.symbol}</span>
-                            <span className="text-[10px] font-medium text-slate-500">({step.value})</span>
+                            <span className="text-[10px] font-medium text-white/40">({step.value})</span>
                           </div>
                         ))}
                       </div>
