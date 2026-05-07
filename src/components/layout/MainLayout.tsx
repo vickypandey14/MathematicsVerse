@@ -1,8 +1,8 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Calculator, 
@@ -14,11 +14,10 @@ import {
   Menu,
   X,
   Compass,
-  Zap,
-  Info,
   Layers,
-  Sparkles,
-  Hash
+  GraduationCap,
+  Hash,
+  Telescope
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -29,7 +28,7 @@ interface MainLayoutProps {
 const navLinks = [
   { name: 'Home', href: '/', icon: LayoutDashboard },
   { name: 'Library', href: '/formulas', icon: Compass },
-  { name: 'Kids Corner', href: '/kids', icon: Sparkles },
+  { name: 'Kids Corner', href: '/kids', icon: GraduationCap },
   { name: 'Roman Numerals', href: '/roman-numerals', icon: Hash },
   { name: 'Units & Measures', href: '/units', icon: Layers },
   { name: 'My Saved', href: '/bookmarks', icon: Bookmark },
@@ -38,7 +37,17 @@ const navLinks = [
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/formulas?q=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-[#0a0c14] text-slate-300 font-sans selection:bg-primary/20">
@@ -66,7 +75,23 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </Link>
         </div>
 
-        <nav className="flex-grow px-4 py-8 space-y-2">
+        <div className="px-6 py-4">
+           <form onSubmit={handleSearch} className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <input 
+                type="text"
+                placeholder={isSidebarOpen ? "Search formulas..." : ""}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={cn(
+                  "w-full bg-white/5 border border-white/5 rounded-2xl py-3 pl-10 pr-4 text-xs font-bold text-white focus:outline-none focus:border-primary transition-all",
+                  !isSidebarOpen && "pl-4 pr-0 w-10 h-10 overflow-hidden text-transparent placeholder:text-transparent"
+                )}
+              />
+           </form>
+        </div>
+
+        <nav className="flex-grow px-4 py-4 space-y-2">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;

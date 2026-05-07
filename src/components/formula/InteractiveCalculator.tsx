@@ -29,28 +29,56 @@ export default function InteractiveCalculator({ formula }: CalculatorProps) {
           { name: 'b', label: 'Magnitude [b]', placeholder: '4' },
         ];
       case 'area-circle':
+      case 'sphere-surface':
         return [{ name: 'r', label: 'Radius [r]', placeholder: '5' }];
+      case 'matrix-det-2x2':
+        return [
+          { name: 'a', label: 'a₁₁', placeholder: '1' },
+          { name: 'b', label: 'a₁₂', placeholder: '2' },
+          { name: 'c', label: 'a₂₁', placeholder: '3' },
+          { name: 'd', label: 'a₂₂', placeholder: '4' },
+        ];
+      case 'log-quotient':
+        return [
+          { name: 'x', label: 'Value [x]', placeholder: '100' },
+          { name: 'y', label: 'Value [y]', placeholder: '10' },
+        ];
       default:
-        return [{ name: 'x', label: 'Value [x]', placeholder: '10' }];
+        return [{ name: 'x', label: 'Input [x]', placeholder: '10' }];
     }
   };
 
   const calculate = () => {
-    const { a, b, c, r, x } = inputs;
+    const vals: Record<string, number> = {};
+    fields.forEach(f => {
+      vals[f.name] = inputs[f.name] || 0;
+    });
+
+    const { a, b, c, r, x, h, w, l } = vals;
+
     switch (formula.slug) {
       case 'quadratic-formula':
-        if (a === 0) return 'SYNTAX ERROR: a=0';
+        if (a === 0) return 'ERROR: a=0';
         const disc = b * b - 4 * a * c;
-        if (disc < 0) return 'IMAGINARY OUTPUT';
+        if (disc < 0) return 'COMPLEX OUTPUT';
         const x1 = (-b + Math.sqrt(disc)) / (2 * a);
         const x2 = (-b - Math.sqrt(disc)) / (2 * a);
         return `x₁=${x1.toFixed(2)} | x₂=${x2.toFixed(2)}`;
       case 'pythagorean-theorem':
-        return `MAGNITUDE=${Math.sqrt(a * a + b * b).toFixed(2)}`;
+        return `c = ${Math.sqrt(a * a + b * b).toFixed(2)}`;
       case 'area-circle':
-        return `AREA=${(Math.PI * r * r).toFixed(2)}`;
+        return `A = ${(Math.PI * r * r).toFixed(2)}`;
+      case 'sphere-surface':
+        return `SA = ${(4 * Math.PI * r * r).toFixed(2)}`;
+      case 'trig-identity-1':
+        return `sin²(${x}) + cos²(${x}) = ${(Math.pow(Math.sin(x), 2) + Math.pow(Math.cos(x), 2)).toFixed(2)}`;
+      case 'matrix-det-2x2':
+        return `det = ${(a * d - b * c).toFixed(2)}`;
+      case 'log-quotient':
+        if (x <= 0 || y <= 0) return 'DOMAIN ERROR';
+        return `log(${x}/${y}) = ${(Math.log10(x) - Math.log10(y)).toFixed(2)}`;
       default:
-        return 'LOGIC NOT DEFINED';
+        return 'COMPUTING...';
     }
   };
 
@@ -74,7 +102,11 @@ export default function InteractiveCalculator({ formula }: CalculatorProps) {
             <input
               type="number"
               placeholder={field.placeholder}
-              onChange={(e) => setInputs({ ...inputs, [field.name]: parseFloat(e.target.value) })}
+              value={inputs[field.name] === undefined ? '' : inputs[field.name]}
+              onChange={(e) => {
+                const val = e.target.value === '' ? undefined : parseFloat(e.target.value);
+                setInputs({ ...inputs, [field.name]: val });
+              }}
               className="w-full bg-black/40 border border-white/5 rounded-2xl py-5 px-6 text-white placeholder:text-slate-700 focus:outline-none focus:border-primary focus:bg-black/60 transition-all text-xl font-bold shadow-inner"
             />
           </div>
@@ -83,7 +115,7 @@ export default function InteractiveCalculator({ formula }: CalculatorProps) {
 
       <div className="bg-black/60 rounded-[32px] p-10 border border-white/5 mb-10 min-h-[140px] flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden">
         <div className="absolute inset-0 bg-primary/5 opacity-30" />
-        {inputs && Object.keys(inputs).length >= fields.length ? (
+        {Object.keys(inputs).filter(k => inputs[k] !== undefined).length >= fields.length ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}

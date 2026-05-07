@@ -1,5 +1,12 @@
+'use client';
+
+import { Hash, Info, History, GraduationCap, Compass } from 'lucide-react';
+import ChronosCalculator from '@/components/math/ChronosCalculator';
+import InscriptionGenerator from '@/components/math/InscriptionGenerator';
 import MainLayout from '@/components/layout/MainLayout';
-import { Hash, Info } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const romanMap = [
   { value: 1000, symbol: 'M' },
@@ -28,6 +35,32 @@ function toRoman(num: number): string {
   return result;
 }
 
+function RomanNumeralBlock({ n, r }: { n: number; r: string }) {
+  return (
+    <div className="perspective-1000 w-full h-24 group">
+      <motion.div
+        className="relative w-full h-full transition-all duration-500 preserve-3d"
+        whileHover={{ rotateY: 180 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      >
+        {/* Front Side (Roman + Small Decimal) */}
+        <div className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/5 shadow-xl">
+           <span className="text-[10px] font-black text-slate-600 mb-1">{n}</span>
+           <span className="text-xl font-heading font-black text-white">{r}</span>
+        </div>
+
+        {/* Back Side (Large Decimal Only) */}
+        <div 
+          className="absolute inset-0 backface-hidden flex items-center justify-center p-4 rounded-2xl bg-primary/20 border border-primary/30 shadow-2xl shadow-primary/20"
+          style={{ transform: 'rotateY(180deg)' }}
+        >
+           <span className="text-4xl font-heading font-black text-white">{n}</span>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function RomanNumeralsPage() {
   const basicNumerals = [
     { n: 1, r: 'I' },
@@ -40,69 +73,162 @@ export default function RomanNumeralsPage() {
   ];
 
   const numbersTo100 = Array.from({ length: 100 }, (_, i) => i + 1);
+  const [activeTab, setActiveTab] = useState<'guide' | 'tools'>('guide');
+  const [activeTool, setActiveTool] = useState<'number' | 'sentence'>('number');
 
   return (
     <MainLayout>
-      <div className="space-y-16">
-        <div className="flex items-center justify-between">
+      <div className="space-y-12">
+        {/* Page Header */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <h1 className="text-5xl md:text-6xl font-heading font-black text-white tracking-tighter mb-2">
+            <h1 className="text-5xl font-heading font-black text-white tracking-tighter mb-2">
               Roman <span className="gradient-text">Numerals</span>
             </h1>
-            <p className="text-slate-500 font-medium text-lg">A quick reference guide to the ancient Roman numbering system.</p>
+            <p className="text-slate-500 font-medium">Quick reference and calculation tools.</p>
+          </div>
+
+          {/* Main Tabs */}
+          <div className="flex bg-slate-900/40 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md">
+             <button 
+                onClick={() => setActiveTab('guide')}
+                className={cn(
+                  "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                  activeTab === 'guide' ? "bg-white text-black shadow-lg" : "text-slate-500 hover:text-slate-300"
+                )}
+             >
+                Guide
+             </button>
+             <button 
+                onClick={() => setActiveTab('tools')}
+                className={cn(
+                  "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                  activeTab === 'tools' ? "bg-white text-black shadow-lg" : "text-slate-500 hover:text-slate-300"
+                )}
+             >
+                Calculators
+             </button>
           </div>
         </div>
 
-        {/* Basic Symbols */}
-        <section>
-          <div className="flex items-center space-x-3 mb-10">
-             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Info className="text-primary w-5 h-5" />
-             </div>
-             <h2 className="text-2xl font-heading font-black text-white tracking-tight uppercase">Basic Symbols</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
-            {basicNumerals.map((item) => (
-              <div key={item.n} className="p-8 rounded-3xl bg-slate-900/40 border border-white/5 flex flex-col items-center justify-center space-y-2 backdrop-blur-md">
-                 <span className="text-4xl font-heading font-black text-secondary">{item.r}</span>
-                 <span className="text-slate-500 text-xs font-black uppercase tracking-widest">{item.n}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+        <AnimatePresence mode="wait">
+          {activeTab === 'guide' ? (
+            <motion.div 
+              key="guide"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-20"
+            >
+              {/* 1. Key Symbols */}
+              <section>
+                <div className="flex items-center space-x-3 mb-8">
+                   <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                      <Info className="text-secondary w-5 h-5" />
+                   </div>
+                   <h2 className="text-2xl font-heading font-black text-white tracking-tight uppercase">Key Symbols</h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                  {basicNumerals.map((item) => (
+                    <div key={item.n} className="p-6 rounded-3xl bg-slate-900/40 border border-white/5 flex flex-col items-center justify-center space-y-1 backdrop-blur-md">
+                       <span className="text-3xl font-heading font-black text-secondary">{item.r}</span>
+                       <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{item.n}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
 
-        {/* 1 to 100 Grid */}
-        <section>
-          <div className="flex items-center space-x-3 mb-10">
-             <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
-                <Hash className="text-secondary w-5 h-5" />
-             </div>
-             <h2 className="text-2xl font-heading font-black text-white tracking-tight uppercase">Numbers 1 to 100</h2>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4">
-             {numbersTo100.map(n => (
-               <div key={n} className="p-4 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center justify-center group hover:bg-primary/10 hover:border-primary/20 transition-all">
-                  <span className="text-xs font-black text-slate-500 group-hover:text-primary transition-colors">{n}</span>
-                  <span className="text-lg font-heading font-black text-white">{toRoman(n)}</span>
-               </div>
-             ))}
-          </div>
-        </section>
+              {/* 2. Numbers 1 to 100 */}
+              <section>
+                <div className="flex items-center space-x-3 mb-8">
+                   <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                      <History className="text-slate-400 w-5 h-5" />
+                   </div>
+                   <h2 className="text-2xl font-heading font-black text-white tracking-tight uppercase">Numbers 1 to 100</h2>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-10 gap-4">
+                   {numbersTo100.map(n => (
+                     <RomanNumeralBlock key={n} n={n} r={toRoman(n)} />
+                   ))}
+                </div>
+              </section>
 
-        {/* How to Read Section */}
-        <section className="p-12 rounded-[48px] bg-slate-900/40 border border-white/5 shadow-2xl backdrop-blur-md">
-           <h2 className="text-3xl font-heading font-black text-white mb-6 uppercase tracking-tight">How to Read Them</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-slate-400 font-medium leading-relaxed">
-              <div className="space-y-4">
-                 <p className="text-white font-bold">1. Addition Rule</p>
-                 <p>When a smaller symbol is placed after a larger one, you add them together. For example: <span className="text-secondary font-bold">VI</span> is 5 + 1 = 6.</p>
+              {/* 3. How to Read Them */}
+              <section>
+                 <div className="flex items-center space-x-3 mb-8">
+                   <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                     <Compass className="text-accent w-5 h-5" />
+                   </div>
+                   <h2 className="text-2xl font-heading font-black text-white tracking-tight uppercase">How to Read Them</h2>
+                 </div>
+
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[
+                      { 
+                        title: 'Addition Rule', 
+                        desc: 'If a smaller number comes AFTER a larger one, add them together.',
+                        example: 'VI = 5 + 1 = 6',
+                        color: 'secondary'
+                      },
+                      { 
+                        title: 'Subtraction Rule', 
+                        desc: 'If a smaller number comes BEFORE a larger one, subtract it.',
+                        example: 'IV = 5 - 1 = 4',
+                        color: 'primary'
+                      }
+                    ].map((rule, i) => (
+                      <div key={i} className="p-8 rounded-[32px] bg-slate-900/40 border border-white/5 relative overflow-hidden group">
+                         <h4 className="text-white font-black uppercase tracking-[0.2em] text-[10px] mb-3">{rule.title}</h4>
+                         <p className="text-slate-500 text-sm font-medium mb-6">{rule.desc}</p>
+                         <div className={cn("p-4 rounded-xl bg-black/40 border border-white/5 inline-block", `text-${rule.color}`)}>
+                            <span className="text-[10px] font-black uppercase tracking-widest mr-4 opacity-50">Example</span>
+                            <span className="text-lg font-heading font-black text-white italic">{rule.example}</span>
+                         </div>
+                      </div>
+                    ))}
+                 </div>
+              </section>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="tools"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-12"
+            >
+              {/* Tool Selector (Sub-tabs) */}
+              <div className="flex space-x-4 border-b border-white/5 pb-6">
+                <button 
+                  onClick={() => setActiveTool('number')}
+                  className={cn(
+                    "text-xs font-black uppercase tracking-[0.2em] transition-all pb-2 border-b-2",
+                    activeTool === 'number' ? "text-primary border-primary" : "text-slate-600 border-transparent hover:text-slate-400"
+                  )}
+                >
+                  Number Converter
+                </button>
+                <button 
+                  onClick={() => setActiveTool('sentence')}
+                  className={cn(
+                    "text-xs font-black uppercase tracking-[0.2em] transition-all pb-2 border-b-2",
+                    activeTool === 'sentence' ? "text-secondary border-secondary" : "text-slate-600 border-transparent hover:text-slate-400"
+                  )}
+                >
+                  Sentence Converter
+                </button>
               </div>
-              <div className="space-y-4">
-                 <p className="text-white font-bold">2. Subtraction Rule</p>
-                 <p>When a smaller symbol is placed before a larger one, you subtract it. For example: <span className="text-primary font-bold">IV</span> is 5 - 1 = 4.</p>
+
+              <div className="bg-slate-900/20 rounded-[48px] p-2 border border-white/5">
+                {activeTool === 'number' ? (
+                  <ChronosCalculator />
+                ) : (
+                  <InscriptionGenerator />
+                )}
               </div>
-           </div>
-        </section>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </MainLayout>
   );

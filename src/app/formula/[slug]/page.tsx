@@ -5,6 +5,7 @@ import MathRenderer from '@/components/math/MathRenderer';
 import MermaidDiagram from '@/components/math/MermaidDiagram';
 import InteractiveCalculator from '@/components/formula/InteractiveCalculator';
 import GraphViz from '@/components/formula/GraphViz';
+import DownloadButton from '@/components/formula/DownloadButton';
 import { notFound } from 'next/navigation';
 import { 
   BookOpen, 
@@ -13,11 +14,11 @@ import {
   ChevronLeft,
   Info,
   Layers,
-  Sparkles,
+  Trophy,
   History as HistoryIcon,
   ScrollText,
   Clock,
-  Zap,
+  Binary,
   Activity,
   Cpu
 } from 'lucide-react';
@@ -167,7 +168,7 @@ export default async function FormulaDetail({ params }: PageProps) {
               {/* Step-by-Step Example */}
               <section className="p-16 rounded-[56px] bg-slate-900/40 border border-white/5 shadow-2xl relative overflow-hidden backdrop-blur-md">
                 <div className="absolute top-0 right-0 p-10 text-primary opacity-5">
-                   <Zap className="w-48 h-48" />
+                   <Binary className="w-48 h-48" />
                 </div>
                 <div className="flex items-center space-x-4 mb-10">
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
@@ -230,15 +231,13 @@ export default async function FormulaDetail({ params }: PageProps) {
 
             <div className="p-12 rounded-[48px] bg-gradient-to-br from-primary/20 to-accent/20 border border-white/10 relative overflow-hidden group shadow-2xl backdrop-blur-md">
               <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity">
-                <Sparkles className="w-10 h-10 text-secondary" />
+                <Trophy className="w-10 h-10 text-secondary" />
               </div>
               <h4 className="text-2xl font-heading font-black text-white mb-6 uppercase tracking-widest">Learning Tip</h4>
               <p className="text-slate-300 font-medium text-lg leading-relaxed mb-10">
                 Mathematics is about patterns. Mastering this formula will help you solve complex problems with ease.
               </p>
-              <button className="w-full py-6 bg-white text-black rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-primary hover:text-white hover:scale-[1.02] transition-all shadow-xl shadow-white/5">
-                Download Summary
-              </button>
+              <DownloadButton formula={formula} />
             </div>
           </div>
         </div>

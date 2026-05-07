@@ -2,7 +2,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import CategoryCard from '@/components/home/CategoryCard';
 import FormulaCard from '@/components/formula/FormulaCard';
 import { getCategories, getFeaturedFormulas } from '@/lib/data';
-import { Zap, Sparkles, LayoutDashboard, Search, Bookmark, History, ArrowRight } from 'lucide-react';
+import { Atom, Lightbulb, LayoutDashboard, Search, Bookmark, History, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function Home() {
@@ -36,7 +36,7 @@ export default async function Home() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-50" />
               <div className="relative z-10">
                 <div className="flex items-center space-x-2 mb-6">
-                   <Sparkles className="text-secondary w-5 h-5" />
+                   <Lightbulb className="text-secondary w-5 h-5" />
                    <h2 className="text-sm font-black text-secondary uppercase tracking-[0.3em]">Formula of the Day</h2>
                 </div>
                 <h3 className="text-4xl font-heading font-black text-white mb-6">Euler's Identity</h3>
@@ -49,7 +49,7 @@ export default async function Home() {
                 </Link>
               </div>
               <div className="absolute right-[-20px] bottom-[-20px] text-white/5 group-hover:text-white/10 transition-colors">
-                 <Zap className="w-64 h-64" />
+                 <Atom className="w-64 h-64" />
               </div>
            </div>
 

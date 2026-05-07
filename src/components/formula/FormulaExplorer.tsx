@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import FormulaCard from '@/components/formula/FormulaCard';
 import { Search, Filter, SlidersHorizontal, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Fuse from 'fuse.js';
+import { useSearchParams } from 'next/navigation';
 
 interface FormulaExplorerProps {
   initialFormulas: any[];
@@ -12,9 +13,19 @@ interface FormulaExplorerProps {
 }
 
 export default function FormulaExplorer({ initialFormulas, categories }: FormulaExplorerProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get('q') || '';
+  
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
+
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q !== null) {
+      setSearchQuery(q);
+    }
+  }, [searchParams]);
 
   const fuse = useMemo(() => new Fuse(initialFormulas, {
     keys: ['title', 'explanation', 'category.name'],

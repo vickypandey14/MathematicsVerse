@@ -2,6 +2,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import FormulaExplorer from '@/components/formula/FormulaExplorer';
 import { getCategories } from '@/lib/data';
 import prisma from '@/lib/prisma';
+import { Suspense } from 'react';
 
 export default async function FormulasPage() {
   const categories = await getCategories();
@@ -20,7 +21,9 @@ export default async function FormulasPage() {
         </p>
       </div>
 
-      <FormulaExplorer initialFormulas={formulas} categories={categories} />
+      <Suspense fallback={<div className="animate-pulse h-96 bg-slate-900/40 rounded-[40px]" />}>
+        <FormulaExplorer initialFormulas={formulas} categories={categories} />
+      </Suspense>
     </MainLayout>
   );
 }
