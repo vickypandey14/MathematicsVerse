@@ -3,6 +3,7 @@
 import { Hash, Info, History, GraduationCap, Compass } from 'lucide-react';
 import ChronosCalculator from '@/components/math/ChronosCalculator';
 import InscriptionGenerator from '@/components/math/InscriptionGenerator';
+import RomanClock from '@/components/math/RomanClock';
 import MainLayout from '@/components/layout/MainLayout';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -73,8 +74,9 @@ export default function RomanNumeralsPage() {
   ];
 
   const numbersTo100 = Array.from({ length: 100 }, (_, i) => i + 1);
-  const [activeTab, setActiveTab] = useState<'guide' | 'tools'>('guide');
+  const [activeTab, setActiveTab] = useState<'guide' | 'tools' | 'clock'>('guide');
   const [activeTool, setActiveTool] = useState<'number' | 'sentence'>('number');
+  const [soundEnabled, setSoundEnabled] = useState(false);
 
   return (
     <MainLayout>
@@ -107,6 +109,15 @@ export default function RomanNumeralsPage() {
                 )}
              >
                 Calculators
+             </button>
+             <button 
+                onClick={() => setActiveTab('clock')}
+                className={cn(
+                  "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                  activeTab === 'clock' ? "bg-white text-black shadow-lg" : "text-slate-500 hover:text-slate-300"
+                )}
+             >
+                Clock
              </button>
           </div>
         </div>
@@ -187,9 +198,9 @@ export default function RomanNumeralsPage() {
                       </div>
                     ))}
                  </div>
-              </section>
+               </section>
             </motion.div>
-          ) : (
+          ) : activeTab === 'tools' ? (
             <motion.div 
               key="tools"
               initial={{ opacity: 0, y: 10 }}
@@ -228,6 +239,18 @@ export default function RomanNumeralsPage() {
                   <InscriptionGenerator />
                 )}
               </div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="clock"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+            >
+              <RomanClock 
+                soundEnabled={soundEnabled} 
+                setSoundEnabled={setSoundEnabled} 
+              />
             </motion.div>
           )}
         </AnimatePresence>
