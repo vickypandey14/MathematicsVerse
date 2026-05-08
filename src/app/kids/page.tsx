@@ -19,10 +19,11 @@ import { cn } from '@/lib/utils';
 export default function KidsCorner() {
   const [baseNumber, setBaseNumber] = useState<number>(7);
   const [inputValue, setInputValue] = useState<string>("7");
+  const [activeView, setActiveView] = useState<'table' | 'visual'>('table');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    if (val === "" || /^\d{0,5}$/.test(val)) {
+    if (val === "" || /^\d{0,3}$/.test(val)) { // Limit to 3 digits for visual clarity
       setInputValue(val);
       if (val !== "") {
         setBaseNumber(parseInt(val));
@@ -31,7 +32,7 @@ export default function KidsCorner() {
   };
 
   const increment = () => {
-    if (baseNumber < 99999) {
+    if (baseNumber < 999) {
       const newVal = baseNumber + 1;
       setBaseNumber(newVal);
       setInputValue(newVal.toString());
@@ -46,153 +47,182 @@ export default function KidsCorner() {
     }
   };
 
-  const firstHalf = Array.from({ length: 10 }, (_, i) => i + 1);
-  const secondHalf = Array.from({ length: 10 }, (_, i) => i + 11);
+  const tableValues = Array.from({ length: 12 }, (_, i) => i + 1);
 
   return (
     <MainLayout>
-      <div className="space-y-16">
-        {/* Kids Hero */}
-        <div className="flex flex-col items-center text-center space-y-4">
+      <div className="space-y-12">
+        {/* Kids Hero - More Compact */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center space-x-6">
             <motion.div 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="w-16 h-16 bg-gradient-to-tr from-secondary to-accent rounded-2xl flex items-center justify-center shadow-2xl shadow-secondary/20"
+              className="w-12 h-12 bg-gradient-to-tr from-secondary to-accent rounded-xl flex items-center justify-center shadow-lg"
             >
-              <Sparkles className="text-white w-8 h-8" />
+              <Sparkles className="text-white w-6 h-6" />
             </motion.div>
-            <h1 className="text-5xl md:text-7xl font-heading font-black text-white tracking-tighter">
+            <h1 className="text-4xl md:text-5xl font-heading font-black text-white tracking-tighter">
               Kids <span className="text-secondary">Corner</span>
             </h1>
           </div>
-          <p className="text-slate-400 font-medium text-xl">The fun way to master your multiplication tables!</p>
+          <div className="hidden md:block">
+             <div className="px-6 py-3 rounded-2xl bg-white/5 border border-white/5 flex items-center space-x-3">
+                <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Learning Mode</span>
+             </div>
+          </div>
         </div>
 
-        {/* Instant Table Generator */}
+        {/* The Interactive Workshop */}
         <section className="max-w-6xl mx-auto">
-          <div className="p-10 md:p-16 rounded-[56px] bg-slate-900/40 border border-white/5 shadow-2xl backdrop-blur-md relative overflow-hidden">
-             <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
-                <Grid className="w-64 h-64 text-white" />
+          <div className="p-8 md:p-12 rounded-[48px] bg-slate-900/40 border border-white/5 shadow-2xl backdrop-blur-md relative overflow-hidden min-h-[600px]">
+             
+             {/* Mode Selector */}
+             <div className="flex justify-center mb-12">
+                <div className="bg-black/40 p-1.5 rounded-2xl border border-white/10 flex items-center">
+                   <button 
+                    onClick={() => setActiveView('table')}
+                    className={cn(
+                      "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                      activeView === 'table' ? "bg-white text-black shadow-xl" : "text-slate-500 hover:text-white"
+                    )}
+                   >
+                     Number Table
+                   </button>
+                   <button 
+                    onClick={() => setActiveView('visual')}
+                    className={cn(
+                      "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                      activeView === 'visual' ? "bg-white text-black shadow-xl" : "text-slate-500 hover:text-white"
+                    )}
+                   >
+                     Visual Playground
+                   </button>
+                </div>
              </div>
 
-             <div className="relative z-10 space-y-16">
-                <div className="flex flex-col items-center space-y-8">
-                   <h2 className="text-2xl font-black text-white uppercase tracking-[0.2em] flex items-center">
-                      <Star className="text-secondary w-6 h-6 mr-3 fill-current" />
-                      Magic Table Maker
-                   </h2>
-                   
-                   <div className="flex items-center space-x-6">
-                      <button 
-                        onClick={decrement}
-                        className="w-16 h-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-secondary/20 hover:border-secondary/40 transition-all text-slate-400 hover:text-white group"
-                      >
-                         <Minus className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                      </button>
-
-                      <div className="relative">
-                        <input 
-                          type="text"
-                          value={inputValue}
-                          onChange={handleInputChange}
-                          className="w-48 md:w-64 bg-black/40 border-4 border-white/5 rounded-[32px] py-8 text-center text-5xl font-heading font-black text-white focus:outline-none focus:border-secondary transition-all shadow-inner"
-                        />
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                           Enter Any Number
+             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                {/* Left Side: Controls */}
+                <div className="lg:col-span-4 space-y-10">
+                   <div className="space-y-6">
+                      <h2 className="text-xl font-black text-white uppercase tracking-[0.2em] flex items-center">
+                        <Star className="text-secondary w-5 h-5 mr-3 fill-current" />
+                        Table Maker
+                      </h2>
+                      
+                      <div className="flex items-center space-x-4">
+                        <button onClick={decrement} className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-secondary/20 hover:text-white transition-all">
+                           <Minus className="w-5 h-5" />
+                        </button>
+                        <div className="relative flex-grow">
+                          <input 
+                            type="text"
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            className="w-full bg-black/40 border-2 border-white/5 rounded-2xl py-6 text-center text-4xl font-heading font-black text-white focus:outline-none focus:border-secondary transition-all"
+                          />
                         </div>
+                        <button onClick={increment} className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-primary/20 hover:text-white transition-all">
+                           <Plus className="w-5 h-5" />
+                        </button>
                       </div>
-
-                      <button 
-                        onClick={increment}
-                        className="w-16 h-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-primary/20 hover:border-primary/40 transition-all text-slate-400 hover:text-white group"
-                      >
-                         <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                      </button>
                    </div>
-                   
-                   <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Generating table for {baseNumber}</p>
+
+                   <div className="p-8 rounded-[32px] bg-white/[0.03] border border-white/5 space-y-4">
+                      <div className="flex items-center space-x-3 text-secondary">
+                        <Zap className="w-4 h-4 fill-current" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Math Tip</span>
+                      </div>
+                      <p className="text-slate-400 text-sm font-medium leading-relaxed">
+                        {baseNumber === 9 ? "The digits of 9 times table always add up to 9!" : 
+                         baseNumber % 2 === 0 ? "Any number times an even number is ALWAYS even!" : 
+                         "Try saying the numbers out loud as you read them!"}
+                      </p>
+                   </div>
                 </div>
 
-                {/* Table Sections */}
-                <div className="space-y-16">
-                  {/* First Half: Till 10 */}
-                  <div className="space-y-8">
-                    <div className="flex items-center space-x-4">
-                      <div className="h-px flex-grow bg-white/5" />
-                      <h3 className="text-xl font-heading font-black text-secondary tracking-[0.2em] uppercase">Till 10</h3>
-                      <div className="h-px flex-grow bg-white/5" />
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                       <AnimatePresence mode="popLayout">
-                          {firstHalf.map((num) => (
-                            <motion.div
-                              key={`${baseNumber}-${num}`}
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ delay: (num-1) * 0.02 }}
-                              className="p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-secondary/30 group transition-all"
-                            >
-                               <div className="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-1 text-center">
-                                  {baseNumber} × {num}
-                               </div>
-                               <div className="text-3xl font-heading font-black text-white text-center group-hover:text-secondary transition-colors">
-                                  {(baseNumber * num).toLocaleString()}
-                               </div>
-                            </motion.div>
-                          ))}
-                       </AnimatePresence>
-                    </div>
-                  </div>
-
-                  {/* Second Half: Till 20 */}
-                  <div className="space-y-8">
-                    <div className="flex items-center space-x-4">
-                      <div className="h-px flex-grow bg-white/5" />
-                      <h3 className="text-xl font-heading font-black text-primary tracking-[0.2em] uppercase">Till 20</h3>
-                      <div className="h-px flex-grow bg-white/5" />
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                       <AnimatePresence mode="popLayout">
-                          {secondHalf.map((num) => (
-                            <motion.div
-                              key={`${baseNumber}-${num}`}
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ delay: (num-11) * 0.02 }}
-                              className="p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-primary/30 group transition-all"
-                            >
-                               <div className="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-1 text-center">
-                                  {baseNumber} × {num}
-                               </div>
-                               <div className="text-3xl font-heading font-black text-white text-center group-hover:text-primary transition-colors">
-                                  {(baseNumber * num).toLocaleString()}
-                               </div>
-                            </motion.div>
-                          ))}
-                       </AnimatePresence>
-                    </div>
-                  </div>
+                {/* Right Side: Content Area */}
+                <div className="lg:col-span-8 bg-black/20 rounded-[40px] border border-white/5 p-8 relative overflow-hidden">
+                   <AnimatePresence mode="wait">
+                      {activeView === 'table' ? (
+                        <motion.div 
+                          key="table"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          className="grid grid-cols-2 md:grid-cols-3 gap-4"
+                        >
+                           {tableValues.map((num) => (
+                             <div key={num} className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-secondary/30 transition-all flex flex-col items-center justify-center">
+                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">{baseNumber} × {num}</span>
+                                <span className="text-2xl font-heading font-black text-white">{(baseNumber * num).toLocaleString()}</span>
+                             </div>
+                           ))}
+                        </motion.div>
+                      ) : (
+                        <motion.div 
+                          key="visual"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          className="h-full flex flex-col"
+                        >
+                           <div className="flex items-center justify-between mb-8">
+                              <h4 className="text-white font-black uppercase tracking-widest text-xs">Visual Area Model</h4>
+                              <span className="text-secondary text-[10px] font-black">Showing {baseNumber} rows of {Math.min(baseNumber, 10)}</span>
+                           </div>
+                           
+                           <div className="flex-grow flex justify-center p-8 bg-black/40 rounded-3xl overflow-auto max-h-[400px] scrollbar-hide">
+                              <div className="grid gap-2 m-auto h-fit" style={{ 
+                                gridTemplateColumns: `repeat(${Math.min(baseNumber, 10)}, minmax(0, 1fr))`,
+                                width: 'fit-content'
+                              }}>
+                                 {Array.from({ length: Math.min(baseNumber * Math.min(baseNumber, 10), 100) }).map((_, i) => (
+                                   <motion.div 
+                                     key={i}
+                                     initial={{ scale: 0 }}
+                                     animate={{ scale: 1 }}
+                                     transition={{ delay: i * 0.01 }}
+                                     className="w-6 h-6 md:w-8 md:h-8 flex items-center justify-center bg-secondary/10 border border-secondary/20 rounded-lg text-lg"
+                                   >
+                                      ⭐
+                                   </motion.div>
+                                 ))}
+                                 {baseNumber > 10 && <div className="col-span-full text-center py-4 text-slate-600 font-black uppercase text-[10px] tracking-widest">Showing first 100 stars...</div>}
+                              </div>
+                           </div>
+                           
+                           <p className="mt-8 text-slate-500 text-center text-xs font-medium italic">
+                             "This is what multiplication looks like! It's just a grid of stars."
+                           </p>
+                        </motion.div>
+                      )}
+                   </AnimatePresence>
                 </div>
              </div>
           </div>
         </section>
 
-        {/* Fun Tips Footer */}
+        {/* Fun Tips Footer - Simplified */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-           <div className="p-10 rounded-[48px] bg-gradient-to-br from-primary/20 to-transparent border border-white/5 backdrop-blur-md">
-              <h3 className="text-2xl font-black text-white mb-4">Did You Know?</h3>
-              <p className="text-slate-400 font-medium leading-relaxed">
-                 Multiplication is just "fast addition"! If you have 3 bags with 4 apples each, you can do 4 + 4 + 4, or just remember that 3 × 4 is 12!
-              </p>
+           <div className="p-8 rounded-[40px] bg-white/[0.02] border border-white/5 flex items-center space-x-6">
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                 <RefreshCcw className="w-8 h-8" />
+              </div>
+              <div>
+                <h4 className="text-white font-black uppercase tracking-widest text-xs mb-1">Fast Addition</h4>
+                <p className="text-slate-500 text-sm font-medium">Multiplication is just adding the same number over and over!</p>
+              </div>
            </div>
-           <div className="p-10 rounded-[48px] bg-gradient-to-br from-secondary/20 to-transparent border border-white/5 backdrop-blur-md">
-              <h3 className="text-2xl font-black text-white mb-4">The Magic of 9</h3>
-              <p className="text-slate-400 font-medium leading-relaxed">
-                 Did you know that in the 9 times table, the digits of the answer always add up to 9? Try it: 9 × 2 = 18 (1+8=9), 9 × 5 = 45 (4+5=9). Amazing!
-              </p>
+           <div className="p-8 rounded-[40px] bg-white/[0.02] border border-white/5 flex items-center space-x-6">
+              <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+                 <Star className="w-8 h-8 fill-current" />
+              </div>
+              <div>
+                <h4 className="text-white font-black uppercase tracking-widest text-xs mb-1">Number Magic</h4>
+                <p className="text-slate-500 text-sm font-medium">Every number has its own special patterns to discover!</p>
+              </div>
            </div>
         </div>
       </div>
