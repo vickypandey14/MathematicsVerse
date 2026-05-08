@@ -10,8 +10,10 @@ import {
   Zap, 
   RefreshCcw,
   Plus,
-  Minus
+  Minus,
+  Timer
 } from 'lucide-react';
+import TimeChallenge from '@/components/math/TimeChallenge';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -19,7 +21,7 @@ import { cn } from '@/lib/utils';
 export default function KidsCorner() {
   const [baseNumber, setBaseNumber] = useState<number>(7);
   const [inputValue, setInputValue] = useState<string>("7");
-  const [activeView, setActiveView] = useState<'table' | 'visual'>('table');
+  const [activeView, setActiveView] = useState<'table' | 'visual' | 'challenge'>('table');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -84,20 +86,30 @@ export default function KidsCorner() {
                    <button 
                     onClick={() => setActiveView('table')}
                     className={cn(
-                      "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                      "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
                       activeView === 'table' ? "bg-white text-black shadow-xl" : "text-slate-500 hover:text-white"
                     )}
                    >
-                     Number Table
+                     Table
                    </button>
                    <button 
                     onClick={() => setActiveView('visual')}
                     className={cn(
-                      "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                      "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
                       activeView === 'visual' ? "bg-white text-black shadow-xl" : "text-slate-500 hover:text-white"
                     )}
                    >
-                     Visual Playground
+                     Visuals
+                   </button>
+                   <button 
+                    onClick={() => setActiveView('challenge')}
+                    className={cn(
+                      "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center",
+                      activeView === 'challenge' ? "bg-white text-black shadow-xl" : "text-slate-500 hover:text-white"
+                    )}
+                   >
+                     <Timer className="w-3 h-3 mr-2" />
+                     Game
                    </button>
                 </div>
              </div>
@@ -143,7 +155,7 @@ export default function KidsCorner() {
                 </div>
 
                 {/* Right Side: Content Area */}
-                <div className="lg:col-span-8 bg-black/20 rounded-[40px] border border-white/5 p-8 relative overflow-hidden">
+                <div className="lg:col-span-8 bg-black/20 rounded-[40px] border border-white/5 p-8 relative overflow-hidden min-h-[450px] flex flex-col">
                    <AnimatePresence mode="wait">
                       {activeView === 'table' ? (
                         <motion.div 
@@ -160,7 +172,7 @@ export default function KidsCorner() {
                              </div>
                            ))}
                         </motion.div>
-                      ) : (
+                      ) : activeView === 'visual' ? (
                         <motion.div 
                           key="visual"
                           initial={{ opacity: 0, x: 20 }}
@@ -196,6 +208,16 @@ export default function KidsCorner() {
                            <p className="mt-8 text-slate-500 text-center text-xs font-medium italic">
                              "This is what multiplication looks like! It's just a grid of stars."
                            </p>
+                        </motion.div>
+                      ) : (
+                        <motion.div 
+                          key="challenge"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          className="h-full"
+                        >
+                           <TimeChallenge />
                         </motion.div>
                       )}
                    </AnimatePresence>
