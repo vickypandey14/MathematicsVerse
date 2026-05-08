@@ -20,14 +20,7 @@ export default async function Home() {
             </h1>
             <p className="text-slate-500 font-medium text-lg">Your interactive guide to understanding the world through mathematics.</p>
           </div>
-          <div className="hidden lg:flex items-center space-x-4">
-             <div className="flex -space-x-3">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-[#0a0c14] bg-slate-800 shadow-lg shadow-black/50" />
-                ))}
-             </div>
-             <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">12,400+ Students Learning</span>
-          </div>
+
         </div>
 
         {/* Highlight Section */}

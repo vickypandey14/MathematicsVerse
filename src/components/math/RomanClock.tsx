@@ -57,7 +57,7 @@ export default function RomanClock({
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-16 overflow-hidden">
-      <div className="p-6 md:p-12 lg:p-20 rounded-[48px] md:rounded-[64px] bg-white/[0.02] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] backdrop-blur-3xl relative overflow-hidden flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+      <div className="p-6 md:p-12 lg:p-20 rounded-[48px] md:rounded-[64px] bg-white/[0.02] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] backdrop-blur-3xl relative overflow-hidden flex flex-col xl:flex-row items-center gap-12 xl:gap-20">
         
         {/* The Clock Hub */}
         <div className="relative group shrink-0">
@@ -112,7 +112,7 @@ export default function RomanClock({
 
               {/* Branding */}
               <div className="absolute inset-0 flex flex-col items-center justify-center opacity-10 pointer-events-none mt-32">
-                 <span className="text-[10px] font-black uppercase tracking-[0.5em]">Mathematica</span>
+                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">MathematicsVerse</span>
                  <span className="text-[8px] font-medium uppercase tracking-[0.3em]">Imperial Edition</span>
               </div>
 
@@ -165,7 +165,7 @@ export default function RomanClock({
               <Clock className="w-3 h-3" />
               <span>Real-Time Horologium</span>
             </div>
-            <h3 className="text-4xl md:text-5xl font-heading font-black text-white tracking-tighter uppercase leading-none">
+            <h3 className="text-xl sm:text-3xl md:text-4xl xl:text-5xl font-heading font-black text-white tracking-tighter uppercase leading-none whitespace-nowrap">
               Classical <span className="gradient-text">Timekeeping</span>
             </h3>
             <p className="text-slate-500 font-medium text-lg italic">"Tempus fugit" — Time flies.</p>

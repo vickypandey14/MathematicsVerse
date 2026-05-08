@@ -140,7 +140,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       {/* Main Content Area */}
       <main 
         className={cn(
-          "flex-grow transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] relative",
+          "flex-grow transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-x-hidden",
           isSidebarOpen ? "ml-72" : "ml-24"
         )}
       >
