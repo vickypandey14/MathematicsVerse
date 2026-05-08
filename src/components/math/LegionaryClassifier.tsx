@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Sword, Users, Flag, Landmark, Info } from 'lucide-react';
+import { Shield, Sword, Users, Flag, Landmark, Info, History } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const UNITS = [
@@ -29,6 +29,26 @@ export default function LegionaryClassifier() {
 
   const { breakdown, remaining } = calculateBreakdown(num);
 
+  const getStrategicInsights = (count: number) => {
+    let rank = "Legionary";
+    let historical = "A small detachment for scouting or guard duty.";
+    
+    if (count >= 10000) { rank = "Consul"; historical = "A massive force capable of conquering entire kingdoms."; }
+    else if (count >= 5000) { rank = "Legatus Legionis"; historical = "A full Legion, the backbone of the Roman Empire."; }
+    else if (count >= 480) { rank = "Tribune"; historical = "A significant force, enough to hold a strategic fort."; }
+    else if (count >= 80) { rank = "Centurion"; historical = "The classic unit of the Roman line."; }
+    else if (count >= 300 && count < 400) { historical = "Reminiscent of the legendary 300 at Thermopylae."; }
+
+    return {
+      rank,
+      historical,
+      grain: (count * 2).toLocaleString(),
+      length: (count * 0.8 / 1000).toFixed(1)
+    };
+  };
+
+  const insights = getStrategicInsights(num);
+
   return (
     <div className="space-y-12">
       {/* Input Header */}
@@ -43,19 +63,57 @@ export default function LegionaryClassifier() {
               <p className="text-slate-500 font-medium">How many Roman soldiers are you commanding?</p>
            </div>
 
-           <div className="relative group max-w-md">
-              <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
-                 <Users className="w-6 h-6 text-primary group-focus-within:scale-110 transition-transform" />
-              </div>
-              <input 
-                type="number"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                placeholder="Enter soldier count..."
-                className="w-full bg-black/40 border border-white/10 rounded-[24px] py-6 pl-16 pr-8 text-2xl font-black text-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-slate-800"
-              />
+           <div className="flex flex-col md:flex-row gap-6">
+             <div className="relative group max-w-md flex-grow">
+                <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                   <Users className="w-6 h-6 text-primary group-focus-within:scale-110 transition-transform" />
+                </div>
+                <input 
+                  type="number"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  placeholder="Enter soldier count..."
+                  className="w-full bg-black/40 border border-white/10 rounded-[24px] py-6 pl-16 pr-8 text-2xl font-black text-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-slate-800"
+                />
+             </div>
+
+             <div className="p-6 rounded-[24px] bg-primary/10 border border-primary/20 flex flex-col justify-center">
+                <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Your Rank</span>
+                <span className="text-xl font-heading font-black text-white uppercase tracking-tighter">{insights.rank}</span>
+             </div>
            </div>
         </div>
+      </div>
+
+      {/* Commander's Briefing Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+         <div className="p-8 rounded-[32px] bg-slate-900/60 border border-white/5 space-y-4">
+            <div className="flex items-center space-x-3 text-secondary">
+               <History className="w-5 h-5" />
+               <span className="text-[10px] font-black uppercase tracking-widest">History</span>
+            </div>
+            <p className="text-slate-400 font-medium leading-relaxed">{insights.historical}</p>
+         </div>
+
+         <div className="p-8 rounded-[32px] bg-slate-900/60 border border-white/5 space-y-4">
+            <div className="flex items-center space-x-3 text-amber-500">
+               <Landmark className="w-5 h-5" />
+               <span className="text-[10px] font-black uppercase tracking-widest">Logistics</span>
+            </div>
+            <p className="text-slate-400 font-medium leading-relaxed">
+              Requires <strong className="text-white">{insights.grain} lbs</strong> of grain per day to stay combat-ready.
+            </p>
+         </div>
+
+         <div className="p-8 rounded-[32px] bg-slate-900/60 border border-white/5 space-y-4">
+            <div className="flex items-center space-x-3 text-primary">
+               <Flag className="w-5 h-5" />
+               <span className="text-[10px] font-black uppercase tracking-widest">Formations</span>
+            </div>
+            <p className="text-slate-400 font-medium leading-relaxed">
+              When marching in column, your line stretches for <strong className="text-white">{insights.length} km</strong>.
+            </p>
+         </div>
       </div>
 
       {/* Visual Breakdown */}
