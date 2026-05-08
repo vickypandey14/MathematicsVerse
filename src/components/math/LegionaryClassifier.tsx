@@ -15,6 +15,7 @@ const UNITS = [
 
 export default function LegionaryClassifier() {
   const [value, setValue] = useState<string>('5432');
+  const [formation, setFormation] = useState<'loose' | 'tight' | 'column'>('loose');
   const num = parseInt(value) || 0;
 
   const calculateBreakdown = (total: number) => {
@@ -71,10 +72,14 @@ export default function LegionaryClassifier() {
                 <input 
                   type="number"
                   min="0"
+                  max="1000000"
                   value={value}
                   onChange={(e) => {
                     const val = e.target.value;
-                    if (val === '' || parseInt(val) >= 0) {
+                    const parsed = parseInt(val);
+                    if (val === '') {
+                      setValue('');
+                    } else if (parsed >= 0 && parsed <= 1000000) {
                       setValue(val);
                     }
                   }}
@@ -83,11 +88,26 @@ export default function LegionaryClassifier() {
                 />
              </div>
 
-             <div className="p-6 rounded-[24px] bg-primary/10 border border-primary/20 flex flex-col justify-center">
+             <div className="p-6 rounded-[24px] bg-primary/10 border border-primary/20 flex flex-col justify-center min-w-[160px]">
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Your Rank</span>
                 <span className="text-xl font-heading font-black text-white uppercase tracking-tighter">{insights.rank}</span>
              </div>
            </div>
+
+           {num > 80000 && (
+             <motion.div 
+               initial={{ opacity: 0, x: -20 }}
+               animate={{ opacity: 1, x: 0 }}
+               className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center space-x-4"
+             >
+                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
+                   <Info className="w-4 h-4 text-amber-500" />
+                </div>
+                <p className="text-amber-500/80 text-[10px] font-bold uppercase tracking-wider">
+                  Historian's Note: Very few Roman commanders ever led a force larger than 80,000 in a single field.
+                </p>
+             </motion.div>
+           )}
         </div>
       </div>
 
@@ -127,19 +147,39 @@ export default function LegionaryClassifier() {
         <section className="p-12 rounded-[48px] bg-black/40 border border-white/5 shadow-inner relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.03)_0%,transparent_100%)]" />
           
-          <div className="relative z-10 space-y-8">
-             <div className="flex items-center justify-between">
+          <div className="relative z-10 space-y-10">
+             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div className="space-y-1">
                   <h4 className="text-white font-black uppercase tracking-widest text-xs">Tactical Deployment</h4>
                   <p className="text-slate-500 text-[10px] font-medium uppercase tracking-widest">Visual Field Representation</p>
                 </div>
-                <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 flex items-center space-x-3">
-                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Formation</span>
+                
+                {/* Formation Toggle */}
+                <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
+                   {[
+                     { id: 'loose', label: 'Skirmish' },
+                     { id: 'tight', label: 'Shield-Wall' },
+                     { id: 'column', label: 'Marching' }
+                   ].map((f) => (
+                     <button
+                       key={f.id}
+                       onClick={() => setFormation(f.id as any)}
+                       className={cn(
+                         "px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all",
+                         formation === f.id ? "bg-white text-black shadow-lg" : "text-slate-500 hover:text-slate-300"
+                       )}
+                     >
+                        {f.label}
+                     </button>
+                   ))}
                 </div>
              </div>
 
-             <div className="min-h-[200px] flex flex-wrap gap-2 items-start justify-start">
+             <div className="min-h-[240px] flex flex-wrap items-start justify-start transition-all duration-700"
+                  style={{ 
+                    gap: formation === 'loose' ? '12px' : formation === 'tight' ? '4px' : '2px',
+                    flexDirection: formation === 'column' ? 'column' : 'row'
+                  }}>
                 {num > 10000 ? (
                   <div className="w-full space-y-6">
                      <div className="flex flex-wrap gap-4">
@@ -153,7 +193,10 @@ export default function LegionaryClassifier() {
                      </div>
                   </div>
                 ) : num > 1000 ? (
-                  <div className="flex flex-wrap gap-3">
+                  <div className={cn(
+                    "flex flex-wrap transition-all duration-700",
+                    formation === 'loose' ? "gap-6" : formation === 'tight' ? "gap-2" : "gap-1 flex-col"
+                  )}>
                      {Array.from({ length: Math.floor(num / 480) }).map((_, i) => (
                        <div key={i} className="w-16 h-20 bg-primary/20 border border-primary/40 rounded-lg flex items-center justify-center group hover:scale-110 transition-transform">
                           <Shield className="w-5 h-5 text-primary" />
@@ -166,14 +209,19 @@ export default function LegionaryClassifier() {
                      ))}
                   </div>
                 ) : (
-                  <div className="flex flex-wrap gap-1.5 max-w-4xl">
-                     {Array.from({ length: num }).map((_, i) => (
+                  <div className={cn(
+                    "flex flex-wrap transition-all duration-700 max-w-4xl",
+                    formation === 'loose' ? "gap-2" : formation === 'tight' ? "gap-0.5" : "gap-0.5 flex-col h-64 overflow-hidden"
+                  )}>
+                     {Array.from({ length: Math.min(num, 1000) }).map((_, i) => (
                        <motion.div 
                          key={i} 
-                         initial={{ scale: 0 }}
-                         animate={{ scale: 1 }}
-                         transition={{ delay: i * 0.002 }}
-                         className="w-1.5 h-1.5 rounded-full bg-primary/60 shadow-[0_0_5px_rgba(99,102,241,0.5)]" 
+                         layout
+                         className={cn(
+                           "rounded-full transition-all duration-500",
+                           formation === 'loose' ? "w-2 h-2 bg-primary/60" : "w-1.5 h-1.5 bg-primary/80",
+                           formation === 'tight' && "rounded-sm"
+                         )} 
                        />
                      ))}
                   </div>
@@ -185,12 +233,10 @@ export default function LegionaryClassifier() {
                    <div className="w-2 h-2 rounded-full bg-primary/60" />
                    <span>= Individual Legionary</span>
                 </div>
-                {num > 1000 && (
-                  <div className="flex items-center space-x-2">
-                     <div className="w-4 h-4 bg-primary/20 border border-primary/40 rounded" />
-                     <span>= Cohort (480)</span>
-                  </div>
-                )}
+                <div className="flex items-center space-x-4 ml-auto italic opacity-50">
+                   <Info className="w-3 h-3" />
+                   <span>Toggle formations to see how Romans adjusted their spacing.</span>
+                </div>
              </div>
           </div>
         </section>
