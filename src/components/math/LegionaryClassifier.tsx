@@ -70,8 +70,14 @@ export default function LegionaryClassifier() {
                 </div>
                 <input 
                   type="number"
+                  min="0"
                   value={value}
-                  onChange={(e) => setValue(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === '' || parseInt(val) >= 0) {
+                      setValue(val);
+                    }
+                  }}
                   placeholder="Enter soldier count..."
                   className="w-full bg-black/40 border border-white/10 rounded-[24px] py-6 pl-16 pr-8 text-2xl font-black text-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-slate-800"
                 />
@@ -115,6 +121,80 @@ export default function LegionaryClassifier() {
             </p>
          </div>
       </div>
+
+      {/* Tactical Deployment (Battle Map) */}
+      {num > 0 && (
+        <section className="p-12 rounded-[48px] bg-black/40 border border-white/5 shadow-inner relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.03)_0%,transparent_100%)]" />
+          
+          <div className="relative z-10 space-y-8">
+             <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <h4 className="text-white font-black uppercase tracking-widest text-xs">Tactical Deployment</h4>
+                  <p className="text-slate-500 text-[10px] font-medium uppercase tracking-widest">Visual Field Representation</p>
+                </div>
+                <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 flex items-center space-x-3">
+                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Formation</span>
+                </div>
+             </div>
+
+             <div className="min-h-[200px] flex flex-wrap gap-2 items-start justify-start">
+                {num > 10000 ? (
+                  <div className="w-full space-y-6">
+                     <div className="flex flex-wrap gap-4">
+                        {Array.from({ length: Math.min(Math.floor(num / 5000), 20) }).map((_, i) => (
+                          <div key={i} className="w-20 h-28 bg-red-500/20 border-2 border-red-500/40 rounded-xl flex flex-col items-center justify-center space-y-2 group hover:bg-red-500/30 transition-all cursor-help">
+                             <Flag className="w-6 h-6 text-red-500" />
+                             <span className="text-[8px] font-black text-red-500 uppercase tracking-tighter">Legion</span>
+                          </div>
+                        ))}
+                        {num > 100000 && <div className="text-slate-600 self-end pb-4 font-black">...and many more</div>}
+                     </div>
+                  </div>
+                ) : num > 1000 ? (
+                  <div className="flex flex-wrap gap-3">
+                     {Array.from({ length: Math.floor(num / 480) }).map((_, i) => (
+                       <div key={i} className="w-16 h-20 bg-primary/20 border border-primary/40 rounded-lg flex items-center justify-center group hover:scale-110 transition-transform">
+                          <Shield className="w-5 h-5 text-primary" />
+                       </div>
+                     ))}
+                     {Array.from({ length: Math.floor((num % 480) / 80) }).map((_, i) => (
+                       <div key={i} className="w-10 h-10 bg-secondary/20 border border-secondary/40 rounded-md flex items-center justify-center opacity-60">
+                          <Users className="w-4 h-4 text-secondary" />
+                       </div>
+                     ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5 max-w-4xl">
+                     {Array.from({ length: num }).map((_, i) => (
+                       <motion.div 
+                         key={i} 
+                         initial={{ scale: 0 }}
+                         animate={{ scale: 1 }}
+                         transition={{ delay: i * 0.002 }}
+                         className="w-1.5 h-1.5 rounded-full bg-primary/60 shadow-[0_0_5px_rgba(99,102,241,0.5)]" 
+                       />
+                     ))}
+                  </div>
+                )}
+             </div>
+
+             <div className="pt-6 border-t border-white/5 flex flex-wrap gap-6 text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">
+                <div className="flex items-center space-x-2">
+                   <div className="w-2 h-2 rounded-full bg-primary/60" />
+                   <span>= Individual Legionary</span>
+                </div>
+                {num > 1000 && (
+                  <div className="flex items-center space-x-2">
+                     <div className="w-4 h-4 bg-primary/20 border border-primary/40 rounded" />
+                     <span>= Cohort (480)</span>
+                  </div>
+                )}
+             </div>
+          </div>
+        </section>
+      )}
 
       {/* Visual Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
