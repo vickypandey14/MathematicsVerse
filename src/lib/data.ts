@@ -47,3 +47,12 @@ export async function searchFormulas(query: string) {
     include: { category: true },
   });
 }
+
+export async function getFormulasByIds(ids: string[]) {
+  return await prisma.formula.findMany({
+    where: {
+      id: { in: ids },
+    },
+    include: { category: true },
+  });
+}

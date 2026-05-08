@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
+import RecentTracker from '@/components/formula/RecentTracker';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -76,6 +77,7 @@ export default async function FormulaDetail({ params }: PageProps) {
 
   return (
     <MainLayout>
+      <RecentTracker formulaId={formula.id} />
       <div className="space-y-16">
         {/* Navigation & Topic Header */}
         <div className="flex items-center justify-between">
