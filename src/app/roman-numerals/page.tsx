@@ -4,6 +4,7 @@ import { Hash, Info, History, GraduationCap, Compass } from 'lucide-react';
 import ChronosCalculator from '@/components/math/ChronosCalculator';
 import InscriptionGenerator from '@/components/math/InscriptionGenerator';
 import RomanClock from '@/components/math/RomanClock';
+import LegionaryClassifier from '@/components/math/LegionaryClassifier';
 import MainLayout from '@/components/layout/MainLayout';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -75,7 +76,7 @@ export default function RomanNumeralsPage() {
 
   const numbersTo100 = Array.from({ length: 100 }, (_, i) => i + 1);
   const [activeTab, setActiveTab] = useState<'guide' | 'tools' | 'clock'>('guide');
-  const [activeTool, setActiveTool] = useState<'number' | 'sentence'>('number');
+  const [activeTool, setActiveTool] = useState<'number' | 'sentence' | 'legion'>('number');
   const [soundEnabled, setSoundEnabled] = useState(false);
 
   return (
@@ -229,14 +230,25 @@ export default function RomanNumeralsPage() {
                   >
                     Sentence Converter
                   </button>
+                  <button 
+                    onClick={() => setActiveTool('legion')}
+                    className={cn(
+                      "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
+                      activeTool === 'legion' ? "bg-white text-black shadow-xl scale-100" : "text-slate-400 hover:text-white scale-95 opacity-60 hover:opacity-100"
+                    )}
+                  >
+                    Legionary Scale
+                  </button>
                 </div>
               </div>
 
               <div className="">
                 {activeTool === 'number' ? (
                   <ChronosCalculator />
-                ) : (
+                ) : activeTool === 'sentence' ? (
                   <InscriptionGenerator />
+                ) : (
+                  <LegionaryClassifier />
                 )}
               </div>
             </motion.div>
