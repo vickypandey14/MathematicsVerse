@@ -11,17 +11,25 @@ import {
   RefreshCcw,
   Plus,
   Minus,
-  Timer
+  Timer,
+  Trophy
 } from 'lucide-react';
 import TimeChallenge from '@/components/math/TimeChallenge';
+import TrophyRoom, { TrophyID } from '@/components/math/TrophyRoom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 export default function KidsCorner() {
   const [baseNumber, setBaseNumber] = useState<number>(7);
   const [inputValue, setInputValue] = useState<string>("7");
-  const [activeView, setActiveView] = useState<'table' | 'visual' | 'challenge'>('table');
+  const [activeView, setActiveView] = useState<'table' | 'visual' | 'challenge' | 'trophies'>('table');
+  const [unlockedTrophies, setUnlockedTrophies] = useState<TrophyID[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('math-verse-trophies');
+    if (saved) setUnlockedTrophies(JSON.parse(saved));
+  }, [activeView]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -110,6 +118,16 @@ export default function KidsCorner() {
                    >
                      <Timer className="w-3 h-3 mr-2" />
                      Game
+                   </button>
+                   <button 
+                    onClick={() => setActiveView('trophies')}
+                    className={cn(
+                      "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center",
+                      activeView === 'trophies' ? "bg-white text-black shadow-xl" : "text-slate-500 hover:text-white"
+                    )}
+                   >
+                     <Trophy className="w-3 h-3 mr-2" />
+                     Trophies
                    </button>
                 </div>
              </div>
@@ -209,7 +227,7 @@ export default function KidsCorner() {
                              "This is what multiplication looks like! It's just a grid of stars."
                            </p>
                         </motion.div>
-                      ) : (
+                      ) : activeView === 'challenge' ? (
                         <motion.div 
                           key="challenge"
                           initial={{ opacity: 0, x: 20 }}
@@ -218,6 +236,16 @@ export default function KidsCorner() {
                           className="h-full"
                         >
                            <TimeChallenge />
+                        </motion.div>
+                      ) : (
+                        <motion.div 
+                          key="trophies"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          className="h-full"
+                        >
+                           <TrophyRoom unlockedIds={unlockedTrophies} />
                         </motion.div>
                       )}
                    </AnimatePresence>
