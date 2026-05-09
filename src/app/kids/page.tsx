@@ -133,47 +133,57 @@ export default function KidsCorner() {
              </div>
 
              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                {/* Left Side: Controls */}
-                <div className="lg:col-span-4 space-y-10">
-                   <div className="space-y-6">
-                      <h2 className="text-xl font-black text-white uppercase tracking-[0.2em] flex items-center">
-                        <Star className="text-secondary w-5 h-5 mr-3 fill-current" />
-                        Table Maker
-                      </h2>
-                      
-                      <div className="flex items-center space-x-4">
-                        <button onClick={decrement} className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-secondary/20 hover:text-white transition-all">
-                           <Minus className="w-5 h-5" />
-                        </button>
-                        <div className="relative flex-grow">
-                          <input 
-                            type="text"
-                            value={inputValue}
-                            onChange={handleInputChange}
-                            className="w-full bg-black/40 border-2 border-white/5 rounded-2xl py-6 text-center text-4xl font-heading font-black text-white focus:outline-none focus:border-secondary transition-all"
-                          />
+                {/* Left Side: Controls - Only show for Table and Visuals */}
+                {(activeView === 'table' || activeView === 'visual') && (
+                  <motion.div 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="lg:col-span-4 space-y-10"
+                  >
+                     <div className="space-y-6">
+                        <h2 className="text-xl font-black text-white uppercase tracking-[0.2em] flex items-center">
+                          <Star className="text-secondary w-5 h-5 mr-3 fill-current" />
+                          Table Maker
+                        </h2>
+                        
+                        <div className="flex items-center space-x-4">
+                          <button onClick={decrement} className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-secondary/20 hover:text-white transition-all">
+                             <Minus className="w-5 h-5" />
+                          </button>
+                          <div className="relative flex-grow">
+                            <input 
+                              type="text"
+                              value={inputValue}
+                              onChange={handleInputChange}
+                              className="w-full bg-black/40 border-2 border-white/5 rounded-2xl py-6 text-center text-4xl font-heading font-black text-white focus:outline-none focus:border-secondary transition-all"
+                            />
+                          </div>
+                          <button onClick={increment} className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-primary/20 hover:text-white transition-all">
+                             <Plus className="w-5 h-5" />
+                          </button>
                         </div>
-                        <button onClick={increment} className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-primary/20 hover:text-white transition-all">
-                           <Plus className="w-5 h-5" />
-                        </button>
-                      </div>
-                   </div>
+                     </div>
 
-                   <div className="p-8 rounded-[32px] bg-white/[0.03] border border-white/5 space-y-4">
-                      <div className="flex items-center space-x-3 text-secondary">
-                        <Zap className="w-4 h-4 fill-current" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Math Tip</span>
-                      </div>
-                      <p className="text-slate-400 text-sm font-medium leading-relaxed">
-                        {baseNumber === 9 ? "The digits of 9 times table always add up to 9!" : 
-                         baseNumber % 2 === 0 ? "Any number times an even number is ALWAYS even!" : 
-                         "Try saying the numbers out loud as you read them!"}
-                      </p>
-                   </div>
-                </div>
+                     <div className="p-8 rounded-[32px] bg-white/[0.03] border border-white/5 space-y-4">
+                        <div className="flex items-center space-x-3 text-secondary">
+                          <Zap className="w-4 h-4 fill-current" />
+                          <span className="text-[10px] font-black uppercase tracking-widest">Math Tip</span>
+                        </div>
+                        <p className="text-slate-400 text-sm font-medium leading-relaxed">
+                          {baseNumber === 9 ? "The digits of 9 times table always add up to 9!" : 
+                           baseNumber % 2 === 0 ? "Any number times an even number is ALWAYS even!" : 
+                           "Try saying the numbers out loud as you read them!"}
+                        </p>
+                     </div>
+                  </motion.div>
+                )}
 
-                {/* Right Side: Content Area */}
-                <div className="lg:col-span-8 bg-black/20 rounded-[40px] border border-white/5 p-8 relative overflow-hidden min-h-[450px] flex flex-col">
+                {/* Right Side: Content Area - Expand if controls are hidden */}
+                <div className={cn(
+                  "bg-black/20 rounded-[40px] border border-white/5 p-8 relative overflow-hidden min-h-[450px] flex flex-col transition-all duration-500",
+                  (activeView === 'table' || activeView === 'visual') ? "lg:col-span-8" : "lg:col-span-12"
+                )}>
                    <AnimatePresence mode="wait">
                       {activeView === 'table' ? (
                         <motion.div 
@@ -181,7 +191,7 @@ export default function KidsCorner() {
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -20 }}
-                          className="grid grid-cols-2 md:grid-cols-3 gap-4"
+                          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
                         >
                            {tableValues.map((num) => (
                              <div key={num} className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-secondary/30 transition-all flex flex-col items-center justify-center">

@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Trophy, Star, Zap, Shield, Crown, Lock, CheckCircle2 } from 'lucide-react';
+import { Trophy, Star, Zap, Shield, Crown, Lock, CheckCircle2, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export type TrophyID = 'first_win' | 'streak_10' | 'score_500' | 'accuracy_100';
+export type TrophyID = 'first_win' | 'streak_10' | 'streak_20' | 'score_500' | 'score_1000' | 'accuracy_100' | 'speed_demon' | 'century_club';
 
 export interface TrophyData {
   id: TrophyID;
@@ -33,6 +33,14 @@ export const TROPHIES: TrophyData[] = [
     requirement: '10x Streak'
   },
   {
+    id: 'speed_demon',
+    title: 'Speed Demon',
+    description: 'Your fingers are moving faster than sound!',
+    tier: 'silver',
+    icon: Zap,
+    requirement: '20+ Ans/Min'
+  },
+  {
     id: 'score_500',
     title: 'Math Titan',
     description: 'Achieved a legendary score in one session.',
@@ -41,12 +49,36 @@ export const TROPHIES: TrophyData[] = [
     requirement: '500+ Points'
   },
   {
+    id: 'century_club',
+    title: 'Century Club',
+    description: 'You have answered over 100 questions correctly!',
+    tier: 'gold',
+    icon: Shield,
+    requirement: '100 Total Correct'
+  },
+  {
+    id: 'streak_20',
+    title: 'The Specialist',
+    description: 'Unstoppable focus! You are in the zone.',
+    tier: 'diamond',
+    icon: Target,
+    requirement: '20x Streak'
+  },
+  {
     id: 'accuracy_100',
     title: 'The Architect',
     description: 'Calculated everything with perfect precision.',
     tier: 'diamond',
     icon: Crown,
     requirement: '100% Accuracy'
+  },
+  {
+    id: 'score_1000',
+    title: 'Math Professor',
+    description: 'You have mastered the art of numbers.',
+    tier: 'diamond',
+    icon: Trophy,
+    requirement: '1000+ Points'
   }
 ];
 

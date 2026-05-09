@@ -51,6 +51,14 @@ export default function TimeChallenge() {
     });
   }, []);
 
+  const updateLifetimeStats = useCallback((correctCount: number) => {
+    const saved = localStorage.getItem('math-verse-lifetime-correct');
+    const current = saved ? parseInt(saved) : 0;
+    const total = current + correctCount;
+    localStorage.setItem('math-verse-lifetime-correct', total.toString());
+    if (total >= 100) unlockTrophy('century_club');
+  }, [unlockTrophy]);
+
   const generateQuestion = useCallback(() => {
     // Difficulty scales based on score
     let maxNum = 10;
@@ -85,9 +93,14 @@ export default function TimeChallenge() {
       
       // Check for Trophies
       const accuracy = stats.total > 0 ? (stats.correct / stats.total) : 0;
-      if (accuracy === 1 && stats.total >= 10) unlockTrophy('accuracy_100');
+      const efficiency = (stats.correct / 0.5); // ans per minute (30s = 0.5m)
+      
+      if (accuracy === 1 && stats.total >= 15) unlockTrophy('accuracy_100');
       if (score >= 500) unlockTrophy('score_500');
+      if (score >= 1000) unlockTrophy('score_1000');
+      if (efficiency >= 20) unlockTrophy('speed_demon');
       unlockTrophy('first_win');
+      updateLifetimeStats(stats.correct);
 
       if (score > highScore) {
         setHighScore(score);
@@ -112,6 +125,7 @@ export default function TimeChallenge() {
       const newStreak = streak + 1;
       const newMultiplier = 1 + Math.floor(newStreak / 5);
       if (newStreak >= 10) unlockTrophy('streak_10');
+      if (newStreak >= 20) unlockTrophy('streak_20');
       
       setScore(prev => prev + (10 * newMultiplier));
       setStreak(newStreak);
