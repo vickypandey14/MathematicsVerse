@@ -1,10 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Trophy, Star, Zap, Shield, Crown, Lock, CheckCircle2, Target } from 'lucide-react';
+import { Trophy, Star, Zap, Shield, Crown, Lock, CheckCircle2, Target, Calculator, Snowflake, Swords, Landmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export type TrophyID = 'first_win' | 'streak_10' | 'streak_20' | 'score_500' | 'score_1000' | 'accuracy_100' | 'speed_demon' | 'century_club';
+export type TrophyID = 
+  | 'first_win' | 'streak_10' | 'streak_20' | 'score_500' | 'score_1000' | 'accuracy_100' | 'speed_demon' | 'century_club'
+  | 'specialist_add' | 'specialist_sub' | 'specialist_multiply' | 'specialist_roman';
 
 export interface TrophyData {
   id: TrophyID;
@@ -79,6 +81,38 @@ export const TROPHIES: TrophyData[] = [
     tier: 'diamond',
     icon: Trophy,
     requirement: '1000+ Points'
+  },
+  {
+    id: 'specialist_add',
+    title: 'Grand Adder',
+    description: 'You can sum up anything in the blink of an eye!',
+    tier: 'gold',
+    icon: Calculator,
+    requirement: '100 Additions'
+  },
+  {
+    id: 'specialist_sub',
+    title: 'Sub-Zero',
+    description: 'Ice cold precision with every subtraction.',
+    tier: 'gold',
+    icon: Snowflake,
+    requirement: '100 Subtractions'
+  },
+  {
+    id: 'specialist_multiply',
+    title: 'Table Titan',
+    description: 'The master of the ancient multiplication art.',
+    tier: 'gold',
+    icon: Swords,
+    requirement: '100 Tables'
+  },
+  {
+    id: 'specialist_roman',
+    title: 'Roman Emperor',
+    description: 'All roads lead to your mathematical mastery.',
+    tier: 'diamond',
+    icon: Landmark,
+    requirement: '50 Roman Conv.'
   }
 ];
 
