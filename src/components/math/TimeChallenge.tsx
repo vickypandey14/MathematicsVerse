@@ -6,6 +6,7 @@ import { Timer, Trophy, Zap, RefreshCcw, Check, X, Star, TrendingUp, Trophy as T
 import { cn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
 import { TrophyID, TROPHIES } from './TrophyRoom';
+import { useSearchParams } from 'next/navigation';
 
 type GameMode = 'multiply' | 'add' | 'subtract' | 'roman';
 type Difficulty = 'easy' | 'medium' | 'hard';
@@ -70,6 +71,16 @@ export default function TimeChallenge() {
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
   const [multiplier, setMultiplier] = useState(1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchParams = useSearchParams();
+
+  // Auto-select mode from URL if present
+  useEffect(() => {
+    const modeParam = searchParams.get('mode') as GameMode;
+    if (modeParam && MISSIONS.some(m => m.id === modeParam)) {
+      setGameMode(modeParam);
+      setGameState('config');
+    }
+  }, [searchParams]);
 
   const [stats, setStats] = useState({ correct: 0, total: 0, bestStreak: 0 });
 
