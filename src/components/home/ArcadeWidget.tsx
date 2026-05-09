@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Zap, Plus, Minus, Hash, ArrowRight, Star, Target, Gamepad2 } from 'lucide-react';
+import { Trophy, Zap, Plus, Minus, Hash, ArrowRight, Star, Target, Gamepad2, X } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -19,7 +19,7 @@ export default function ArcadeWidget() {
   }, []);
 
   const quickMissions = [
-    { id: 'multiply', name: 'Table Master', icon: Zap, color: 'text-primary', glow: 'shadow-primary/40' },
+    { id: 'multiply', name: 'Table Master', icon: X, color: 'text-primary', glow: 'shadow-primary/40' },
     { id: 'add', name: 'Sum Striker', icon: Plus, color: 'text-green-500', glow: 'shadow-green-500/40' },
     { id: 'subtract', name: 'Minus Medic', icon: Minus, color: 'text-blue-500', glow: 'shadow-blue-500/40' },
     { id: 'roman', name: 'Roman Raider', icon: Hash, color: 'text-secondary', glow: 'shadow-secondary/40' },
@@ -106,25 +106,52 @@ export default function ArcadeWidget() {
                  </div>
               </div>
 
-              {/* Game Icons: The Glowing Buttons */}
-              <div className="flex items-center space-x-5 pt-2">
+              {/* Game Icons: The Kinetic Orbs */}
+              <motion.div 
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  visible: { transition: { staggerChildren: 0.1 } }
+                }}
+                className="flex items-center space-x-5 pt-2"
+              >
                  {quickMissions.map((m, i) => (
-                   <Link 
-                    key={i} 
-                    href={`/kids?mode=${m.id}`} 
-                    className={cn(
-                      "w-16 h-16 rounded-2xl bg-slate-900 border border-white/10 flex items-center justify-center transition-all hover:-translate-y-2 hover:bg-slate-800 hover:border-white/30 shadow-xl group/btn overflow-hidden relative",
-                      m.color
-                    )}
+                   <motion.div
+                    key={i}
+                    variants={{
+                      hidden: { opacity: 0, scale: 0, y: 20 },
+                      visible: { opacity: 1, scale: 1, y: 0 }
+                    }}
+                    whileHover={{ scale: 1.1, y: -8 }}
+                    whileTap={{ scale: 0.9 }}
                    >
-                     {/* The Glow Effect */}
-                     <div className={cn("absolute inset-0 opacity-0 group-hover/btn:opacity-20 transition-opacity bg-current", m.glow.replace('shadow-', 'bg-'))} />
-                     <div className={cn("absolute -inset-4 opacity-0 group-hover/btn:opacity-40 blur-2xl transition-opacity bg-current", m.glow.replace('shadow-', 'bg-'))} />
-                     
-                     <m.icon className="w-7 h-7 relative z-10 group-hover/btn:scale-110 transition-transform" />
-                   </Link>
+                     <Link 
+                      href={`/kids?mode=${m.id}`} 
+                      className={cn(
+                        "w-16 h-16 rounded-2xl bg-slate-900 border border-white/10 flex items-center justify-center transition-all hover:bg-slate-800 hover:border-white/30 shadow-xl group/btn overflow-hidden relative",
+                        m.color
+                      )}
+                     >
+                       {/* The Glow Effect */}
+                       <div className={cn("absolute inset-0 opacity-0 group-hover/btn:opacity-20 transition-opacity bg-current", m.glow.replace('shadow-', 'bg-'))} />
+                       
+                       {/* Rotating Light Streak */}
+                       <motion.div 
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        className={cn("absolute -inset-2 opacity-0 group-hover/btn:opacity-30 blur-xl transition-opacity bg-gradient-to-r from-transparent via-current to-transparent", m.color)}
+                       />
+                       
+                       <motion.div
+                        animate={{ y: [0, -3, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
+                       >
+                         <m.icon className="w-7 h-7 relative z-10 group-hover/btn:rotate-[360deg] transition-transform duration-700" />
+                       </motion.div>
+                     </Link>
+                   </motion.div>
                  ))}
-              </div>
+              </motion.div>
            </div>
         </div>
       </div>

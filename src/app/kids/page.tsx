@@ -14,17 +14,41 @@ import {
   Timer,
   Trophy
 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useState, useEffect } from 'react';
 import TimeChallenge from '@/components/math/TimeChallenge';
 import TrophyRoom, { TrophyID } from '@/components/math/TrophyRoom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 export default function KidsCorner() {
+  return (
+    <Suspense fallback={
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-[600px]">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      </MainLayout>
+    }>
+      <KidsCornerContent />
+    </Suspense>
+  );
+}
+
+function KidsCornerContent() {
+  const searchParams = useSearchParams();
   const [baseNumber, setBaseNumber] = useState<number>(7);
   const [inputValue, setInputValue] = useState<string>("7");
   const [activeView, setActiveView] = useState<'table' | 'visual' | 'challenge' | 'trophies'>('table');
   const [unlockedTrophies, setUnlockedTrophies] = useState<TrophyID[]>([]);
+
+  useEffect(() => {
+    // If we have a mission mode in the URL, jump straight to the game tab
+    const mode = searchParams.get('mode');
+    if (mode) {
+      setActiveView('challenge');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const saved = localStorage.getItem('math-verse-trophies');

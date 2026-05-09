@@ -24,7 +24,7 @@ const MISSIONS: GameMission[] = [
   { 
     id: 'multiply', 
     title: 'Table Master', 
-    icon: Zap, 
+    icon: X, 
     color: 'text-primary', 
     description: 'Master multiplication tables',
     instructions: 'Multiply the two numbers shown as quickly as you can. Focus on building mental shortcuts for larger numbers to boost your score!'
