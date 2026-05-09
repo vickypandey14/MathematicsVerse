@@ -55,16 +55,16 @@ export default function ArcadeWidget() {
                  <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-primary shadow-xl">
                     <Gamepad2 className="w-6 h-6" />
                  </div>
-                 <span className="text-xs font-black uppercase tracking-[0.4em] text-slate-500">Mathematics Command Center</span>
+                 <span className="text-xs font-black uppercase tracking-[0.4em] text-slate-500">Your Math Arcade</span>
               </div>
 
               <div className="space-y-2">
                  <h2 className="text-5xl md:text-6xl font-heading font-black text-white tracking-tighter leading-none">
-                    READY FOR <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">YOUR NEXT MISSION?</span>
+                    READY TO <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">PLAY?</span>
                  </h2>
                  <p className="text-slate-500 font-medium text-lg max-w-md">
-                    Jump back into action. You've conquered <span className="text-white font-black">{stats.lifetimeCorrect}</span> challenges.
+                    You've solved <span className="text-white font-black">{stats.lifetimeCorrect}</span> problems so far. Can you beat your high score today?
                  </p>
               </div>
 
@@ -73,7 +73,7 @@ export default function ArcadeWidget() {
                     href="/kids"
                     className="group relative px-10 py-5 rounded-2xl bg-primary text-white font-black uppercase tracking-[0.2em] text-xs transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/40 flex items-center justify-center space-x-3 overflow-hidden min-w-[220px]"
                  >
-                    <span className="relative z-10">Launch Mission</span>
+                    <span className="relative z-10">Start Playing</span>
                     <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
                  </Link>
               </div>
