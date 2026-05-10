@@ -68,7 +68,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-800 text-slate-300 text-sm mb-8"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-card/50 border border-border text-foreground/80 text-sm mb-8"
           >
             <Sparkles className="w-4 h-4 text-primary" />
             <span>Discover the elegance of math</span>
@@ -79,7 +79,7 @@ export default function Hero() {
             <span className="gradient-text">Mathematics</span>Verse
           </h1>
 
-          <p className="text-xl md:text-2xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-foreground/60 mb-10 max-w-2xl mx-auto leading-relaxed">
             A premium interactive platform for exploring complex formulas with stunning visualizations and beginner-friendly explanations.
           </p>
 
@@ -94,7 +94,7 @@ export default function Hero() {
             </Link>
             <Link
               href="/categories"
-              className="px-8 py-4 bg-slate-900 text-white border border-slate-800 rounded-2xl font-bold transition-all hover:bg-slate-800 hover:border-slate-700 active:scale-95"
+              className="px-8 py-4 bg-card text-foreground border border-border rounded-2xl font-bold transition-all hover:bg-card/80 hover:border-border/50 active:scale-95"
             >
               Browse Categories
             </Link>
@@ -107,7 +107,7 @@ export default function Hero() {
         transition={{ repeat: Infinity, duration: 2 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center"
       >
-        <span className="text-xs text-slate-500 mb-2 uppercase tracking-widest font-bold">Scroll to explore</span>
+        <span className="text-xs text-foreground/40 mb-2 uppercase tracking-widest font-bold">Scroll to explore</span>
         <div className="w-1 h-8 rounded-full bg-gradient-to-b from-primary to-transparent" />
       </motion.div>
     </section>

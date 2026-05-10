@@ -83,13 +83,13 @@ export default async function FormulaDetail({ params }: PageProps) {
         <div className="flex items-center justify-between">
           <Link 
             href="/formulas" 
-            className="inline-flex items-center space-x-3 text-slate-500 hover:text-white group transition-all"
+            className="inline-flex items-center space-x-3 text-foreground/50 hover:text-foreground group transition-all"
           >
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-2 transition-transform text-primary" />
             <span className="text-xs font-black uppercase tracking-[0.3em]">Back to Library</span>
           </Link>
           <div className="flex items-center space-x-4">
-             <span className="px-5 py-2 rounded-xl bg-white/5 border border-white/5 text-[10px] font-black uppercase tracking-widest text-slate-500">
+             <span className="px-5 py-2 rounded-xl bg-foreground/5 border border-border text-[10px] font-black uppercase tracking-widest text-foreground/50">
                Difficulty: {formula.difficulty}
              </span>
              <span className="px-5 py-2 rounded-xl bg-primary/10 border border-primary/20 text-[10px] font-black uppercase tracking-widest text-primary">
@@ -102,11 +102,11 @@ export default async function FormulaDetail({ params }: PageProps) {
           <div className="lg:col-span-8 space-y-16">
             {/* Title & Formula Display */}
             <section>
-              <h1 className="text-6xl md:text-8xl font-heading font-black text-white tracking-tighter mb-10 leading-none">
+              <h1 className="text-6xl md:text-8xl font-heading font-black text-foreground tracking-tighter mb-10 leading-none">
                 {formula.title}
               </h1>
               
-              <div className="p-20 rounded-[56px] bg-slate-900/40 border border-white/5 flex items-center justify-center min-h-[400px] shadow-2xl relative overflow-hidden group backdrop-blur-md">
+              <div className="p-20 rounded-[56px] bg-card/40 border border-border flex items-center justify-center min-h-[400px] shadow-2xl relative overflow-hidden group backdrop-blur-md">
                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                  <div className="scale-150 md:scale-[2]">
                     <MathRenderer latex={formula.latex} block />
@@ -120,35 +120,35 @@ export default async function FormulaDetail({ params }: PageProps) {
                   <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
                     <Layers className="text-secondary w-6 h-6" />
                   </div>
-                  <h3 className="text-3xl font-heading font-black text-white tracking-tighter uppercase">Conceptual Flow</h3>
+                  <h3 className="text-3xl font-heading font-black text-foreground tracking-tighter uppercase">Conceptual Flow</h3>
                </div>
-               <div className="p-12 rounded-[40px] bg-black/40 border border-white/5 shadow-inner backdrop-blur-xl">
+               <div className="p-12 rounded-[40px] bg-foreground/5 border border-border shadow-inner backdrop-blur-xl">
                   <MermaidDiagram chart={chart} />
                </div>
             </section>
 
             {/* Simple Logic & Use Case Grid */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="p-10 rounded-[40px] bg-slate-900/40 border border-white/5 shadow-xl backdrop-blur-md">
+              <div className="p-10 rounded-[40px] bg-card/40 border border-border shadow-xl backdrop-blur-md">
                 <div className="flex items-center space-x-4 mb-8">
                   <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center border border-accent/20">
                     <Lightbulb className="text-accent w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-heading font-black text-white tracking-tight uppercase">The Core Idea</h3>
+                  <h3 className="text-2xl font-heading font-black text-foreground tracking-tight uppercase">The Core Idea</h3>
                 </div>
-                <p className="text-slate-400 leading-relaxed font-medium text-lg">
+                <p className="text-foreground/60 leading-relaxed font-medium text-lg">
                   {formula.explanation}
                 </p>
               </div>
 
-              <div className="p-10 rounded-[40px] bg-slate-900/40 border border-white/5 shadow-xl backdrop-blur-md">
+              <div className="p-10 rounded-[40px] bg-card/40 border border-border shadow-xl backdrop-blur-md">
                 <div className="flex items-center space-x-4 mb-8">
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
                     <CheckCircle2 className="text-primary w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-heading font-black text-white tracking-tight uppercase">Real World Use</h3>
+                  <h3 className="text-2xl font-heading font-black text-foreground tracking-tight uppercase">Real World Use</h3>
                 </div>
-                <p className="text-slate-400 leading-relaxed font-medium text-lg">
+                <p className="text-foreground/60 leading-relaxed font-medium text-lg">
                   {formula.useCase}
                 </p>
               </div>
@@ -160,15 +160,15 @@ export default async function FormulaDetail({ params }: PageProps) {
                   <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center border border-accent/20">
                     <Activity className="text-accent w-6 h-6" />
                   </div>
-                  <h3 className="text-3xl font-heading font-black text-white tracking-tighter uppercase">Visual Analysis</h3>
+                  <h3 className="text-3xl font-heading font-black text-foreground tracking-tighter uppercase">Visual Analysis</h3>
                </div>
-               <div className="p-12 rounded-[40px] bg-slate-900/40 border border-white/5 shadow-xl backdrop-blur-md">
+               <div className="p-12 rounded-[40px] bg-card/40 border border-border shadow-xl backdrop-blur-md">
                   <GraphViz formula={formula} />
                </div>
             </section>
 
               {/* Step-by-Step Example */}
-              <section className="p-16 rounded-[56px] bg-slate-900/40 border border-white/5 shadow-2xl relative overflow-hidden backdrop-blur-md">
+              <section className="p-16 rounded-[56px] bg-card/40 border border-border shadow-2xl relative overflow-hidden backdrop-blur-md">
                 <div className="absolute top-0 right-0 p-10 text-primary opacity-5">
                    <Binary className="w-48 h-48" />
                 </div>
@@ -176,9 +176,9 @@ export default async function FormulaDetail({ params }: PageProps) {
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
                     <BookOpen className="text-primary w-6 h-6" />
                   </div>
-                  <h3 className="text-3xl font-heading font-black text-white tracking-tighter uppercase">Step-by-Step Guide</h3>
+                  <h3 className="text-3xl font-heading font-black text-foreground tracking-tighter uppercase">Step-by-Step Guide</h3>
                 </div>
-                <div className="prose prose-invert max-w-none text-slate-400 font-medium text-xl leading-relaxed">
+                <div className="prose prose-invert max-w-none text-foreground/60 font-medium text-xl leading-relaxed">
                    <p>{formula.example}</p>
                 </div>
               </section>
@@ -195,11 +195,11 @@ export default async function FormulaDetail({ params }: PageProps) {
                       <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
                         <HistoryIcon className="text-secondary w-6 h-6" />
                       </div>
-                      <h3 className="text-3xl font-heading font-black text-white tracking-tighter uppercase">Historical Record</h3>
+                      <h3 className="text-3xl font-heading font-black text-foreground tracking-tighter uppercase">Historical Record</h3>
                     </div>
-                    <div className="hidden md:flex items-center space-x-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                      <Clock className="w-3 h-3 text-slate-500" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Timeline: Ancient to Modern</span>
+                    <div className="hidden md:flex items-center space-x-2 px-4 py-2 rounded-full bg-foreground/5 border border-border">
+                      <Clock className="w-3 h-3 text-foreground/40" />
+                      <span className="text-[10px] font-black uppercase tracking-widest text-foreground/40">Timeline: Ancient to Modern</span>
                     </div>
                   </div>
 
@@ -208,7 +208,7 @@ export default async function FormulaDetail({ params }: PageProps) {
                     <div className="pl-12 space-y-8">
                        <div className="relative">
                           <div className="absolute left-[-45px] top-2 w-4 h-4 rounded-full bg-[#0a0c14] border-2 border-secondary shadow-lg shadow-secondary/20" />
-                          <p className="text-slate-300 font-medium text-xl leading-relaxed italic border-l-4 border-secondary/20 pl-6 py-2 bg-secondary/5 rounded-r-2xl">
+                          <p className="text-foreground/80 font-medium text-xl leading-relaxed italic border-l-4 border-secondary/20 pl-6 py-2 bg-secondary/5 rounded-r-2xl">
                             "{formula.history}"
                           </p>
                        </div>
@@ -220,7 +220,7 @@ export default async function FormulaDetail({ params }: PageProps) {
                                </div>
                              ))}
                           </div>
-                          <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Validated Historical Sources</span>
+                          <span className="text-[10px] font-black text-foreground/40 uppercase tracking-widest">Validated Historical Sources</span>
                        </div>
                     </div>
                   </div>
@@ -235,8 +235,8 @@ export default async function FormulaDetail({ params }: PageProps) {
               <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity">
                 <Trophy className="w-10 h-10 text-secondary" />
               </div>
-              <h4 className="text-2xl font-heading font-black text-white mb-6 uppercase tracking-widest">Learning Tip</h4>
-              <p className="text-slate-300 font-medium text-lg leading-relaxed mb-10">
+              <h4 className="text-2xl font-heading font-black text-foreground mb-6 uppercase tracking-widest">Learning Tip</h4>
+              <p className="text-foreground/80 font-medium text-lg leading-relaxed mb-10">
                 Mathematics is about patterns. Mastering this formula will help you solve complex problems with ease.
               </p>
               <DownloadButton formula={formula} />

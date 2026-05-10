@@ -46,9 +46,9 @@ function RomanNumeralBlock({ n, r }: { n: number; r: string }) {
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       >
         {/* Front Side (Roman + Small Decimal) */}
-        <div className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/5 shadow-xl">
-           <span className="text-[10px] font-black text-slate-600 mb-1">{n}</span>
-           <span className="text-xl font-heading font-black text-white">{r}</span>
+        <div className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-4 rounded-2xl bg-card border border-border shadow-xl">
+           <span className="text-[10px] font-black text-foreground/40 mb-1">{n}</span>
+           <span className="text-xl font-heading font-black text-foreground">{r}</span>
         </div>
 
         {/* Back Side (Large Decimal Only) */}
@@ -56,7 +56,7 @@ function RomanNumeralBlock({ n, r }: { n: number; r: string }) {
           className="absolute inset-0 backface-hidden flex items-center justify-center p-4 rounded-2xl bg-primary/20 border border-primary/30 shadow-2xl shadow-primary/20"
           style={{ transform: 'rotateY(180deg)' }}
         >
-           <span className="text-4xl font-heading font-black text-white">{n}</span>
+           <span className="text-4xl font-heading font-black text-foreground">{n}</span>
         </div>
       </motion.div>
     </div>
@@ -85,19 +85,19 @@ export default function RomanNumeralsPage() {
         {/* Page Header */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <h1 className="text-5xl font-heading font-black text-white tracking-tighter mb-2">
+            <h1 className="text-5xl font-heading font-black text-foreground tracking-tighter mb-2">
               Roman <span className="gradient-text">Numerals</span>
             </h1>
-            <p className="text-slate-500 font-medium">Quick reference and calculation tools.</p>
+            <p className="text-foreground/50 font-medium">Quick reference and calculation tools.</p>
           </div>
 
           {/* Main Tabs */}
-          <div className="flex bg-slate-900/40 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md">
+          <div className="flex bg-card/40 p-1.5 rounded-2xl border border-border backdrop-blur-md">
              <button 
                 onClick={() => setActiveTab('guide')}
                 className={cn(
                   "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  activeTab === 'guide' ? "bg-white text-black shadow-lg" : "text-slate-500 hover:text-slate-300"
+                  activeTab === 'guide' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
                 )}
              >
                 Guide
@@ -106,7 +106,7 @@ export default function RomanNumeralsPage() {
                 onClick={() => setActiveTab('tools')}
                 className={cn(
                   "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  activeTab === 'tools' ? "bg-white text-black shadow-lg" : "text-slate-500 hover:text-slate-300"
+                  activeTab === 'tools' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
                 )}
              >
                 Calculators
@@ -115,7 +115,7 @@ export default function RomanNumeralsPage() {
                 onClick={() => setActiveTab('clock')}
                 className={cn(
                   "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  activeTab === 'clock' ? "bg-white text-black shadow-lg" : "text-slate-500 hover:text-slate-300"
+                  activeTab === 'clock' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
                 )}
              >
                 Clock
@@ -138,13 +138,13 @@ export default function RomanNumeralsPage() {
                    <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
                       <Info className="text-secondary w-5 h-5" />
                    </div>
-                   <h2 className="text-2xl font-heading font-black text-white tracking-tight uppercase">Key Symbols</h2>
+                   <h2 className="text-2xl font-heading font-black text-foreground tracking-tight uppercase">Key Symbols</h2>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
                   {basicNumerals.map((item) => (
-                    <div key={item.n} className="p-6 rounded-3xl bg-slate-900/40 border border-white/5 flex flex-col items-center justify-center space-y-1 backdrop-blur-md">
+                    <div key={item.n} className="p-6 rounded-3xl bg-card/40 border border-border flex flex-col items-center justify-center space-y-1 backdrop-blur-md">
                        <span className="text-3xl font-heading font-black text-secondary">{item.r}</span>
-                       <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{item.n}</span>
+                       <span className="text-foreground/40 text-[10px] font-black uppercase tracking-widest">{item.n}</span>
                     </div>
                   ))}
                 </div>
@@ -156,7 +156,7 @@ export default function RomanNumeralsPage() {
                    <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
                       <History className="text-slate-400 w-5 h-5" />
                    </div>
-                   <h2 className="text-2xl font-heading font-black text-white tracking-tight uppercase">Numbers 1 to 100</h2>
+                   <h2 className="text-2xl font-heading font-black text-foreground tracking-tight uppercase">Numbers 1 to 100</h2>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-10 gap-4">
                    {numbersTo100.map(n => (
@@ -189,9 +189,9 @@ export default function RomanNumeralsPage() {
                         color: 'primary'
                       }
                     ].map((rule, i) => (
-                      <div key={i} className="p-8 rounded-[32px] bg-slate-900/40 border border-white/5 relative overflow-hidden group">
-                         <h4 className="text-white font-black uppercase tracking-[0.2em] text-[10px] mb-3">{rule.title}</h4>
-                         <p className="text-slate-500 text-sm font-medium mb-6">{rule.desc}</p>
+                      <div key={i} className="p-8 rounded-[32px] bg-card/40 border border-border relative overflow-hidden group">
+                         <h4 className="text-foreground font-black uppercase tracking-[0.2em] text-[10px] mb-3">{rule.title}</h4>
+                         <p className="text-foreground/50 text-sm font-medium mb-6">{rule.desc}</p>
                          <div className={cn("p-4 rounded-xl bg-black/40 border border-white/5 inline-block", `text-${rule.color}`)}>
                             <span className="text-[10px] font-black uppercase tracking-widest mr-4 opacity-50">Example</span>
                             <span className="text-lg font-heading font-black text-white italic">{rule.example}</span>
@@ -211,12 +211,12 @@ export default function RomanNumeralsPage() {
             >
               {/* Tool Selector (Segmented Control) */}
               <div className="flex justify-start mb-8">
-                <div className="inline-flex bg-white/5 p-1.5 rounded-[24px] border border-white/10 backdrop-blur-md">
+                <div className="inline-flex bg-foreground/5 p-1.5 rounded-[24px] border border-border backdrop-blur-md">
                   <button 
                     onClick={() => setActiveTool('number')}
                     className={cn(
                       "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
-                      activeTool === 'number' ? "bg-white text-black shadow-xl scale-100" : "text-slate-400 hover:text-white scale-95 opacity-60 hover:opacity-100"
+                      activeTool === 'number' ? "bg-foreground text-background shadow-xl scale-100" : "text-foreground/40 hover:text-foreground scale-95 opacity-60 hover:opacity-100"
                     )}
                   >
                     Number Converter
@@ -225,7 +225,7 @@ export default function RomanNumeralsPage() {
                     onClick={() => setActiveTool('sentence')}
                     className={cn(
                       "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
-                      activeTool === 'sentence' ? "bg-white text-black shadow-xl scale-100" : "text-slate-400 hover:text-white scale-95 opacity-60 hover:opacity-100"
+                      activeTool === 'sentence' ? "bg-foreground text-background shadow-xl scale-100" : "text-foreground/40 hover:text-foreground scale-95 opacity-60 hover:opacity-100"
                     )}
                   >
                     Sentence Converter
@@ -234,7 +234,7 @@ export default function RomanNumeralsPage() {
                     onClick={() => setActiveTool('legion')}
                     className={cn(
                       "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
-                      activeTool === 'legion' ? "bg-white text-black shadow-xl scale-100" : "text-slate-400 hover:text-white scale-95 opacity-60 hover:opacity-100"
+                      activeTool === 'legion' ? "bg-foreground text-background shadow-xl scale-100" : "text-foreground/40 hover:text-foreground scale-95 opacity-60 hover:opacity-100"
                     )}
                   >
                     Legionary Scale

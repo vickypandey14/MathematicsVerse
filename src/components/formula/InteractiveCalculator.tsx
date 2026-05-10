@@ -85,35 +85,35 @@ export default function InteractiveCalculator({ formula }: CalculatorProps) {
   const fields = getFields();
 
   return (
-    <div className="p-10 rounded-[40px] bg-slate-900/40 border border-white/5 shadow-2xl backdrop-blur-md">
+    <div className="p-10 rounded-[40px] bg-card/40 border border-border shadow-2xl backdrop-blur-md">
       <div className="flex items-center space-x-4 mb-10">
         <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
           <Terminal className="text-primary w-6 h-6" />
         </div>
-        <h3 className="text-2xl font-heading font-black text-white tracking-tighter uppercase">Processor</h3>
+        <h3 className="text-2xl font-heading font-black text-foreground tracking-tighter uppercase">Processor</h3>
       </div>
 
       <div className="space-y-8 mb-10">
         {fields.map((field) => (
           <div key={field.name}>
-            <label className="block text-[10px] font-black text-slate-500 mb-3 uppercase tracking-[0.3em]">
+            <label className="block text-[10px] font-black text-foreground/50 mb-3 uppercase tracking-[0.3em]">
               {field.label}
             </label>
-            <input
-              type="number"
-              placeholder={field.placeholder}
-              value={inputs[field.name] === undefined ? '' : inputs[field.name]}
-              onChange={(e) => {
-                const val = e.target.value === '' ? undefined : parseFloat(e.target.value);
-                setInputs({ ...inputs, [field.name]: val });
-              }}
-              className="w-full bg-black/40 border border-white/5 rounded-2xl py-5 px-6 text-white placeholder:text-slate-700 focus:outline-none focus:border-primary focus:bg-black/60 transition-all text-xl font-bold shadow-inner"
-            />
+              <input
+                type="number"
+                placeholder={field.placeholder}
+                value={inputs[field.name] === undefined ? '' : inputs[field.name]}
+                onChange={(e) => {
+                  const val = e.target.value === '' ? undefined : parseFloat(e.target.value);
+                  setInputs({ ...inputs, [field.name]: val });
+                }}
+                className="w-full bg-foreground/5 border border-border rounded-2xl py-5 px-6 text-foreground placeholder:text-foreground/20 focus:outline-none focus:border-primary focus:bg-foreground/10 transition-all text-xl font-bold shadow-inner"
+              />
           </div>
         ))}
       </div>
 
-      <div className="bg-black/60 rounded-[32px] p-10 border border-white/5 mb-10 min-h-[140px] flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden">
+      <div className="bg-foreground/10 rounded-[32px] p-10 border border-border mb-10 min-h-[140px] flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden">
         <div className="absolute inset-0 bg-primary/5 opacity-30" />
         {Object.keys(inputs).filter(k => inputs[k] !== undefined).length >= fields.length ? (
           <motion.div
@@ -122,19 +122,19 @@ export default function InteractiveCalculator({ formula }: CalculatorProps) {
             key={calculate().toString()}
             className="relative z-10"
           >
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-3 block text-accent">Computed Output</span>
-            <div className="text-3xl font-heading font-black text-white tracking-tighter">
+            <span className="text-[10px] font-black text-foreground/50 uppercase tracking-[0.3em] mb-3 block text-accent">Computed Output</span>
+            <div className="text-3xl font-heading font-black text-foreground tracking-tighter">
               {calculate()}
             </div>
           </motion.div>
         ) : (
-          <span className="text-slate-600 font-bold text-sm relative z-10 tracking-widest uppercase">Awaiting Data Streams...</span>
+          <span className="text-foreground/40 font-bold text-sm relative z-10 tracking-widest uppercase">Awaiting Data Streams...</span>
         )}
       </div>
 
       <button
         onClick={() => setInputs({})}
-        className="w-full py-5 bg-white/5 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-all flex items-center justify-center space-x-3 border border-white/5 shadow-lg"
+        className="w-full py-5 bg-foreground/5 text-foreground/50 hover:text-foreground rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-foreground/10 transition-all flex items-center justify-center space-x-3 border border-border shadow-lg"
       >
         <RefreshCcw className="w-4 h-4" />
         <span>Flush Memory</span>

@@ -69,10 +69,11 @@ export default function GraphViz({ formula }: GraphVizProps) {
                 <stop offset="95%" stopColor="#d946ef" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} opacity={0.3} />
+            <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-border" vertical={false} opacity={0.3} />
             <XAxis
               dataKey="x"
-              stroke="#475569"
+              stroke="currentColor"
+              className="text-foreground/40"
               fontSize={10}
               fontWeight="900"
               tickLine={false}
@@ -80,7 +81,8 @@ export default function GraphViz({ formula }: GraphVizProps) {
               dy={15}
             />
             <YAxis
-              stroke="#475569"
+              stroke="currentColor"
+              className="text-foreground/40"
               fontSize={10}
               fontWeight="900"
               tickLine={false}
@@ -90,12 +92,12 @@ export default function GraphViz({ formula }: GraphVizProps) {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#0a0c14',
-                border: '1px solid #1e293b',
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: '16px',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.2)',
                 fontSize: '12px',
-                color: '#f1f5f9',
+                color: 'var(--foreground)',
                 fontWeight: '700',
               }}
               itemStyle={{ color: '#06b6d4' }}
@@ -113,19 +115,19 @@ export default function GraphViz({ formula }: GraphVizProps) {
           </AreaChart>
         </ResponsiveContainer>
       ) : (
-        <div className="w-full h-[350px] bg-black/20 rounded-[40px] animate-pulse flex items-center justify-center border border-white/5">
+        <div className="w-full h-[350px] bg-foreground/5 rounded-[40px] animate-pulse flex items-center justify-center border border-border">
           <div className="w-12 h-12 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
         </div>
       )}
     </div>
 
-      <div className="mt-10 flex items-center justify-center space-x-12 text-[10px] text-slate-500 font-black uppercase tracking-[0.4em]">
+      <div className="mt-10 flex items-center justify-center space-x-12 text-[10px] text-foreground/50 font-black uppercase tracking-[0.4em]">
         <div className="flex items-center">
           <div className="w-3 h-3 rounded-full bg-primary mr-3 shadow-lg shadow-primary/20" />
           <span>Real-time Telemetry</span>
         </div>
         <div className="flex items-center">
-          <div className="w-3 h-0.5 bg-slate-800 mr-3" />
+          <div className="w-3 h-0.5 bg-foreground/20 mr-3" />
           <span>Vector Baseline</span>
         </div>
       </div>

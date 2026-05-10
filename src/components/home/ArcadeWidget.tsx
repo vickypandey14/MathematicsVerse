@@ -52,19 +52,19 @@ export default function ArcadeWidget() {
            {/* Left: Branding & Core Info */}
            <div className="space-y-8 flex-grow">
               <div className="flex items-center space-x-3">
-                 <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-primary shadow-xl">
+                 <div className="w-10 h-10 rounded-xl bg-foreground/5 border border-border flex items-center justify-center text-primary shadow-xl">
                     <Gamepad2 className="w-6 h-6" />
                  </div>
-                 <span className="text-xs font-black uppercase tracking-[0.4em] text-slate-500">Your Math Arcade</span>
+                 <span className="text-xs font-black uppercase tracking-[0.4em] text-foreground/50">Your Math Arcade</span>
               </div>
 
               <div className="space-y-2">
-                 <h2 className="text-5xl md:text-6xl font-heading font-black text-white tracking-tighter leading-none">
+                 <h2 className="text-5xl md:text-6xl font-heading font-black text-foreground tracking-tighter leading-none">
                     READY TO <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">PLAY?</span>
                  </h2>
                  <p className="text-slate-500 font-medium text-lg max-w-md">
-                    You've solved <span className="text-white font-black">{stats.lifetimeCorrect}</span> problems so far. Can you beat your high score today?
+                    You've solved <span className="text-foreground font-black">{stats.lifetimeCorrect}</span> problems so far. Can you beat your high score today?
                  </p>
               </div>
 
@@ -88,8 +88,8 @@ export default function ArcadeWidget() {
                     <div className="flex items-center justify-between relative z-10">
                        <Star className="w-8 h-8 text-secondary fill-current" />
                        <div className="text-right">
-                          <p className="text-3xl font-heading font-black text-white tracking-tighter leading-none">{stats.highScore}</p>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">Personal Best</p>
+                          <p className="text-3xl font-heading font-black text-foreground tracking-tighter leading-none">{stats.highScore}</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-foreground/50 mt-1">Personal Best</p>
                        </div>
                     </div>
                  </div>
@@ -99,8 +99,8 @@ export default function ArcadeWidget() {
                     <div className="flex items-center justify-between relative z-10">
                        <Target className="w-8 h-8 text-primary" />
                        <div className="text-right">
-                          <p className="text-3xl font-heading font-black text-white tracking-tighter leading-none">{stats.lifetimeCorrect}</p>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">Lifetime Rank</p>
+                          <p className="text-3xl font-heading font-black text-foreground tracking-tighter leading-none">{stats.lifetimeCorrect}</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-foreground/50 mt-1">Lifetime Rank</p>
                        </div>
                     </div>
                  </div>

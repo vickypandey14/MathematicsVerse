@@ -132,21 +132,21 @@ export default function UnitsPage() {
       <div className="space-y-16">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h1 className="text-5xl md:text-6xl font-heading font-black text-white tracking-tighter mb-4">
+            <h1 className="text-5xl md:text-6xl font-heading font-black text-foreground tracking-tighter mb-4">
               Universal <span className="gradient-text">Measures</span>
             </h1>
-            <p className="text-slate-500 font-medium text-lg max-w-2xl">
+            <p className="text-foreground/50 font-medium text-lg max-w-2xl">
               From the quantum vibrations of an atom to the expansion of galaxies. The complete guide to measuring our reality.
             </p>
           </div>
-          <div className="flex flex-wrap bg-slate-900/50 p-2 rounded-3xl border border-white/5 backdrop-blur-md max-w-full overflow-x-auto no-scrollbar">
+          <div className="flex flex-wrap bg-card/50 p-2 rounded-3xl border border-border backdrop-blur-md max-w-full overflow-x-auto no-scrollbar">
              {unitCategories.map((cat) => (
                <button
                  key={cat.id}
                  onClick={() => setActiveCategory(cat.id)}
                  className={cn(
                    "p-4 rounded-2xl transition-all duration-300 relative group shrink-0",
-                   activeCategory === cat.id ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-slate-500 hover:text-white"
+                   activeCategory === cat.id ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-foreground/50 hover:text-foreground"
                  )}
                  title={cat.name}
                >
@@ -161,20 +161,20 @@ export default function UnitsPage() {
 
         {/* Category Hero */}
         <div className={cn(
-          "relative p-12 md:p-20 rounded-[56px] overflow-hidden border border-white/10 shadow-2xl",
-          "bg-slate-900/40 backdrop-blur-xl"
+          "relative p-12 md:p-20 rounded-[56px] overflow-hidden border border-border shadow-2xl",
+          "bg-card/40 backdrop-blur-xl"
         )}>
            <div className={cn("absolute top-0 right-0 w-96 h-96 blur-[150px] opacity-20 bg-gradient-to-br", currentCategory.color)} />
            
            <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-10">
-              <div className={cn("w-24 h-24 rounded-[32px] flex items-center justify-center border border-white/10 bg-white/5")}>
-                 <currentCategory.icon className="w-12 h-12 text-white" />
+              <div className={cn("w-24 h-24 rounded-[32px] flex items-center justify-center border border-border bg-foreground/5")}>
+                 <currentCategory.icon className="w-12 h-12 text-foreground" />
               </div>
               <div>
-                 <h2 className="text-4xl md:text-5xl font-heading font-black text-white uppercase tracking-tight mb-2">
+                 <h2 className="text-4xl md:text-5xl font-heading font-black text-foreground uppercase tracking-tight mb-2">
                     {currentCategory.name}
                  </h2>
-                 <p className="text-slate-400 text-lg font-medium">Standard units used to quantify {currentCategory.name.toLowerCase()}.</p>
+                 <p className="text-foreground/40 text-lg font-medium">Standard units used to quantify {currentCategory.name.toLowerCase()}.</p>
               </div>
            </div>
         </div>
@@ -182,7 +182,7 @@ export default function UnitsPage() {
         {/* Units Grid */}
         <div className="space-y-8">
            <div className="flex items-center justify-between px-6">
-              <h3 className="text-xl font-heading font-black text-white uppercase tracking-widest">Unit Inventory</h3>
+              <h3 className="text-xl font-heading font-black text-foreground uppercase tracking-widest">Unit Inventory</h3>
               <div className="flex items-center space-x-6 text-[10px] font-black text-slate-500 uppercase tracking-widest">
                  <div className="flex items-center"><Minimize2 className="w-3 h-3 mr-2" /> Micro-Scale</div>
                  <div className="flex items-center">Macro-Scale <Maximize2 className="w-3 h-3 ml-2" /></div>
@@ -195,13 +195,12 @@ export default function UnitsPage() {
                   key={unit.name}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="group p-8 rounded-[40px] bg-slate-900/40 border border-white/5 hover:border-primary/30 transition-all duration-500 backdrop-blur-md relative overflow-hidden"
+                                    className="group p-8 rounded-[40px] bg-card/40 border border-border hover:border-primary/30 transition-all duration-500 backdrop-blur-md relative overflow-hidden"
                 >
                    <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity">
                       <ArrowRight className="w-5 h-5 text-primary" />
                    </div>
-
+ 
                    <div className="flex items-start justify-between mb-8">
                       <div>
                         <span className={cn(
@@ -213,23 +212,23 @@ export default function UnitsPage() {
                         )}>
                           {unit.scale}
                         </span>
-                        <h4 className="text-3xl font-heading font-black text-white tracking-tight">{unit.name}</h4>
+                        <h4 className="text-3xl font-heading font-black text-foreground tracking-tight">{unit.name}</h4>
                       </div>
                       <div className="text-right">
                          <p className="text-xl font-black text-primary">{unit.value}</p>
-                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Reference</p>
+                         <p className="text-[10px] font-black text-foreground/50 uppercase tracking-widest">Reference</p>
                       </div>
                    </div>
 
                    <div className="space-y-6">
-                      <div className="p-6 rounded-3xl bg-black/40 border border-white/5 shadow-inner">
-                         <p className="text-base font-medium text-slate-300 leading-relaxed">
+                      <div className="p-6 rounded-3xl bg-foreground/5 border border-border shadow-inner">
+                         <p className="text-base font-medium text-foreground/80 leading-relaxed">
                             <span className="text-primary font-black uppercase tracking-widest text-[10px] block mb-2 opacity-60">General Definition</span>
                             {unit.def}
                          </p>
                       </div>
-                      <div className="p-6 rounded-3xl bg-white/5 border border-white/5 group-hover:bg-primary/5 transition-colors">
-                         <p className="text-base font-medium text-slate-400">
+                      <div className="p-6 rounded-3xl bg-foreground/5 border border-border group-hover:bg-primary/5 transition-colors">
+                         <p className="text-base font-medium text-foreground/60">
                             <span className="text-secondary font-black uppercase tracking-widest text-[10px] block mb-2 opacity-60">Contextual Example</span>
                             "{unit.ex}"
                          </p>
@@ -241,30 +240,30 @@ export default function UnitsPage() {
         </div>
 
         {/* Informational Footer */}
-        <section className="p-16 rounded-[56px] bg-slate-900/40 border border-white/10 shadow-2xl relative overflow-hidden backdrop-blur-md">
+        <section className="p-16 rounded-[56px] bg-card/40 border border-border shadow-2xl relative overflow-hidden backdrop-blur-md">
            <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-secondary/5" />
            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-7">
-                 <h3 className="text-4xl font-heading font-black text-white mb-6 uppercase tracking-tight">The Precision of Math</h3>
-                 <p className="text-slate-400 text-xl leading-relaxed font-medium mb-10">
+                 <h3 className="text-4xl font-heading font-black text-foreground mb-6 uppercase tracking-tight">The Precision of Math</h3>
+                 <p className="text-foreground/40 text-xl leading-relaxed font-medium mb-10">
                     Measurement is the language of the physical world. Without standard units, we couldn't build skyscrapers, navigate the oceans, or understand the expansion of our universe.
                  </p>
                  <div className="flex flex-wrap gap-4">
                     {['SI Standard', 'Universal Constants', 'Precision Metrics', 'Metric vs Imperial'].map(label => (
-                      <div key={label} className="px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-xs font-black text-white uppercase tracking-[0.2em]">{label}</div>
+                      <div key={label} className="px-6 py-4 rounded-2xl bg-foreground/5 border border-border text-xs font-black text-foreground uppercase tracking-[0.2em]">{label}</div>
                     ))}
                  </div>
               </div>
-              <div className="lg:col-span-5 bg-black/40 p-10 rounded-[48px] border border-white/10 shadow-inner">
+              <div className="lg:col-span-5 bg-foreground/5 p-10 rounded-[48px] border border-border shadow-inner">
                  <div className="flex items-center space-x-6 mb-8">
                     <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
                        <Zap className="text-primary w-8 h-8" />
                     </div>
-                    <h4 className="text-2xl font-heading font-black text-white">Critical Logic</h4>
+                    <h4 className="text-2xl font-heading font-black text-foreground">Critical Logic</h4>
                  </div>
-                 <p className="text-slate-500 font-medium text-lg leading-relaxed">
+                 <p className="text-foreground/50 font-medium text-lg leading-relaxed">
                     "When you can measure what you are speaking about, and express it in numbers, you know something about it." 
-                    <span className="block mt-4 text-white/40 text-sm font-black">— Lord Kelvin</span>
+                    <span className="block mt-4 text-foreground/40 text-sm font-black">— Lord Kelvin</span>
                  </p>
               </div>
            </div>
