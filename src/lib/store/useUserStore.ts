@@ -4,9 +4,11 @@ import { persist } from 'zustand/middleware';
 interface UserState {
   bookmarks: string[];
   recentlyViewed: string[];
+  isSidebarOpen: boolean;
   toggleBookmark: (formulaId: string) => void;
   addRecentlyViewed: (formulaId: string) => void;
   isBookmarked: (formulaId: string) => boolean;
+  setIsSidebarOpen: (isOpen: boolean) => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -14,6 +16,7 @@ export const useUserStore = create<UserState>()(
     (set, get) => ({
       bookmarks: [],
       recentlyViewed: [],
+      isSidebarOpen: true,
       toggleBookmark: (formulaId: string) => {
         const { bookmarks } = get();
         if (bookmarks.includes(formulaId)) {
@@ -29,6 +32,9 @@ export const useUserStore = create<UserState>()(
       },
       isBookmarked: (formulaId: string) => {
         return get().bookmarks.includes(formulaId);
+      },
+      setIsSidebarOpen: (isOpen: boolean) => {
+        set({ isSidebarOpen: isOpen });
       },
     }),
     {

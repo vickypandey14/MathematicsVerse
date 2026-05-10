@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import ThemeSwitcher from './ThemeSwitcher';
 import { cn } from '@/lib/utils';
+import { useUserStore } from '@/lib/store/useUserStore';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -39,8 +40,13 @@ const navLinks = [
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { isSidebarOpen, setIsSidebarOpen } = useUserStore();
+  const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,15 +62,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <aside 
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-border bg-background/80 backdrop-blur-3xl",
-          isSidebarOpen ? "w-72" : "w-24"
+          mounted ? (isSidebarOpen ? "w-72" : "w-24") : "w-72"
         )}
       >
-        <div className="p-8 flex items-center justify-between">
+        <div className={cn("p-8 flex items-center", isSidebarOpen ? "justify-between" : "justify-center")}>
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 bg-gradient-to-tr from-primary via-secondary to-accent rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">
               <Calculator className="text-white w-6 h-6" />
             </div>
-            {isSidebarOpen && (
+            {mounted && isSidebarOpen && (
               <motion.span 
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -76,17 +82,28 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </Link>
         </div>
 
-        <div className="px-6 py-4">
+        <div className={cn("px-6 py-4", !isSidebarOpen && "flex justify-center px-0")}>
            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
+              <Search 
+                className={cn(
+                  "absolute top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40 cursor-pointer z-10 transition-all",
+                  isSidebarOpen ? "left-4" : "left-1/2 -translate-x-1/2"
+                )} 
+                onClick={() => {
+                  if (!isSidebarOpen) setIsSidebarOpen(true);
+                }}
+              />
               <input 
                 type="text"
-                placeholder={isSidebarOpen ? "Search formulas..." : ""}
+                placeholder={mounted && isSidebarOpen ? "Search formulas..." : ""}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onClick={() => {
+                  if (!isSidebarOpen) setIsSidebarOpen(true);
+                }}
                 className={cn(
-                  "w-full bg-foreground/5 border border-border rounded-2xl py-3 pl-10 pr-4 text-xs font-bold text-foreground focus:outline-none focus:border-primary transition-all",
-                  !isSidebarOpen && "pl-4 pr-0 w-10 h-10 overflow-hidden text-transparent placeholder:text-transparent"
+                  "bg-foreground/5 border border-border rounded-2xl py-3 text-xs font-bold text-foreground focus:outline-none focus:border-primary transition-all cursor-pointer",
+                  isSidebarOpen ? "w-full pl-10 pr-4" : "w-12 h-12 p-0 flex items-center justify-center text-transparent placeholder:text-transparent"
                 )}
               />
            </form>
@@ -101,14 +118,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 key={link.name}
                 href={link.href}
                 className={cn(
-                  "flex items-center space-x-4 px-4 py-4 rounded-2xl transition-all duration-300 group relative",
+                  "flex items-center py-4 rounded-2xl transition-all duration-300 group relative",
+                  isSidebarOpen ? "px-4 space-x-4" : "justify-center",
                   isActive 
                     ? "bg-foreground/5 text-foreground" 
                     : "text-foreground/50 hover:text-foreground hover:bg-foreground/5"
                 )}
               >
                 <Icon className={cn("w-6 h-6 shrink-0", isActive ? "text-primary" : "group-hover:text-primary transition-colors")} />
-                {isSidebarOpen && (
+                {mounted && isSidebarOpen && (
                   <motion.span 
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -128,13 +146,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
           })}
         </nav>
 
-        <div className="p-6 flex items-center gap-2">
+        <div className={cn("p-6 flex items-center gap-2", !isSidebarOpen && "flex-col p-4")}>
           <ThemeSwitcher />
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="flex-grow flex items-center justify-center p-4 rounded-2xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all group"
+            className={cn(
+              "flex items-center justify-center rounded-2xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all group",
+              isSidebarOpen ? "flex-grow p-4" : "w-12 h-12"
+            )}
           >
-            {isSidebarOpen ? <X className="w-5 h-5 text-foreground/40 group-hover:text-foreground" /> : <Menu className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />}
+            {mounted && isSidebarOpen ? <X className="w-5 h-5 text-foreground/40 group-hover:text-foreground" /> : <Menu className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />}
           </button>
         </div>
       </aside>
@@ -143,7 +164,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <main 
         className={cn(
           "flex-grow transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-x-hidden",
-          isSidebarOpen ? "ml-72" : "ml-24"
+          mounted ? (isSidebarOpen ? "ml-72" : "ml-24") : "ml-72"
         )}
       >
         <AnimatePresence mode="wait">
