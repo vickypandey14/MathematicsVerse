@@ -92,9 +92,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <AnimatePresence>
         {(!isMobile || isSidebarOpen) && (
           <motion.aside 
-            initial={isMobile ? { x: -300 } : false}
-            animate={isMobile ? { x: 0 } : false}
-            exit={isMobile ? { x: -300 } : false}
+            initial={isMobile ? { x: -300 } : undefined}
+            animate={isMobile ? { x: 0 } : undefined}
+            exit={isMobile ? { x: -300 } : undefined}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className={cn(
               "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-border bg-background/80 backdrop-blur-3xl",
