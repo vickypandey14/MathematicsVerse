@@ -10,7 +10,7 @@ const UNITS = [
   { name: 'Legion', size: 5000, icon: Flag, color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/20' },
   { name: 'Cohort', size: 480, icon: Shield, color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/20' },
   { name: 'Century', size: 80, icon: Users, color: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/20' },
-  { name: 'Contubernium', size: 8, icon: Sword, color: 'text-slate-400', bg: 'bg-slate-400/10', border: 'border-slate-400/20' },
+  { name: 'Contubernium', size: 8, icon: Sword, color: 'text-foreground/40', bg: 'bg-foreground/5', border: 'border-border' },
 ];
 
 export default function LegionaryClassifier() {
@@ -53,15 +53,15 @@ export default function LegionaryClassifier() {
   return (
     <div className="space-y-12">
       {/* Input Header */}
-      <div className="p-10 rounded-[40px] bg-slate-900/40 border border-white/5 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+      <div className="p-10 rounded-[40px] bg-card/40 border border-border backdrop-blur-xl shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-5">
            <Shield className="w-32 h-32" />
         </div>
         
         <div className="relative z-10 space-y-8">
            <div className="space-y-2">
-              <h3 className="text-2xl font-heading font-black text-white uppercase tracking-tight">Military Scale</h3>
-              <p className="text-slate-500 font-medium">How many Roman soldiers are you commanding?</p>
+              <h3 className="text-2xl font-heading font-black text-foreground uppercase tracking-tight">Military Scale</h3>
+              <p className="text-foreground/50 font-medium">How many Roman soldiers are you commanding?</p>
            </div>
 
            <div className="flex flex-col md:flex-row gap-6">
@@ -84,13 +84,13 @@ export default function LegionaryClassifier() {
                     }
                   }}
                   placeholder="Enter soldier count..."
-                  className="w-full bg-black/40 border border-white/10 rounded-[24px] py-6 pl-16 pr-8 text-2xl font-black text-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-slate-800"
+                  className="w-full bg-foreground/5 border border-border rounded-[24px] py-6 pl-16 pr-8 text-2xl font-black text-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-foreground/20"
                 />
              </div>
 
              <div className="p-6 rounded-[24px] bg-primary/10 border border-primary/20 flex flex-col justify-center min-w-[160px]">
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Your Rank</span>
-                <span className="text-xl font-heading font-black text-white uppercase tracking-tighter">{insights.rank}</span>
+                <span className="text-xl font-heading font-black text-foreground uppercase tracking-tighter">{insights.rank}</span>
              </div>
            </div>
 
@@ -113,49 +113,49 @@ export default function LegionaryClassifier() {
 
       {/* Commander's Briefing Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-         <div className="p-8 rounded-[32px] bg-slate-900/60 border border-white/5 space-y-4">
+         <div className="p-8 rounded-[32px] bg-card/60 border border-border space-y-4">
             <div className="flex items-center space-x-3 text-secondary">
                <History className="w-5 h-5" />
                <span className="text-[10px] font-black uppercase tracking-widest">History</span>
             </div>
-            <p className="text-slate-400 font-medium leading-relaxed">{insights.historical}</p>
+            <p className="text-foreground/50 font-medium leading-relaxed">{insights.historical}</p>
          </div>
 
-         <div className="p-8 rounded-[32px] bg-slate-900/60 border border-white/5 space-y-4">
+         <div className="p-8 rounded-[32px] bg-card/60 border border-border space-y-4">
             <div className="flex items-center space-x-3 text-amber-500">
                <Landmark className="w-5 h-5" />
                <span className="text-[10px] font-black uppercase tracking-widest">Logistics</span>
             </div>
-            <p className="text-slate-400 font-medium leading-relaxed">
-              Requires <strong className="text-white">{insights.grain} lbs</strong> of grain per day to stay combat-ready.
+            <p className="text-foreground/50 font-medium leading-relaxed">
+              Requires <strong className="text-foreground">{insights.grain} lbs</strong> of grain per day to stay combat-ready.
             </p>
          </div>
 
-         <div className="p-8 rounded-[32px] bg-slate-900/60 border border-white/5 space-y-4">
+         <div className="p-8 rounded-[32px] bg-card/60 border border-border space-y-4">
             <div className="flex items-center space-x-3 text-primary">
                <Flag className="w-5 h-5" />
                <span className="text-[10px] font-black uppercase tracking-widest">Formations</span>
             </div>
-            <p className="text-slate-400 font-medium leading-relaxed">
-              When marching in column, your line stretches for <strong className="text-white">{insights.length} km</strong>.
+            <p className="text-foreground/50 font-medium leading-relaxed">
+              When marching in column, your line stretches for <strong className="text-foreground">{insights.length} km</strong>.
             </p>
          </div>
       </div>
 
       {/* Tactical Deployment (Battle Map) */}
       {num > 0 && (
-        <section className="p-12 rounded-[48px] bg-black/40 border border-white/5 shadow-inner relative overflow-hidden">
+        <section className="p-12 rounded-[48px] bg-foreground/5 border border-border shadow-inner relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.03)_0%,transparent_100%)]" />
           
           <div className="relative z-10 space-y-10">
              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div className="space-y-1">
-                  <h4 className="text-white font-black uppercase tracking-widest text-xs">Tactical Deployment</h4>
-                  <p className="text-slate-500 text-[10px] font-medium uppercase tracking-widest">Visual Field Representation</p>
+                  <h4 className="text-foreground font-black uppercase tracking-widest text-xs">Tactical Deployment</h4>
+                  <p className="text-foreground/40 text-[10px] font-medium uppercase tracking-widest">Visual Field Representation</p>
                 </div>
                 
                 {/* Formation Toggle */}
-                <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
+                <div className="flex bg-foreground/5 p-1 rounded-2xl border border-border">
                    {[
                      { id: 'loose', label: 'Skirmish' },
                      { id: 'tight', label: 'Shield-Wall' },
@@ -166,7 +166,7 @@ export default function LegionaryClassifier() {
                        onClick={() => setFormation(f.id as any)}
                        className={cn(
                          "px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all",
-                         formation === f.id ? "bg-white text-black shadow-lg" : "text-slate-500 hover:text-slate-300"
+                         formation === f.id ? "bg-foreground text-background shadow-lg" : "text-foreground/40 hover:text-foreground"
                        )}
                      >
                         {f.label}
@@ -189,7 +189,7 @@ export default function LegionaryClassifier() {
                              <span className="text-[8px] font-black text-red-500 uppercase tracking-tighter">Legion</span>
                           </div>
                         ))}
-                        {num > 100000 && <div className="text-slate-600 self-end pb-4 font-black">...and many more</div>}
+                        {num > 100000 && <div className="text-foreground/40 self-end pb-4 font-black">...and many more</div>}
                      </div>
                   </div>
                 ) : num > 1000 ? (
@@ -228,7 +228,7 @@ export default function LegionaryClassifier() {
                 )}
              </div>
 
-             <div className="pt-6 border-t border-white/5 flex flex-wrap gap-6 text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">
+             <div className="pt-6 border-t border-border flex flex-wrap gap-6 text-[8px] font-black uppercase tracking-[0.2em] text-foreground/40">
                 <div className="flex items-center space-x-2">
                    <div className="w-2 h-2 rounded-full bg-primary/60" />
                    <span>= Individual Legionary</span>
@@ -268,7 +268,7 @@ export default function LegionaryClassifier() {
                   </div>
                   
                   <div>
-                    <p className="text-4xl font-heading font-black text-white tracking-tighter">
+                    <p className="text-4xl font-heading font-black text-foreground tracking-tighter">
                       {unit.count.toLocaleString()}
                     </p>
                     <p className={cn("text-[10px] font-black uppercase tracking-[0.2em]", unit.color)}>
@@ -276,7 +276,7 @@ export default function LegionaryClassifier() {
                     </p>
                   </div>
 
-                  <p className="text-slate-500 text-xs font-medium">
+                  <p className="text-foreground/40 text-xs font-medium">
                     Equivalent to { (unit.count * unit.size).toLocaleString() } men.
                   </p>
                 </div>
@@ -288,23 +288,23 @@ export default function LegionaryClassifier() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="p-8 rounded-[32px] bg-white/5 border border-white/5 backdrop-blur-md flex flex-col justify-center"
+              className="p-8 rounded-[32px] bg-foreground/5 border border-border backdrop-blur-md flex flex-col justify-center"
             >
-               <p className="text-4xl font-heading font-black text-white tracking-tighter">{remaining}</p>
-               <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">Individual Legionaries</p>
+               <p className="text-4xl font-heading font-black text-foreground tracking-tighter">{remaining}</p>
+               <p className="text-foreground/40 text-[10px] font-black uppercase tracking-[0.2em]">Individual Legionaries</p>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
       {/* Educational Footer */}
-      <div className="p-10 rounded-[40px] bg-white/[0.02] border border-white/10 flex flex-col md:flex-row items-center gap-10">
-         <div className="w-20 h-20 shrink-0 rounded-full bg-slate-900 border border-white/5 flex items-center justify-center shadow-2xl">
+      <div className="p-10 rounded-[40px] bg-foreground/[0.02] border border-border flex flex-col md:flex-row items-center gap-10">
+         <div className="w-20 h-20 shrink-0 rounded-full bg-card border border-border flex items-center justify-center shadow-2xl">
             <Info className="w-8 h-8 text-primary" />
          </div>
          <div className="space-y-4">
-            <h4 className="text-white font-black uppercase tracking-widest text-sm">Did you know?</h4>
-            <p className="text-slate-500 font-medium leading-relaxed">
+            <h4 className="text-foreground font-black uppercase tracking-widest text-sm">Did you know?</h4>
+            <p className="text-foreground/50 font-medium leading-relaxed">
               The Roman military was organized for extreme efficiency. A <strong>Contubernium</strong> shared a single tent, while a <strong>Legion</strong> was a self-sufficient army with its own engineers, doctors, and artillery.
             </p>
          </div>

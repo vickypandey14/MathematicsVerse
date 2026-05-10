@@ -45,42 +45,42 @@ export default function InscriptionGenerator() {
 
   return (
     <div className="w-full max-w-6xl mx-auto">
-      <div className="p-10 md:p-16 rounded-[64px] bg-white/[0.03] border border-white/10 shadow-2xl backdrop-blur-2xl relative overflow-hidden group">
+      <div className="p-10 md:p-16 rounded-[64px] bg-card/60 border border-border shadow-2xl backdrop-blur-2xl relative overflow-hidden group">
         <div className="relative z-10">
         <div className="flex items-center space-x-4 mb-10">
           <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
             <Type className="text-secondary w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-2xl font-heading font-black text-white tracking-tighter uppercase">Sentence Converter</h3>
-            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Change numbers in a sentence</p>
+            <h3 className="text-2xl font-heading font-black text-foreground tracking-tighter uppercase">Sentence Converter</h3>
+            <p className="text-foreground/40 text-[10px] font-black uppercase tracking-widest">Change numbers in a sentence</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-8">
             <div>
-              <label className="block text-[10px] font-black text-slate-500 mb-4 uppercase tracking-[0.3em]">Type your sentence here</label>
+              <label className="block text-[10px] font-black text-foreground/40 mb-4 uppercase tracking-[0.3em]">Type your sentence here</label>
               <textarea 
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-[32px] py-8 px-10 text-xl font-medium text-white placeholder:text-white/10 focus:outline-none focus:border-white/30 focus:bg-white/[0.08] transition-all min-h-[200px] shadow-2xl"
+                className="w-full bg-foreground/5 border border-border rounded-[32px] py-8 px-10 text-xl font-medium text-foreground placeholder:text-foreground/10 focus:outline-none focus:border-foreground/30 focus:bg-foreground/[0.08] transition-all min-h-[200px] shadow-2xl"
                 placeholder="Example: I am 15 years old"
               />
             </div>
           </div>
 
-          <div className="p-10 rounded-[40px] bg-white/5 border border-white/10 relative group-hover:bg-white/[0.08] transition-all h-full min-h-[200px] flex flex-col justify-center">
+          <div className="p-10 rounded-[40px] bg-foreground/5 border border-border relative group-hover:bg-foreground/[0.08] transition-all h-full min-h-[200px] flex flex-col justify-center">
             <span className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] mb-6 block">Roman Style Result</span>
-            <p className="text-3xl md:text-4xl font-heading font-black text-white tracking-tight leading-relaxed italic opacity-90">
+            <p className="text-3xl md:text-4xl font-heading font-black text-foreground tracking-tight leading-relaxed italic opacity-90">
               {processText(text)}
             </p>
             <div className="mt-8 flex items-center space-x-4">
-              <div className="h-px bg-white/10 flex-grow" />
-              <div className="flex items-center space-x-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">
+              <div className="h-px bg-border flex-grow" />
+              <div className="flex items-center space-x-2 text-[10px] font-black text-foreground/20 uppercase tracking-widest">
                 <span>EST. MMXXIV</span>
               </div>
-              <div className="h-px bg-white/10 flex-grow" />
+              <div className="h-px bg-border flex-grow" />
             </div>
           </div>
         </div>

@@ -271,7 +271,7 @@ export default function TimeChallenge() {
                  <button 
                    key={mission.id}
                    onClick={() => selectMission(mission.id)}
-                   className="relative p-10 rounded-[48px] bg-slate-900/40 border border-white/5 hover:border-white/20 text-left group transition-all hover:-translate-y-2 overflow-hidden shadow-2xl"
+                   className="relative p-10 rounded-[48px] bg-card/40 border border-border hover:border-foreground/20 text-left group transition-all hover:-translate-y-2 overflow-hidden shadow-2xl"
                  >
                     <div className={cn(
                         "absolute -right-20 -top-20 w-64 h-64 blur-[100px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-full bg-current",
@@ -282,13 +282,13 @@ export default function TimeChallenge() {
                        <div className="flex items-center justify-between mb-8">
                           <div className={cn(
                             "w-20 h-20 rounded-[32px] flex items-center justify-center shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-6",
-                            "bg-white/5 border border-white/10",
+                            "bg-foreground/5 border border-border",
                             mission.color
                           )}>
                              <mission.icon className="w-10 h-10" />
                           </div>
-                          <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                             <ArrowRight className="w-6 h-6 text-white" />
+                          <div className="w-12 h-12 rounded-full bg-foreground/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                             <ArrowRight className="w-6 h-6 text-foreground" />
                           </div>
                        </div>
 
@@ -318,10 +318,10 @@ export default function TimeChallenge() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full max-w-5xl bg-slate-900/60 rounded-[64px] border border-white/10 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] backdrop-blur-3xl flex flex-col md:flex-row min-h-[600px]"
+            className="w-full max-w-5xl bg-card/60 rounded-[64px] border border-border overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.2)] backdrop-blur-3xl flex flex-col md:flex-row min-h-[600px]"
           >
              {/* Left Panel: Mission Identity */}
-             <div className="md:w-5/12 bg-black/40 p-12 flex flex-col justify-between border-r border-white/5 relative overflow-hidden">
+             <div className="md:w-5/12 bg-foreground/10 p-12 flex flex-col justify-between border-r border-border relative overflow-hidden">
                 {/* Decorative Background Scanning Line */}
                 <motion.div 
                   animate={{ y: [0, 500, 0] }}
@@ -357,13 +357,13 @@ export default function TimeChallenge() {
 
                 <div className="relative z-10 space-y-6">
                    <div className="space-y-2">
-                      <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Tactical Intel</p>
-                      <p className="text-slate-300 text-lg font-medium leading-relaxed italic">
+                      <p className="text-foreground/50 text-[10px] font-black uppercase tracking-widest">Tactical Intel</p>
+                      <p className="text-foreground/80 text-lg font-medium leading-relaxed italic">
                         "{MISSIONS.find(m => m.id === gameMode)?.instructions}"
                       </p>
                    </div>
                    
-                   <div className="flex items-center space-x-6 text-[10px] font-black uppercase tracking-widest text-slate-600">
+                   <div className="flex items-center space-x-6 text-[10px] font-black uppercase tracking-widest text-foreground/40">
                       <div className="flex items-center space-x-2">
                          <Star className="w-3 h-3" />
                          <span>XP Multiplier Active</span>
@@ -382,7 +382,7 @@ export default function TimeChallenge() {
                    {/* Difficulty Select */}
                    <div className="space-y-6">
                       <div className="flex items-center justify-between">
-                         <h5 className="text-white text-xs font-black uppercase tracking-[0.2em]">Select Difficulty Rank</h5>
+                         <h5 className="text-foreground text-xs font-black uppercase tracking-[0.2em]">Select Difficulty Rank</h5>
                          <span className="text-primary text-[10px] font-black uppercase tracking-widest">Level 0{difficulty === 'easy' ? '1' : difficulty === 'medium' ? '2' : '3'}</span>
                       </div>
                       <div className="grid grid-cols-3 gap-4">
@@ -393,20 +393,20 @@ export default function TimeChallenge() {
                              className={cn(
                                "relative group h-32 rounded-3xl border-2 transition-all overflow-hidden",
                                difficulty === d 
-                                ? "bg-white border-white shadow-[0_0_30px_rgba(255,255,255,0.2)] scale-105 z-10" 
-                                : "bg-white/5 border-white/5 hover:border-white/20"
+                                ? "bg-foreground border-foreground shadow-[0_0_30px_rgba(0,0,0,0.1)] scale-105 z-10" 
+                                : "bg-foreground/5 border-border hover:border-foreground/20"
                              )}
                            >
                               <div className="relative z-10 h-full flex flex-col items-center justify-center space-y-2">
                                  <span className={cn(
                                    "text-[10px] font-black uppercase tracking-widest",
-                                   difficulty === d ? "text-slate-500" : "text-slate-600"
+                                   difficulty === d ? "text-background/40" : "text-foreground/30"
                                  )}>
                                    {d === 'easy' ? 'Novice' : d === 'medium' ? 'Scholar' : 'Master'}
                                  </span>
                                  <span className={cn(
                                    "text-2xl font-heading font-black",
-                                   difficulty === d ? "text-black" : "text-white"
+                                   difficulty === d ? "text-background" : "text-foreground"
                                  )}>
                                    {d === 'easy' ? '1-10' : d === 'medium' ? '1-20' : '1-50'}
                                  </span>
@@ -419,9 +419,9 @@ export default function TimeChallenge() {
                    {/* Time Select */}
                    <div className="space-y-6">
                       <div className="flex items-center justify-between">
-                         <h5 className="text-white text-xs font-black uppercase tracking-[0.2em] text-right w-full">Mission Duration</h5>
+                         <h5 className="text-foreground text-xs font-black uppercase tracking-[0.2em] text-right w-full">Mission Duration</h5>
                       </div>
-                      <div className="flex items-center justify-between bg-black/40 p-2 rounded-[32px] border border-white/5">
+                      <div className="flex items-center justify-between bg-foreground/10 p-2 rounded-[32px] border border-border">
                          {[30, 60, 120].map((t) => (
                            <button 
                              key={t}
@@ -429,8 +429,8 @@ export default function TimeChallenge() {
                              className={cn(
                                "flex-grow py-6 rounded-[28px] text-xs font-black uppercase tracking-widest transition-all",
                                gameTime === t 
-                                ? "bg-primary text-white shadow-xl shadow-primary/20" 
-                                : "text-slate-500 hover:text-white"
+                                ? "bg-primary text-foreground shadow-xl shadow-primary/20" 
+                                : "text-foreground/50 hover:text-foreground"
                              )}
                            >
                              {t} Seconds
@@ -447,10 +447,10 @@ export default function TimeChallenge() {
                    </div>
                    <button 
                     onClick={startGame}
-                    className="group relative w-full py-8 rounded-[32px] bg-white text-black font-black uppercase tracking-[0.5em] overflow-hidden hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_50px_rgba(255,255,255,0.1)]"
+                    className="group relative w-full py-8 rounded-[32px] bg-foreground text-background font-black uppercase tracking-[0.5em] overflow-hidden hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
                    >
                       <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                      <span className="relative z-10 group-hover:text-white flex items-center justify-center space-x-4">
+                      <span className="relative z-10 group-hover:text-foreground flex items-center justify-center space-x-4">
                          <span>Let's Go!</span>
                          <ArrowRight className="w-6 h-6" />
                       </span>
@@ -468,13 +468,13 @@ export default function TimeChallenge() {
             {/* Top HUD: Aligned Grid */}
             <div className="w-full grid grid-cols-3 items-start px-6">
                {/* Left: Timer */}
-               <div className="p-4 rounded-[24px] bg-slate-900/60 border-l-4 border-primary backdrop-blur-2xl shadow-2xl space-y-0 w-fit">
+               <div className="p-4 rounded-[24px] bg-card/60 border-l-4 border-primary backdrop-blur-2xl shadow-2xl space-y-0 w-fit">
                   <div className="flex items-center space-x-2 text-primary">
                      <Timer className={cn("w-4 h-4", timeLeft < 10 && "animate-pulse")} />
                      <span className="text-xs font-black uppercase tracking-tight opacity-60">Timer</span>
                   </div>
-                  <div className={cn("text-4xl font-heading font-black tracking-tighter", timeLeft < 10 ? "text-red-500" : "text-white")}>
-                     {timeLeft}<span className="text-base text-slate-600 ml-1">s</span>
+                  <div className={cn("text-4xl font-heading font-black tracking-tighter", timeLeft < 10 ? "text-red-500" : "text-foreground")}>
+                     {timeLeft}<span className="text-base text-foreground/20 ml-1">s</span>
                   </div>
                </div>
 
@@ -482,7 +482,7 @@ export default function TimeChallenge() {
                <div className="flex justify-center">
                   <button 
                     onClick={() => setGameState('idle')}
-                    className="group p-3 rounded-xl bg-white/5 border border-white/5 text-slate-500 hover:text-white transition-all flex items-center space-x-2 backdrop-blur-xl"
+                    className="group p-3 rounded-xl bg-foreground/5 border border-border text-foreground/50 hover:text-foreground transition-all flex items-center space-x-2 backdrop-blur-xl"
                   >
                       <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                       <span className="text-xs font-black uppercase tracking-tight">Abort Mission</span>
@@ -491,12 +491,12 @@ export default function TimeChallenge() {
 
                {/* Right: Score */}
                <div className="flex justify-end">
-                  <div className="p-4 rounded-[24px] bg-slate-900/60 border-r-4 border-secondary backdrop-blur-2xl shadow-2xl text-right space-y-0 w-fit">
+                  <div className="p-4 rounded-[24px] bg-card/60 border-r-4 border-secondary backdrop-blur-2xl shadow-2xl text-right space-y-0 w-fit">
                      <div className="flex items-center justify-end space-x-2 text-secondary">
                         <span className="text-xs font-black uppercase tracking-tight opacity-60">Power Level</span>
                         <Star className="w-4 h-4 fill-current" />
                      </div>
-                     <div className="text-4xl font-heading font-black tracking-tighter text-white">
+                     <div className="text-4xl font-heading font-black tracking-tighter text-foreground">
                         {score}
                      </div>
                   </div>
@@ -510,12 +510,12 @@ export default function TimeChallenge() {
                   <motion.div 
                     animate={{ rotate: 360 }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="w-[300px] h-[300px] border border-white/[0.02] rounded-full"
+                    className="w-[300px] h-[300px] border border-foreground/[0.02] rounded-full"
                   />
                </div>
 
                <div className="text-center">
-                  <h2 className="text-white/40 text-xs font-black uppercase tracking-tighter">
+                  <h2 className="text-foreground/40 text-xs font-black uppercase tracking-tighter">
                      {gameMode === 'multiply' && "Synthesize Product"}
                      {gameMode === 'add' && "Calculate Sum"}
                      {gameMode === 'subtract' && "Determine Difference"}
@@ -529,7 +529,7 @@ export default function TimeChallenge() {
                         key={`a-${question.a}`}
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="text-8xl md:text-9xl font-heading font-black text-white tracking-tighter"
+                        className="text-8xl md:text-9xl font-heading font-black text-foreground tracking-tighter"
                      >
                         {question.a}
                      </motion.div>
@@ -543,7 +543,7 @@ export default function TimeChallenge() {
                            key={`b-${question.b}`}
                            initial={{ opacity: 0, scale: 0.5 }}
                            animate={{ opacity: 1, scale: 1 }}
-                           className="text-8xl md:text-9xl font-heading font-black text-white tracking-tighter"
+                           className="text-8xl md:text-9xl font-heading font-black text-foreground tracking-tighter"
                         >
                            {question.b}
                         </motion.div>
@@ -563,9 +563,9 @@ export default function TimeChallenge() {
                         value={userAnswer}
                         onChange={handleInputChange}
                         className={cn(
-                          "relative w-full bg-black/60 border-2 rounded-[24px] py-8 text-center text-6xl font-heading font-black text-white focus:outline-none transition-all placeholder:text-white/5 uppercase backdrop-blur-3xl tracking-tighter",
+                          "relative w-full bg-foreground/10 border-2 rounded-[24px] py-8 text-center text-6xl font-heading font-black text-foreground focus:outline-none transition-all placeholder:text-foreground/5 uppercase backdrop-blur-3xl tracking-tighter",
                           feedback === 'correct' ? "border-green-500 text-green-500 scale-105" : 
-                          feedback === 'wrong' ? "border-red-500 text-red-500 animate-shake" : "border-white/10 focus:border-primary shadow-2xl"
+                          feedback === 'wrong' ? "border-red-500 text-red-500 animate-shake" : "border-border focus:border-primary shadow-2xl"
                         )}
                         placeholder="..."
                      />
@@ -579,7 +579,7 @@ export default function TimeChallenge() {
                   <div className="flex items-center space-x-2">
                      <TrendingUp className="w-5 h-5 text-primary" />
                      <div>
-                        <p className="text-white font-black uppercase text-xs tracking-tight">{streak} COMBO</p>
+                        <p className="text-foreground font-black uppercase text-xs tracking-tight">{streak} COMBO</p>
                      </div>
                   </div>
                   {streak > 0 && (
@@ -592,7 +592,7 @@ export default function TimeChallenge() {
                     </motion.span>
                   )}
                </div>
-               <div className="h-3 w-full bg-white/5 rounded-full p-0.5 border border-white/5">
+               <div className="h-3 w-full bg-foreground/5 rounded-full p-0.5 border border-border">
                   <motion.div 
                      className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
                      initial={{ width: 0 }}
@@ -612,17 +612,17 @@ export default function TimeChallenge() {
                 <div className="w-20 h-20 bg-secondary/10 rounded-[28px] flex items-center justify-center mx-auto mb-4 border border-secondary/20">
                     <Trophy className="w-10 h-10 text-secondary fill-current" />
                 </div>
-                <h3 className="text-4xl font-heading font-black text-white uppercase tracking-tight">Mission Report</h3>
-                <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">{MISSIONS.find(m => m.id === gameMode)?.title} Operations</p>
+                <h3 className="text-4xl font-heading font-black text-foreground uppercase tracking-tight">Mission Report</h3>
+                <p className="text-foreground/50 text-[10px] font-black uppercase tracking-[0.2em]">{MISSIONS.find(m => m.id === gameMode)?.title} Operations</p>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/5 text-center space-y-1">
-                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Score</p>
-                    <p className="text-4xl font-heading font-black text-white">{score}</p>
+                <div className="p-6 rounded-3xl bg-foreground/5 border border-border text-center space-y-1">
+                    <p className="text-foreground/40 text-[10px] font-black uppercase tracking-widest">Score</p>
+                    <p className="text-4xl font-heading font-black text-foreground">{score}</p>
                 </div>
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/5 text-center space-y-1">
-                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Accuracy</p>
+                <div className="p-6 rounded-3xl bg-foreground/5 border border-border text-center space-y-1">
+                    <p className="text-foreground/40 text-[10px] font-black uppercase tracking-widest">Accuracy</p>
                     <p className="text-4xl font-heading font-black text-primary">{stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0}%</p>
                 </div>
             </div>
@@ -630,13 +630,13 @@ export default function TimeChallenge() {
             <div className="flex flex-col md:flex-row gap-4">
               <button 
                 onClick={startGame}
-                className="flex-grow px-8 py-5 rounded-2xl bg-white text-black font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all shadow-xl active:scale-95"
+                className="flex-grow px-8 py-5 rounded-2xl bg-foreground text-background font-black uppercase tracking-widest hover:bg-primary hover:text-foreground transition-all shadow-xl active:scale-95"
               >
                 Play Again
               </button>
               <button 
                 onClick={() => setGameState('idle')}
-                className="px-8 py-5 rounded-2xl bg-slate-900 border border-white/5 text-slate-400 font-black uppercase tracking-widest hover:text-white transition-all"
+                className="px-8 py-5 rounded-2xl bg-card border border-border text-foreground/60 font-black uppercase tracking-widest hover:text-foreground transition-all"
               >
                 New Mission
               </button>

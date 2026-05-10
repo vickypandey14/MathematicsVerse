@@ -13,15 +13,15 @@ export default async function FormulasPage() {
   return (
     <MainLayout>
       <div className="mb-16">
-        <h1 className="text-4xl md:text-5xl font-heading font-black text-white tracking-tighter mb-4">
+        <h1 className="text-4xl md:text-5xl font-heading font-black text-foreground tracking-tighter mb-4">
           Library <span className="text-primary">Explorer</span>
         </h1>
-        <p className="text-slate-500 font-medium max-w-2xl">
+        <p className="text-foreground/50 font-medium max-w-2xl">
           Search, filter, and discover mathematical principles across all major domains.
         </p>
       </div>
 
-      <Suspense fallback={<div className="animate-pulse h-96 bg-slate-900/40 rounded-[40px]" />}>
+      <Suspense fallback={<div className="animate-pulse h-96 bg-card/40 rounded-[40px]" />}>
         <FormulaExplorer initialFormulas={formulas} categories={categories} />
       </Suspense>
     </MainLayout>

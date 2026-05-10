@@ -152,12 +152,12 @@ export default function RomanNumeralsPage() {
 
               {/* 2. Numbers 1 to 100 */}
               <section>
-                <div className="flex items-center space-x-3 mb-8">
-                   <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-                      <History className="text-slate-400 w-5 h-5" />
-                   </div>
-                   <h2 className="text-2xl font-heading font-black text-foreground tracking-tight uppercase">Numbers 1 to 100</h2>
-                </div>
+                 <div className="flex items-center space-x-3 mb-8">
+                    <div className="w-10 h-10 rounded-xl bg-foreground/5 flex items-center justify-center">
+                       <History className="text-foreground/40 w-5 h-5" />
+                    </div>
+                    <h2 className="text-2xl font-heading font-black text-foreground tracking-tight uppercase">Numbers 1 to 100</h2>
+                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-10 gap-4">
                    {numbersTo100.map(n => (
                      <RomanNumeralBlock key={n} n={n} r={toRoman(n)} />
@@ -171,7 +171,7 @@ export default function RomanNumeralsPage() {
                    <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
                      <Compass className="text-accent w-5 h-5" />
                    </div>
-                   <h2 className="text-2xl font-heading font-black text-white tracking-tight uppercase">How to Read Them</h2>
+                    <h2 className="text-2xl font-heading font-black text-foreground tracking-tight uppercase">How to Read Them</h2>
                  </div>
 
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -192,10 +192,10 @@ export default function RomanNumeralsPage() {
                       <div key={i} className="p-8 rounded-[32px] bg-card/40 border border-border relative overflow-hidden group">
                          <h4 className="text-foreground font-black uppercase tracking-[0.2em] text-[10px] mb-3">{rule.title}</h4>
                          <p className="text-foreground/50 text-sm font-medium mb-6">{rule.desc}</p>
-                         <div className={cn("p-4 rounded-xl bg-black/40 border border-white/5 inline-block", `text-${rule.color}`)}>
-                            <span className="text-[10px] font-black uppercase tracking-widest mr-4 opacity-50">Example</span>
-                            <span className="text-lg font-heading font-black text-white italic">{rule.example}</span>
-                         </div>
+                          <div className={cn("p-4 rounded-xl bg-foreground/10 border border-border inline-block", `text-${rule.color}`)}>
+                             <span className="text-[10px] font-black uppercase tracking-widest mr-4 opacity-50">Example</span>
+                             <span className="text-lg font-heading font-black text-foreground italic">{rule.example}</span>
+                          </div>
                       </div>
                     ))}
                  </div>

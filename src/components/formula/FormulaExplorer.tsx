@@ -50,15 +50,15 @@ export default function FormulaExplorer({ initialFormulas, categories }: Formula
 
   return (
     <div className="space-y-12">
-      <div className="sticky top-2 z-30 p-4 rounded-[32px] bg-slate-900/40 backdrop-blur-xl border border-white/5 shadow-2xl flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+      <div className="sticky top-2 z-30 p-4 rounded-[32px] bg-card/40 backdrop-blur-xl border border-border shadow-2xl flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
         <div className="relative flex-grow w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/50" />
           <input
             type="text"
             placeholder="Search library..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-primary focus:bg-black/60 transition-all font-bold"
+            className="w-full bg-foreground/5 border border-border rounded-2xl py-4 pl-12 pr-4 text-foreground focus:outline-none focus:border-primary focus:bg-foreground/10 transition-all font-bold"
           />
         </div>
 
@@ -66,7 +66,7 @@ export default function FormulaExplorer({ initialFormulas, categories }: Formula
           <select
             value={selectedCategory || ''}
             onChange={(e) => setSelectedCategory(e.target.value || null)}
-            className="flex-grow md:w-48 bg-black/40 border border-white/5 rounded-2xl py-4 px-4 text-white text-sm font-bold focus:outline-none focus:border-primary focus:bg-black/60 transition-all appearance-none cursor-pointer"
+            className="flex-grow md:w-48 bg-foreground/5 border border-border rounded-2xl py-4 px-4 text-foreground text-sm font-bold focus:outline-none focus:border-primary focus:bg-foreground/10 transition-all appearance-none cursor-pointer"
           >
             <option value="">All Categories</option>
             {categories.map(cat => (
@@ -77,7 +77,7 @@ export default function FormulaExplorer({ initialFormulas, categories }: Formula
           <select
             value={selectedDifficulty || ''}
             onChange={(e) => setSelectedDifficulty(e.target.value || null)}
-            className="flex-grow md:w-48 bg-black/40 border border-white/5 rounded-2xl py-4 px-4 text-white text-sm font-bold focus:outline-none focus:border-primary focus:bg-black/60 transition-all appearance-none cursor-pointer"
+            className="flex-grow md:w-48 bg-foreground/5 border border-border rounded-2xl py-4 px-4 text-foreground text-sm font-bold focus:outline-none focus:border-primary focus:bg-foreground/10 transition-all appearance-none cursor-pointer"
           >
             <option value="">All Difficulties</option>
             <option value="Beginner">Beginner</option>
@@ -101,7 +101,7 @@ export default function FormulaExplorer({ initialFormulas, categories }: Formula
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-slate-500 px-6">
+      <div className="flex items-center justify-between text-foreground/50 px-6">
         <span className="text-[10px] font-black uppercase tracking-widest">
           Located {filteredFormulas.length} Subjects
         </span>
@@ -115,11 +115,11 @@ export default function FormulaExplorer({ initialFormulas, categories }: Formula
         </div>
       ) : (
         <div className="py-32 text-center">
-          <div className="w-20 h-20 bg-slate-900/40 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5">
-            <Search className="w-8 h-8 text-slate-700" />
+          <div className="w-20 h-20 bg-card/40 rounded-full flex items-center justify-center mx-auto mb-6 border border-border">
+            <Search className="w-8 h-8 text-foreground/20" />
           </div>
-          <h3 className="text-2xl font-black text-white mb-2">No results</h3>
-          <p className="text-slate-500 font-medium tracking-tight">Try different keywords or filters.</p>
+          <h3 className="text-2xl font-black text-foreground mb-2">No results</h3>
+          <p className="text-foreground/50 font-medium tracking-tight">Try different keywords or filters.</p>
         </div>
       )}
     </div>

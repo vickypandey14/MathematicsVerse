@@ -142,7 +142,7 @@ function TrophyCard({ trophy, isUnlocked }: TrophyCardProps) {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -5 }}
       className={cn(
-        "relative group p-6 rounded-[32px] border bg-slate-900/40 backdrop-blur-xl transition-all duration-500 overflow-hidden",
+        "relative group p-6 rounded-[32px] border bg-card/40 backdrop-blur-xl transition-all duration-500 overflow-hidden",
         isUnlocked ? "opacity-100" : "opacity-40 grayscale",
         glowColors[trophy.tier]
       )}
@@ -168,9 +168,9 @@ function TrophyCard({ trophy, isUnlocked }: TrophyCardProps) {
            </div>
            
            {!isUnlocked && (
-             <div className="absolute -top-2 -right-2 w-8 h-8 bg-black/80 rounded-full flex items-center justify-center border border-white/10 shadow-lg">
-                <Lock className="w-4 h-4 text-slate-500" />
-             </div>
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-background/80 rounded-full flex items-center justify-center border border-border shadow-lg">
+                 <Lock className="w-4 h-4 text-foreground/40" />
+              </div>
            )}
            {isUnlocked && (
              <motion.div 
@@ -184,7 +184,7 @@ function TrophyCard({ trophy, isUnlocked }: TrophyCardProps) {
         </div>
 
         <div className="space-y-1">
-          <h4 className={cn("text-lg font-heading font-black tracking-tight", isUnlocked ? "text-white" : "text-slate-500")}>
+          <h4 className={cn("text-lg font-heading font-black tracking-tight", isUnlocked ? "text-foreground" : "text-foreground/40")}>
             {trophy.title}
           </h4>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">
@@ -192,7 +192,7 @@ function TrophyCard({ trophy, isUnlocked }: TrophyCardProps) {
           </p>
         </div>
 
-        <p className="text-slate-400 text-xs font-medium leading-relaxed">
+        <p className="text-foreground/60 text-xs font-medium leading-relaxed">
           {isUnlocked ? trophy.description : `Requirement: ${trophy.requirement}`}
         </p>
 
@@ -201,7 +201,7 @@ function TrophyCard({ trophy, isUnlocked }: TrophyCardProps) {
             "pt-4 w-full flex justify-center border-t border-white/5",
             tierColors[trophy.tier].split(' ')[0] // use the first color for the label
           )}>
-             <span className="text-[8px] font-black uppercase tracking-widest px-3 py-1 bg-white/5 rounded-full border border-white/5">
+             <span className="text-[8px] font-black uppercase tracking-widest px-3 py-1 bg-foreground/5 rounded-full border border-border">
                 Earned
              </span>
           </div>
@@ -216,13 +216,13 @@ export default function TrophyRoom({ unlockedIds = [] }: { unlockedIds?: TrophyI
     <div className="space-y-8 h-full overflow-y-auto pr-4 scrollbar-hide pb-12">
       <div className="flex items-center justify-between">
          <div className="space-y-1">
-            <h3 className="text-2xl font-heading font-black text-white uppercase tracking-tight">Hall of Fame</h3>
-            <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">Your Military & Scholarly Achievements</p>
+            <h3 className="text-2xl font-heading font-black text-foreground uppercase tracking-tight">Hall of Fame</h3>
+            <p className="text-foreground/50 text-xs font-medium uppercase tracking-widest">Your Military & Scholarly Achievements</p>
          </div>
-         <div className="px-6 py-3 rounded-2xl bg-white/5 border border-white/5 flex items-center space-x-3">
-            <Trophy className="w-5 h-5 text-amber-500" />
-            <span className="text-sm font-black text-white">{unlockedIds.length}/{TROPHIES.length}</span>
-         </div>
+          <div className="px-6 py-3 rounded-2xl bg-foreground/5 border border-border flex items-center space-x-3">
+             <Trophy className="w-5 h-5 text-amber-500" />
+             <span className="text-sm font-black text-foreground">{unlockedIds.length}/{TROPHIES.length}</span>
+          </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

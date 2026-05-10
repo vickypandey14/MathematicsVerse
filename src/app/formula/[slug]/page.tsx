@@ -185,7 +185,7 @@ export default async function FormulaDetail({ params }: PageProps) {
 
               {/* Historical Context Section */}
               {formula.history && (
-                <section className="p-16 rounded-[56px] bg-gradient-to-br from-black/40 to-slate-900/20 border border-white/5 shadow-2xl relative overflow-hidden backdrop-blur-md">
+                <section className="p-16 rounded-[56px] bg-gradient-to-br from-card/40 to-card/20 border border-border shadow-2xl relative overflow-hidden backdrop-blur-md">
                   <div className="absolute top-[-10%] right-[-5%] p-10 text-secondary opacity-5">
                      <ScrollText className="w-64 h-64 rotate-12" />
                   </div>
@@ -207,7 +207,7 @@ export default async function FormulaDetail({ params }: PageProps) {
                     <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-secondary/50 via-secondary/10 to-transparent ml-2" />
                     <div className="pl-12 space-y-8">
                        <div className="relative">
-                          <div className="absolute left-[-45px] top-2 w-4 h-4 rounded-full bg-[#0a0c14] border-2 border-secondary shadow-lg shadow-secondary/20" />
+                          <div className="absolute left-[-45px] top-2 w-4 h-4 rounded-full bg-background border-2 border-secondary shadow-lg shadow-secondary/20" />
                           <p className="text-foreground/80 font-medium text-xl leading-relaxed italic border-l-4 border-secondary/20 pl-6 py-2 bg-secondary/5 rounded-r-2xl">
                             "{formula.history}"
                           </p>
@@ -215,7 +215,7 @@ export default async function FormulaDetail({ params }: PageProps) {
                        <div className="flex items-center space-x-6">
                           <div className="flex -space-x-3">
                              {[1,2,3].map(i => (
-                               <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0a0c14] bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500">
+                               <div key={i} className="w-8 h-8 rounded-full border-2 border-background bg-foreground/10 flex items-center justify-center text-[10px] font-bold text-foreground/40">
                                  {i}
                                </div>
                              ))}
@@ -231,7 +231,7 @@ export default async function FormulaDetail({ params }: PageProps) {
           <div className="lg:col-span-4 space-y-10">
             <InteractiveCalculator formula={formula} />
 
-            <div className="p-12 rounded-[48px] bg-gradient-to-br from-primary/20 to-accent/20 border border-white/10 relative overflow-hidden group shadow-2xl backdrop-blur-md">
+            <div className="p-12 rounded-[48px] bg-gradient-to-br from-primary/20 to-accent/20 border border-border relative overflow-hidden group shadow-2xl backdrop-blur-md">
               <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity">
                 <Trophy className="w-10 h-10 text-secondary" />
               </div>

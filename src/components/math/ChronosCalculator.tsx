@@ -81,7 +81,7 @@ export default function ChronosCalculator() {
 
   return (
     <div className="w-full max-w-6xl mx-auto">
-      <div className="p-10 md:p-16 rounded-[64px] bg-white/[0.03] border border-white/10 shadow-2xl backdrop-blur-2xl relative overflow-hidden">
+      <div className="p-10 md:p-16 rounded-[64px] bg-card/60 border border-border shadow-2xl backdrop-blur-2xl relative overflow-hidden">
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between mb-12 space-y-6 md:space-y-0">
             <div className="flex items-center space-x-4">
@@ -89,17 +89,17 @@ export default function ChronosCalculator() {
                 <Calculator className="text-primary w-7 h-7" />
               </div>
               <div>
-                <h3 className="text-2xl font-heading font-black text-white tracking-tighter uppercase">Number Converter</h3>
-                <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Ancient Math Tool</p>
+                <h3 className="text-2xl font-heading font-black text-foreground tracking-tighter uppercase">Number Converter</h3>
+                <p className="text-foreground/40 text-[10px] font-black uppercase tracking-widest">Ancient Math Tool</p>
               </div>
             </div>
 
-            <div className="flex bg-white/5 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md">
+            <div className="flex bg-foreground/5 p-1.5 rounded-2xl border border-border backdrop-blur-md">
               <button 
                 onClick={() => { setMode('decimal'); setInputValue(''); }}
                 className={cn(
                   "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  mode === 'decimal' ? "bg-white text-black shadow-xl" : "text-slate-400 hover:text-white"
+                  mode === 'decimal' ? "bg-foreground text-background shadow-xl" : "text-foreground/40 hover:text-foreground"
                 )}
               >
                 Numbers
@@ -108,7 +108,7 @@ export default function ChronosCalculator() {
                 onClick={() => { setMode('roman'); setInputValue(''); }}
                 className={cn(
                   "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  mode === 'roman' ? "bg-white text-black shadow-xl" : "text-slate-400 hover:text-white"
+                  mode === 'roman' ? "bg-foreground text-background shadow-xl" : "text-foreground/40 hover:text-foreground"
                 )}
               >
                 Roman Numerals
@@ -120,7 +120,7 @@ export default function ChronosCalculator() {
             {/* Input Side */}
             <div className="space-y-8">
               <div className="relative group">
-                <label className="block text-[10px] font-black text-slate-500 mb-4 uppercase tracking-[0.3em]">
+                <label className="block text-[10px] font-black text-foreground/40 mb-4 uppercase tracking-[0.3em]">
                   {mode === 'decimal' ? 'Type a Number' : 'Type a Roman Numeral'}
                 </label>
                 <div className="relative">
@@ -129,12 +129,12 @@ export default function ChronosCalculator() {
                     placeholder={mode === 'decimal' ? 'e.g. 2024' : 'e.g. MMXXIV'}
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value.toUpperCase())}
-                    className="w-full bg-white/5 border border-white/10 rounded-[32px] py-10 px-10 text-5xl font-heading font-black text-white placeholder:text-white/10 focus:outline-none focus:border-white/30 focus:bg-white/[0.08] transition-all shadow-2xl uppercase"
+                    className="w-full bg-foreground/5 border border-border rounded-[32px] py-10 px-10 text-5xl font-heading font-black text-foreground placeholder:text-foreground/10 focus:outline-none focus:border-foreground/30 focus:bg-foreground/[0.08] transition-all shadow-2xl uppercase"
                   />
                   <div className="absolute right-6 top-1/2 -translate-y-1/2">
                     <button 
                       onClick={() => setInputValue('')}
-                      className="p-3 hover:bg-white/5 rounded-xl text-slate-600 hover:text-white transition-colors"
+                      className="p-3 hover:bg-foreground/5 rounded-xl text-foreground/40 hover:text-foreground transition-colors"
                     >
                       <RefreshCw className="w-5 h-5" />
                     </button>
@@ -149,7 +149,7 @@ export default function ChronosCalculator() {
                     <button 
                       key={s}
                       onClick={() => setInputValue(prev => prev + s)}
-                      className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 text-sm font-black text-slate-400 hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all"
+                      className="w-12 h-12 rounded-xl bg-foreground/5 border border-border text-sm font-black text-foreground/40 hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all"
                     >
                       {s}
                     </button>
@@ -166,37 +166,37 @@ export default function ChronosCalculator() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.05 }}
-                    className="p-10 rounded-[40px] bg-gradient-to-br from-white/5 to-transparent border border-white/10 shadow-2xl relative overflow-hidden"
+                    className="p-10 rounded-[40px] bg-gradient-to-br from-foreground/5 to-transparent border border-border shadow-2xl relative overflow-hidden"
                   >
                     <div className="absolute top-0 right-0 p-6 opacity-10">
                        <Hash className="w-16 h-16 text-primary" />
                     </div>
 
                     <div className="mb-8">
-                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 block">Answer</span>
-                      <div className="text-6xl md:text-7xl font-heading font-black text-white tracking-tighter break-all">
+                      <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] mb-4 block">Answer</span>
+                      <div className="text-6xl md:text-7xl font-heading font-black text-foreground tracking-tighter break-all">
                         {mode === 'decimal' ? output.result : output.val}
                       </div>
                     </div>
 
                     <div className="space-y-4">
-                      <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] block">How it works</span>
+                      <span className="text-[10px] font-black text-foreground/30 uppercase tracking-[0.3em] block">How it works</span>
                       <div className="flex flex-wrap gap-2">
                         {output.steps.map((step, i) => (
-                          <div key={i} className="flex items-center space-x-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
-                            <span className="text-sm font-black text-white">{step.symbol}</span>
-                            <span className="text-[10px] font-medium text-white/40">({step.value})</span>
+                          <div key={i} className="flex items-center space-x-2 px-4 py-2 bg-foreground/5 border border-border rounded-xl">
+                            <span className="text-sm font-black text-foreground">{step.symbol}</span>
+                            <span className="text-[10px] font-medium text-foreground/40">({step.value})</span>
                           </div>
                         ))}
                       </div>
                     </div>
                   </motion.div>
                 ) : (
-                  <div className="h-full flex flex-col items-center justify-center py-12 px-6 text-center border-2 border-dashed border-white/5 rounded-[40px]">
-                    <div className="w-16 h-16 rounded-3xl bg-slate-800/50 flex items-center justify-center mb-6">
-                      <Info className="text-slate-600 w-8 h-8" />
+                  <div className="h-full flex flex-col items-center justify-center py-12 px-6 text-center border-2 border-dashed border-border rounded-[40px]">
+                    <div className="w-16 h-16 rounded-3xl bg-foreground/5 flex items-center justify-center mb-6">
+                      <Info className="text-foreground/20 w-8 h-8" />
                     </div>
-                    <p className="text-slate-500 font-bold uppercase tracking-widest text-xs leading-relaxed">
+                    <p className="text-foreground/40 font-bold uppercase tracking-widest text-xs leading-relaxed">
                       Awaiting Numerical Input...<br/>
                       <span className="opacity-50 text-[10px]">Enter values above to activate the engine</span>
                     </p>
@@ -215,12 +215,12 @@ export default function ChronosCalculator() {
           { title: 'Additive Rule', desc: 'When a smaller numeral is placed after a larger one, add it (e.g. VI = 6)', icon: ChevronRight },
           { title: 'Limit of Three', desc: 'The same numeral is rarely used more than three times in a row.', icon: History },
         ].map((rule, i) => (
-          <div key={i} className="p-8 rounded-[32px] bg-slate-900/40 border border-white/5 hover:border-primary/20 transition-all group">
-             <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-all">
-                <rule.icon className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+          <div key={i} className="p-8 rounded-[32px] bg-card/40 border border-border hover:border-primary/20 transition-all group">
+             <div className="w-10 h-10 rounded-xl bg-foreground/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-all">
+                <rule.icon className="w-5 h-5 text-foreground/40 group-hover:text-primary transition-colors" />
              </div>
-             <h4 className="text-white font-black uppercase tracking-wider text-xs mb-2">{rule.title}</h4>
-             <p className="text-slate-500 text-xs font-medium leading-relaxed">{rule.desc}</p>
+             <h4 className="text-foreground font-black uppercase tracking-wider text-xs mb-2">{rule.title}</h4>
+             <p className="text-foreground/50 text-xs font-medium leading-relaxed">{rule.desc}</p>
           </div>
         ))}
       </div>

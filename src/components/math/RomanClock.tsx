@@ -57,7 +57,7 @@ export default function RomanClock({
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-16 overflow-hidden">
-      <div className="p-6 md:p-12 lg:p-20 rounded-[48px] md:rounded-[64px] bg-white/[0.02] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] backdrop-blur-3xl relative overflow-hidden flex flex-col xl:flex-row items-center gap-12 xl:gap-20">
+      <div className="p-6 md:p-12 lg:p-20 rounded-[48px] md:rounded-[64px] bg-card/40 border border-border shadow-[0_0_100px_rgba(0,0,0,0.2)] backdrop-blur-3xl relative overflow-hidden flex flex-col xl:flex-row items-center gap-12 xl:gap-20">
         
         {/* The Clock Hub */}
         <div className="relative group shrink-0">
@@ -65,8 +65,8 @@ export default function RomanClock({
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000 -z-10" />
           
           {/* Main Clock Face */}
-          <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[440px] lg:h-[440px] rounded-full p-1.5 bg-gradient-to-br from-white/10 to-white/5 shadow-2xl border border-white/20">
-            <div className="w-full h-full rounded-full bg-[#050505] relative overflow-hidden shadow-inner">
+          <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[440px] lg:h-[440px] rounded-full p-1.5 bg-gradient-to-br from-foreground/10 to-foreground/5 shadow-2xl border border-border">
+            <div className="w-full h-full rounded-full bg-background relative overflow-hidden shadow-inner">
               
               {/* Radial Texture / Brushed Metal Effect */}
               <div className="absolute inset-0 opacity-20 pointer-events-none" 
@@ -84,7 +84,7 @@ export default function RomanClock({
                   >
                     <div 
                       className={cn(
-                        isHour ? "w-1 h-5 bg-white/40 shadow-[0_0_10px_rgba(255,255,255,0.2)]" : "w-0.5 h-2 bg-white/10"
+                        isHour ? "w-1 h-5 bg-foreground/40 shadow-[0_0_10px_rgba(0,0,0,0.1)]" : "w-0.5 h-2 bg-foreground/10"
                       )}
                     />
                   </div>
@@ -101,7 +101,7 @@ export default function RomanClock({
                     style={{ transform: `rotate(${angle}deg)` }}
                   >
                     <span 
-                      className="text-2xl md:text-3xl font-heading font-black text-white/80 select-none tracking-tighter"
+                      className="text-2xl md:text-3xl font-heading font-black text-foreground/80 select-none tracking-tighter"
                       style={{ transform: `rotate(-${angle}deg)` }}
                     >
                       {getRoman(i)}
@@ -120,7 +120,7 @@ export default function RomanClock({
               <div className="absolute inset-0 flex items-center justify-center">
                 {/* Hour Hand */}
                 <motion.div 
-                  className="absolute w-2.5 h-[28%] bg-white rounded-full origin-bottom shadow-2xl z-10"
+                  className="absolute w-2.5 h-[28%] bg-foreground rounded-full origin-bottom shadow-2xl z-10"
                   style={{ 
                     bottom: '50%',
                     rotate: (hours * 30) + (minutes * 0.5)
@@ -150,8 +150,8 @@ export default function RomanClock({
 
                 {/* Center Assembly */}
                 <div className="relative z-40">
-                  <div className="w-5 h-5 bg-black rounded-full border-2 border-white/20 shadow-2xl" />
-                  <div className="absolute inset-1 bg-white rounded-full" />
+                  <div className="w-5 h-5 bg-background rounded-full border-2 border-border shadow-2xl" />
+                  <div className="absolute inset-1 bg-foreground rounded-full" />
                 </div>
               </div>
             </div>
@@ -165,22 +165,22 @@ export default function RomanClock({
               <Clock className="w-3 h-3" />
               <span>Real-Time Horologium</span>
             </div>
-            <h3 className="text-xl sm:text-3xl md:text-4xl xl:text-5xl font-heading font-black text-white tracking-tighter uppercase leading-none whitespace-nowrap">
+            <h3 className="text-xl sm:text-3xl md:text-4xl xl:text-5xl font-heading font-black text-foreground tracking-tighter uppercase leading-none whitespace-nowrap">
               Classical <span className="gradient-text">Timekeeping</span>
             </h3>
-            <p className="text-slate-500 font-medium text-lg italic">"Tempus fugit" — Time flies.</p>
+            <p className="text-foreground/40 font-medium text-lg italic">"Tempus fugit" — Time flies.</p>
           </div>
 
           <div className="space-y-8">
             <div className="flex gap-8">
               <div>
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4 block">Dial Layout</span>
-                <div className="flex bg-white/5 p-1.5 rounded-[24px] border border-white/10 backdrop-blur-md w-fit">
+                <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.4em] mb-4 block">Dial Layout</span>
+                <div className="flex bg-foreground/5 p-1.5 rounded-[24px] border border-border backdrop-blur-md w-fit">
                   <button 
                     onClick={() => setUseWatchmakerFour(true)}
                     className={cn(
                       "px-8 py-4 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
-                      useWatchmakerFour ? "bg-white text-black shadow-2xl scale-105" : "text-slate-500 hover:text-white"
+                      useWatchmakerFour ? "bg-foreground text-background shadow-2xl scale-105" : "text-foreground/40 hover:text-foreground"
                     )}
                   >
                     Watchmaker
@@ -189,7 +189,7 @@ export default function RomanClock({
                     onClick={() => setUseWatchmakerFour(false)}
                     className={cn(
                       "px-8 py-4 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
-                      !useWatchmakerFour ? "bg-white text-black shadow-2xl scale-105" : "text-slate-500 hover:text-white"
+                      !useWatchmakerFour ? "bg-foreground text-background shadow-2xl scale-105" : "text-foreground/40 hover:text-foreground"
                     )}
                   >
                     Standard
@@ -198,14 +198,14 @@ export default function RomanClock({
               </div>
 
               <div>
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4 block">Tick Sound</span>
+                <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.4em] mb-4 block">Tick Sound</span>
                 <button 
                   onClick={() => setSoundEnabled(!soundEnabled)}
                   className={cn(
                     "p-4 rounded-[24px] border transition-all duration-300 flex items-center space-x-3",
                     soundEnabled 
                       ? "bg-secondary/20 border-secondary text-secondary shadow-[0_0_20px_rgba(217,70,239,0.2)]" 
-                      : "bg-white/5 border-white/10 text-slate-500 hover:text-white"
+                      : "bg-foreground/5 border border-border text-foreground/40 hover:text-foreground"
                   )}
                 >
                   {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
@@ -216,7 +216,7 @@ export default function RomanClock({
               </div>
             </div>
 
-            <div className="p-10 rounded-[48px] bg-white/[0.03] border border-white/10 relative overflow-hidden group/card shadow-2xl">
+            <div className="p-10 rounded-[48px] bg-card/60 border border-border relative overflow-hidden group/card shadow-2xl">
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover/card:scale-110 transition-transform duration-700">
                 <History className="w-24 h-24 text-secondary" />
               </div>
@@ -226,19 +226,19 @@ export default function RomanClock({
                    <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
                       <Info className="text-secondary w-4 h-4" />
                    </div>
-                   <h4 className="text-white font-black uppercase tracking-widest text-xs">The Mystery of the Four</h4>
-                </div>
+                    <h4 className="text-foreground font-black uppercase tracking-widest text-xs">The Mystery of the Four</h4>
+                 </div>
                 
-                <p className="text-slate-400 text-base leading-relaxed font-medium mb-6">
+                <p className="text-foreground/60 text-base leading-relaxed font-medium mb-6">
                   {useWatchmakerFour 
                     ? "In watchmaking, 'IIII' is preferred for its 'Golden Balance'. It creates a perfect symmetry with the 'VIII' on the opposite side. Interestingly, King Louis XIV of France reportedly preferred 'IIII' so strongly that it became the industry standard."
                     : "The 'IV' symbol is mathematically correct according to the subtractive rule. However, on a round clock face, 'IV' can look very similar to 'VI' when viewed at an angle. Choosing this mode reflects modern mathematical precision over classical aesthetics."}
                 </p>
 
-                <div className="flex items-center space-x-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
-                   <ShieldCheck className="w-4 h-4" />
-                   <span>Authentic Roman Logic</span>
-                </div>
+                 <div className="flex items-center space-x-4 text-[10px] font-black text-foreground/20 uppercase tracking-[0.2em]">
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>Authentic Roman Logic</span>
+                 </div>
               </div>
             </div>
           </div>
