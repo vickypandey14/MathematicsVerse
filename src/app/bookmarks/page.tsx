@@ -64,10 +64,10 @@ export default function BookmarksPage() {
               <Bookmark className="w-3 h-3" />
               <span>Saved Content</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-heading font-black text-white tracking-tighter">
+            <h1 className="text-5xl md:text-6xl font-heading font-black text-foreground tracking-tighter">
               My <span className="gradient-text">Bookmarks</span>
             </h1>
-            <p className="text-slate-500 font-medium text-lg max-w-2xl">
+            <p className="text-foreground/50 font-medium text-lg max-w-2xl">
               Your personal collection of formulas and lessons for quick reference and deep study.
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function BookmarksPage() {
           <div className="flex items-center justify-center min-h-[40vh]">
             <div className="text-center space-y-4">
               <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto" />
-              <p className="text-slate-500 font-black uppercase tracking-[0.2em] text-[10px]">Loading Collection...</p>
+              <p className="text-foreground/40 font-black uppercase tracking-[0.2em] text-[10px]">Loading Collection...</p>
             </div>
           </div>
         ) : formulas.length > 0 ? (
@@ -87,13 +87,13 @@ export default function BookmarksPage() {
             ))}
           </div>
         ) : (
-          <div className="p-20 rounded-[48px] bg-white/[0.02] border border-white/5 border-dashed flex flex-col items-center justify-center text-center space-y-8">
-            <div className="w-24 h-24 rounded-full bg-slate-900 flex items-center justify-center border border-white/5 shadow-2xl">
-              <BookOpen className="w-10 h-10 text-slate-700" />
+          <div className="p-20 rounded-[48px] bg-card/40 border border-border border-dashed flex flex-col items-center justify-center text-center space-y-8">
+            <div className="w-24 h-24 rounded-full bg-card flex items-center justify-center border border-border shadow-2xl">
+              <BookOpen className="w-10 h-10 text-foreground/20" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-2xl font-heading font-black text-white uppercase tracking-tight">Your library is empty</h3>
-              <p className="text-slate-500 font-medium">Explore our library and bookmark formulas to see them here.</p>
+              <h3 className="text-2xl font-heading font-black text-foreground uppercase tracking-tight">Your library is empty</h3>
+              <p className="text-foreground/40 font-medium">Explore our library and bookmark formulas to see them here.</p>
             </div>
             <Link 
               href="/formulas" 
