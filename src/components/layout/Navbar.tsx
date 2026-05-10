@@ -13,6 +13,8 @@ const navLinks = [
   { name: 'Recently Viewed', href: '/recent', icon: History },
 ];
 
+import ThemeSwitcher from './ThemeSwitcher';
+
 export default function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,7 +33,7 @@ export default function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b',
         isScrolled
-          ? 'bg-slate-950/80 backdrop-blur-md border-slate-800 py-3'
+          ? 'bg-background/80 backdrop-blur-md border-border py-3'
           : 'bg-transparent border-transparent py-5'
       )}
     >
@@ -41,7 +43,7 @@ export default function Navbar() {
             <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
               <Calculator className="text-white w-6 h-6" />
             </div>
-            <span className="text-xl font-heading font-bold tracking-tight">
+            <span className="text-xl font-heading font-bold tracking-tight text-foreground">
               Mathematics<span className="gradient-text">Verse</span>
             </span>
           </Link>
@@ -56,7 +58,7 @@ export default function Navbar() {
                   href={link.href}
                   className={cn(
                     'relative text-sm font-medium transition-colors hover:text-primary flex items-center space-x-1',
-                    isActive ? 'text-primary' : 'text-slate-400'
+                    isActive ? 'text-primary' : 'text-foreground/60'
                   )}
                 >
                   <Icon className="w-4 h-4" />
@@ -70,12 +72,17 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            
+            <div className="pl-4 border-l border-border">
+              <ThemeSwitcher />
+            </div>
           </div>
 
-          <div className="md:hidden">
+          <div className="flex items-center space-x-4 md:hidden">
+            <ThemeSwitcher />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-slate-400 hover:text-white"
+              className="p-2 text-foreground/60 hover:text-foreground"
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
@@ -90,7 +97,7 @@ export default function Navbar() {
           open: { opacity: 1, height: 'auto', display: 'block' },
           closed: { opacity: 0, height: 0, transitionEnd: { display: 'none' } },
         }}
-        className="md:hidden bg-slate-900 border-b border-slate-800"
+        className="md:hidden bg-background border-b border-border"
       >
         <div className="px-4 pt-2 pb-6 space-y-1">
           {navLinks.map((link) => {
@@ -100,7 +107,7 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                className="flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium text-foreground/70 hover:bg-foreground/5 hover:text-foreground transition-colors"
               >
                 <Icon className="w-5 h-5" />
                 <span>{link.name}</span>

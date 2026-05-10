@@ -27,7 +27,7 @@ export default function ArcadeWidget() {
 
   return (
     <div className="col-span-1 md:col-span-3 p-[2px] rounded-[48px] bg-gradient-to-r from-primary via-secondary to-accent shadow-2xl relative group overflow-hidden transition-all hover:scale-[1.01]">
-      <div className="bg-[#05050a] rounded-[46px] p-10 h-full relative z-10 overflow-hidden">
+      <div className="bg-card rounded-[46px] p-10 h-full relative z-10 overflow-hidden">
         {/* Animated Background Particles */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
            <motion.div 
@@ -128,7 +128,7 @@ export default function ArcadeWidget() {
                      <Link 
                       href={`/kids?mode=${m.id}`} 
                       className={cn(
-                        "w-16 h-16 rounded-2xl bg-slate-900 border border-white/10 flex items-center justify-center transition-all hover:bg-slate-800 hover:border-white/30 shadow-xl group/btn overflow-hidden relative",
+                        "w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center transition-all hover:bg-card/80 hover:border-border/50 shadow-xl group/btn overflow-hidden relative",
                         m.color
                       )}
                      >

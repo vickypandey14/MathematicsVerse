@@ -262,8 +262,8 @@ export default function TimeChallenge() {
             className="w-full max-w-4xl space-y-12"
           >
             <div className="text-center space-y-4">
-              <h3 className="text-5xl font-heading font-black text-white uppercase tracking-tight">Pick Your Math Game</h3>
-              <p className="text-slate-500 font-medium text-lg">Which math skill do you want to practice today?</p>
+              <h3 className="text-5xl font-heading font-black text-foreground uppercase tracking-tight">Pick Your Math Game</h3>
+              <p className="text-foreground/60 font-medium text-lg">Which math skill do you want to practice today?</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -293,10 +293,10 @@ export default function TimeChallenge() {
                        </div>
 
                        <div className="space-y-3">
-                          <h4 className="text-3xl font-heading font-black text-white tracking-tight group-hover:text-primary transition-colors">
+                          <h4 className="text-3xl font-heading font-black text-foreground tracking-tight group-hover:text-primary transition-colors">
                             {mission.title}
                           </h4>
-                          <p className="text-slate-400 text-base font-medium leading-relaxed max-w-[280px]">
+                          <p className="text-foreground/70 text-base font-medium leading-relaxed max-w-[280px]">
                             {mission.description}
                           </p>
                        </div>
@@ -330,14 +330,14 @@ export default function TimeChallenge() {
                 />
 
                 <div className="relative z-10 space-y-8">
-                   <button onClick={() => setGameState('idle')} className="group flex items-center space-x-3 text-slate-500 hover:text-white transition-colors">
+                   <button onClick={() => setGameState('idle')} className="group flex items-center space-x-3 text-foreground/50 hover:text-foreground transition-colors">
                       <ChevronLeft className="w-5 h-5 group-hover:-translate-x-2 transition-transform" />
                       <span className="text-xs font-black uppercase tracking-widest">Return to Hangar</span>
                    </button>
 
                    <div className="space-y-4">
                       <div className={cn(
-                        "w-24 h-24 rounded-[32px] bg-white/5 border border-white/10 flex items-center justify-center shadow-2xl",
+                        "w-24 h-24 rounded-[32px] bg-foreground/5 border border-border flex items-center justify-center shadow-2xl",
                         MISSIONS.find(m => m.id === gameMode)?.color
                       )}>
                          {(() => {
@@ -345,7 +345,7 @@ export default function TimeChallenge() {
                            return Icon ? <Icon className="w-12 h-12" /> : null;
                          })()}
                       </div>
-                      <h3 className="text-5xl font-heading font-black text-white uppercase tracking-tighter leading-none">
+                      <h3 className="text-5xl font-heading font-black text-foreground uppercase tracking-tighter leading-none">
                         {MISSIONS.find(m => m.id === gameMode)?.title}
                       </h3>
                       <div className="flex items-center space-x-2 text-primary font-black text-[10px] uppercase tracking-[0.3em]">

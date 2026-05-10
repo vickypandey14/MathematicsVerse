@@ -19,6 +19,7 @@ import {
   Hash,
   Telescope
 } from 'lucide-react';
+import ThemeSwitcher from './ThemeSwitcher';
 import { cn } from '@/lib/utils';
 
 interface MainLayoutProps {
@@ -50,11 +51,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0a0c14] text-slate-300 font-sans selection:bg-primary/20">
+    <div className="flex min-h-screen bg-background text-foreground transition-colors duration-300 font-sans selection:bg-primary/20">
       {/* Sidebar */}
       <aside 
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-white/5 bg-[#0a0c14]/80 backdrop-blur-3xl",
+          "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-border bg-background/80 backdrop-blur-3xl",
           isSidebarOpen ? "w-72" : "w-24"
         )}
       >
@@ -67,7 +68,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
               <motion.span 
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-xl font-heading font-black tracking-tighter text-white"
+                className="text-xl font-heading font-black tracking-tighter text-foreground"
               >
                 MATH<span className="text-primary">VERSE</span>
               </motion.span>
@@ -77,14 +78,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
         <div className="px-6 py-4">
            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
               <input 
                 type="text"
                 placeholder={isSidebarOpen ? "Search formulas..." : ""}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={cn(
-                  "w-full bg-white/5 border border-white/5 rounded-2xl py-3 pl-10 pr-4 text-xs font-bold text-white focus:outline-none focus:border-primary transition-all",
+                  "w-full bg-foreground/5 border border-border rounded-2xl py-3 pl-10 pr-4 text-xs font-bold text-foreground focus:outline-none focus:border-primary transition-all",
                   !isSidebarOpen && "pl-4 pr-0 w-10 h-10 overflow-hidden text-transparent placeholder:text-transparent"
                 )}
               />
@@ -102,8 +103,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 className={cn(
                   "flex items-center space-x-4 px-4 py-4 rounded-2xl transition-all duration-300 group relative",
                   isActive 
-                    ? "bg-white/5 text-white" 
-                    : "text-slate-500 hover:text-white hover:bg-white/5"
+                    ? "bg-foreground/5 text-foreground" 
+                    : "text-foreground/50 hover:text-foreground hover:bg-foreground/5"
                 )}
               >
                 <Icon className={cn("w-6 h-6 shrink-0", isActive ? "text-primary" : "group-hover:text-primary transition-colors")} />
@@ -127,12 +128,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
           })}
         </nav>
 
-        <div className="p-6">
+        <div className="p-6 flex items-center gap-2">
+          <ThemeSwitcher />
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="w-full flex items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all group"
+            className="flex-grow flex items-center justify-center p-4 rounded-2xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all group"
           >
-            {isSidebarOpen ? <X className="w-5 h-5 text-slate-500 group-hover:text-white" /> : <Menu className="w-5 h-5 text-slate-500 group-hover:text-white" />}
+            {isSidebarOpen ? <X className="w-5 h-5 text-foreground/40 group-hover:text-foreground" /> : <Menu className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />}
           </button>
         </div>
       </aside>
