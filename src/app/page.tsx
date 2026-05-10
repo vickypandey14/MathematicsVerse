@@ -14,7 +14,7 @@ export default async function Home() {
     <MainLayout>
       <div className="space-y-16">
         {/* Simple & Logical Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
             <h1 className="text-5xl md:text-6xl font-heading font-black text-foreground tracking-tighter mb-2">
               Math <span className="gradient-text">Explorer</span>

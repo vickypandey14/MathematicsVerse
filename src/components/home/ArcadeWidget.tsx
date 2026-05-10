@@ -27,7 +27,7 @@ export default function ArcadeWidget() {
 
   return (
     <div className="col-span-1 md:col-span-3 p-[2px] rounded-[48px] bg-gradient-to-r from-primary via-secondary to-accent shadow-2xl relative group overflow-hidden transition-all hover:scale-[1.01]">
-      <div className="bg-card rounded-[46px] p-10 h-full relative z-10 overflow-hidden">
+      <div className="bg-card rounded-[46px] p-6 md:p-10 h-full relative z-10 overflow-hidden">
         {/* Animated Background Particles */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
            <motion.div 

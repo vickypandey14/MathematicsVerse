@@ -42,11 +42,23 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const router = useRouter();
   const { isSidebarOpen, setIsSidebarOpen } = useUserStore();
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     setMounted(true);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Close sidebar on mobile when route changes
+  useEffect(() => {
+    if (isMobile) {
+      setIsSidebarOpen(false);
+    }
+  }, [pathname, isMobile, setIsSidebarOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,20 +69,46 @@ export default function MainLayout({ children }: MainLayoutProps) {
   };
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground transition-colors duration-300 font-sans selection:bg-primary/20">
-      {/* Sidebar */}
-      <aside 
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-border bg-background/80 backdrop-blur-3xl",
-          mounted ? (isSidebarOpen ? "w-72" : "w-24") : "w-72"
-        )}
-      >
-        <div className={cn("p-8 flex items-center", isSidebarOpen ? "justify-between" : "justify-center")}>
+    <div className="flex flex-col lg:flex-row min-h-screen bg-background text-foreground transition-colors duration-300 font-sans selection:bg-primary/20">
+      {/* Mobile Top Bar */}
+      <header className="lg:hidden flex items-center justify-between p-6 border-b border-border bg-background/80 backdrop-blur-3xl sticky top-0 z-[60]">
+        <Link href="/" className="flex items-center space-x-3 group">
+          <div className="w-10 h-10 bg-gradient-to-tr from-primary via-secondary to-accent rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+            <Calculator className="text-white w-6 h-6" />
+          </div>
+          <span className="text-xl font-heading font-black tracking-tighter text-foreground">
+            MATH<span className="text-primary">VERSE</span>
+          </span>
+        </Link>
+        <button 
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-3 rounded-xl bg-foreground/5 border border-border text-foreground/60 hover:text-foreground transition-all"
+        >
+          {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </header>
+
+      {/* Desktop/Mobile Sidebar */}
+      <AnimatePresence>
+        {(!isMobile || isSidebarOpen) && (
+          <motion.aside 
+            initial={isMobile ? { x: -300 } : false}
+            animate={isMobile ? { x: 0 } : false}
+            exit={isMobile ? { x: -300 } : false}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className={cn(
+              "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-border bg-background/80 backdrop-blur-3xl",
+              isMobile 
+                ? "w-72" 
+                : (isSidebarOpen ? "w-72" : "w-24")
+            )}
+          >
+        <div className={cn("p-8 flex items-center", (isMobile || isSidebarOpen) ? "justify-between" : "justify-center")}>
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 bg-gradient-to-tr from-primary via-secondary to-accent rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">
               <Calculator className="text-white w-6 h-6" />
             </div>
-            {mounted && isSidebarOpen && (
+            {mounted && (isMobile || isSidebarOpen) && (
               <motion.span 
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -87,7 +125,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
               <Search 
                 className={cn(
                   "absolute top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40 cursor-pointer z-10 transition-all",
-                  isSidebarOpen ? "left-4" : "left-1/2 -translate-x-1/2"
+                  (isMobile || isSidebarOpen) ? "left-4" : "left-1/2 -translate-x-1/2"
                 )} 
                 onClick={() => {
                   if (!isSidebarOpen) setIsSidebarOpen(true);
@@ -103,7 +141,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 }}
                 className={cn(
                   "bg-foreground/5 border border-border rounded-2xl py-3 text-xs font-bold text-foreground focus:outline-none focus:border-primary transition-all cursor-pointer",
-                  isSidebarOpen ? "w-full pl-10 pr-4" : "w-12 h-12 p-0 flex items-center justify-center text-transparent placeholder:text-transparent"
+                  (isMobile || isSidebarOpen) ? "w-full pl-10 pr-4" : "w-12 h-12 p-0 flex items-center justify-center text-transparent placeholder:text-transparent"
                 )}
               />
            </form>
@@ -126,7 +164,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 )}
               >
                 <Icon className={cn("w-6 h-6 shrink-0", isActive ? "text-primary" : "group-hover:text-primary transition-colors")} />
-                {mounted && isSidebarOpen && (
+                {mounted && (isMobile || isSidebarOpen) && (
                   <motion.span 
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -152,19 +190,34 @@ export default function MainLayout({ children }: MainLayoutProps) {
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className={cn(
               "flex items-center justify-center rounded-2xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all group",
-              isSidebarOpen ? "flex-grow p-4" : "w-12 h-12"
+              (isMobile || isSidebarOpen) ? "flex-grow p-4" : "w-12 h-12"
             )}
           >
-            {mounted && isSidebarOpen ? <X className="w-5 h-5 text-foreground/40 group-hover:text-foreground" /> : <Menu className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />}
+            {mounted && (isMobile || isSidebarOpen) ? <X className="w-5 h-5 text-foreground/40 group-hover:text-foreground" /> : <Menu className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />}
           </button>
         </div>
-      </aside>
+      </motion.aside>
+      )}
+      </AnimatePresence>
+
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {isSidebarOpen && isMobile && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSidebarOpen(false)}
+            className="fixed inset-0 bg-background/40 backdrop-blur-sm z-40 lg:hidden"
+          />
+        )}
+      </AnimatePresence>
 
       {/* Main Content Area */}
       <main 
         className={cn(
-          "flex-grow transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-x-hidden",
-          mounted ? (isSidebarOpen ? "ml-72" : "ml-24") : "ml-72"
+          "flex-grow transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] relative overflow-x-hidden min-h-screen",
+          isMobile ? "ml-0" : (isSidebarOpen ? "ml-72" : "ml-24")
         )}
       >
         <AnimatePresence mode="wait">
@@ -174,7 +227,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-            className="max-w-7xl mx-auto p-12"
+            className="max-w-7xl mx-auto p-6 md:p-12"
           >
             {children}
           </motion.div>

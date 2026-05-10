@@ -92,34 +92,37 @@ export default function RomanNumeralsPage() {
           </div>
 
           {/* Main Tabs */}
-          <div className="flex bg-card/40 p-1.5 rounded-2xl border border-border backdrop-blur-md">
-             <button 
-                onClick={() => setActiveTab('guide')}
-                className={cn(
-                  "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  activeTab === 'guide' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
-                )}
-             >
-                Guide
-             </button>
-             <button 
-                onClick={() => setActiveTab('tools')}
-                className={cn(
-                  "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  activeTab === 'tools' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
-                )}
-             >
-                Calculators
-             </button>
-             <button 
-                onClick={() => setActiveTab('clock')}
-                className={cn(
-                  "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                  activeTab === 'clock' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
-                )}
-             >
-                Clock
-             </button>
+          {/* Main Tabs - Scrollable on mobile */}
+          <div className="w-full overflow-x-auto pb-4 md:pb-0 hide-scrollbar">
+            <div className="flex bg-card/40 p-1.5 rounded-2xl border border-border backdrop-blur-md w-fit mx-auto md:mx-0">
+               <button 
+                  onClick={() => setActiveTab('guide')}
+                  className={cn(
+                    "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                    activeTab === 'guide' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
+                  )}
+               >
+                  Guide
+               </button>
+               <button 
+                  onClick={() => setActiveTab('tools')}
+                  className={cn(
+                    "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                    activeTab === 'tools' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
+                  )}
+               >
+                  Calculators
+               </button>
+               <button 
+                  onClick={() => setActiveTab('clock')}
+                  className={cn(
+                    "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                    activeTab === 'clock' ? "bg-foreground text-background shadow-lg" : "text-foreground/50 hover:text-foreground"
+                  )}
+               >
+                  Clock
+               </button>
+            </div>
           </div>
         </div>
 
@@ -209,13 +212,13 @@ export default function RomanNumeralsPage() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-12"
             >
-              {/* Tool Selector (Segmented Control) */}
-              <div className="flex justify-start mb-8">
-                <div className="inline-flex bg-foreground/5 p-1.5 rounded-[24px] border border-border backdrop-blur-md">
+              {/* Tool Selector - Scrollable on mobile */}
+              <div className="w-full overflow-x-auto pb-4 hide-scrollbar">
+                <div className="inline-flex bg-foreground/5 p-1.5 rounded-[24px] border border-border backdrop-blur-md w-fit">
                   <button 
                     onClick={() => setActiveTool('number')}
                     className={cn(
-                      "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
+                      "px-6 md:px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap",
                       activeTool === 'number' ? "bg-foreground text-background shadow-xl scale-100" : "text-foreground/40 hover:text-foreground scale-95 opacity-60 hover:opacity-100"
                     )}
                   >
@@ -224,7 +227,7 @@ export default function RomanNumeralsPage() {
                   <button 
                     onClick={() => setActiveTool('sentence')}
                     className={cn(
-                      "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
+                      "px-6 md:px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap",
                       activeTool === 'sentence' ? "bg-foreground text-background shadow-xl scale-100" : "text-foreground/40 hover:text-foreground scale-95 opacity-60 hover:opacity-100"
                     )}
                   >
@@ -233,7 +236,7 @@ export default function RomanNumeralsPage() {
                   <button 
                     onClick={() => setActiveTool('legion')}
                     className={cn(
-                      "px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300",
+                      "px-6 md:px-8 py-3 rounded-[18px] text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap",
                       activeTool === 'legion' ? "bg-foreground text-background shadow-xl scale-100" : "text-foreground/40 hover:text-foreground scale-95 opacity-60 hover:opacity-100"
                     )}
                   >

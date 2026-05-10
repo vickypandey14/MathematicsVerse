@@ -112,48 +112,50 @@ function KidsCornerContent() {
         <section className="max-w-6xl mx-auto">
           <div className="p-8 md:p-12 rounded-[48px] bg-card/40 border border-border shadow-2xl backdrop-blur-md relative overflow-hidden min-h-[600px]">
              
-             {/* Mode Selector */}
+             {/* Mode Selector - Scrollable on mobile */}
              <div className="flex justify-center mb-12">
-                 <div className="bg-foreground/10 p-1.5 rounded-2xl border border-border flex items-center">
-                   <button 
-                    onClick={() => setActiveView('table')}
-                    className={cn(
-                      "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                      activeView === 'table' ? "bg-foreground text-background shadow-xl" : "text-foreground/50 hover:text-foreground"
-                    )}
-                   >
-                     Table
-                   </button>
-                   <button 
-                    onClick={() => setActiveView('visual')}
-                    className={cn(
-                      "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                      activeView === 'visual' ? "bg-foreground text-background shadow-xl" : "text-foreground/50 hover:text-foreground"
-                    )}
-                   >
-                     Visuals
-                   </button>
-                   <button 
-                    onClick={() => setActiveView('challenge')}
-                    className={cn(
-                      "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center",
-                      activeView === 'challenge' ? "bg-foreground text-background shadow-xl" : "text-foreground/50 hover:text-foreground"
-                    )}
-                   >
-                     <Timer className="w-3 h-3 mr-2" />
-                     Game
-                   </button>
-                   <button 
-                    onClick={() => setActiveView('trophies')}
-                    className={cn(
-                      "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center",
-                      activeView === 'trophies' ? "bg-foreground text-background shadow-xl" : "text-foreground/50 hover:text-foreground"
-                    )}
-                   >
-                     <Trophy className="w-3 h-3 mr-2" />
-                     Trophies
-                   </button>
-                </div>
+                 <div className="w-full overflow-x-auto pb-2 hide-scrollbar flex justify-center">
+                   <div className="bg-foreground/10 p-1.5 rounded-2xl border border-border flex items-center w-fit">
+                     <button 
+                      onClick={() => setActiveView('table')}
+                      className={cn(
+                        "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeView === 'table' ? "bg-foreground text-background shadow-xl" : "text-foreground/50 hover:text-foreground"
+                      )}
+                     >
+                       Table
+                     </button>
+                     <button 
+                      onClick={() => setActiveView('visual')}
+                      className={cn(
+                        "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeView === 'visual' ? "bg-foreground text-background shadow-xl" : "text-foreground/50 hover:text-foreground"
+                      )}
+                     >
+                       Visuals
+                     </button>
+                     <button 
+                      onClick={() => setActiveView('challenge')}
+                      className={cn(
+                        "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center whitespace-nowrap",
+                        activeView === 'challenge' ? "bg-foreground text-background shadow-xl" : "text-foreground/50 hover:text-foreground"
+                      )}
+                     >
+                       <Timer className="w-3 h-3 mr-2" />
+                       Game
+                     </button>
+                     <button 
+                      onClick={() => setActiveView('trophies')}
+                      className={cn(
+                        "px-6 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center whitespace-nowrap",
+                        activeView === 'trophies' ? "bg-foreground text-background shadow-xl" : "text-foreground/50 hover:text-foreground"
+                      )}
+                     >
+                       <Trophy className="w-3 h-3 mr-2" />
+                       Trophies
+                     </button>
+                  </div>
+                 </div>
              </div>
 
              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">

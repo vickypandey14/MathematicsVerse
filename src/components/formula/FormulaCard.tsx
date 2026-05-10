@@ -39,7 +39,7 @@ export default function FormulaCard({ formula, index }: FormulaCardProps) {
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
     >
-      <div className="relative p-10 rounded-[48px] bg-card/40 border border-border hover:border-primary/40 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)] transition-all duration-500 h-full flex flex-col group backdrop-blur-md shadow-2xl">
+      <div className="relative p-6 md:p-10 rounded-[48px] bg-card/40 border border-border hover:border-primary/40 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)] transition-all duration-500 h-full flex flex-col group backdrop-blur-md shadow-2xl">
         {/* Bookmark Button */}
         <div className="absolute top-8 right-8 z-20">
           <button

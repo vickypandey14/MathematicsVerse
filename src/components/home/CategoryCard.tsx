@@ -38,7 +38,7 @@ export default function CategoryCard({ category, index }: CategoryCardProps) {
     >
       <Link
         href={`/formulas?category=${category.slug}`}
-        className="group block relative p-10 rounded-[32px] bg-card/40 border border-border hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 overflow-hidden backdrop-blur-md"
+        className="group block relative p-6 md:p-10 rounded-[32px] bg-card/40 border border-border hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 overflow-hidden backdrop-blur-md"
       >
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[60px] group-hover:bg-primary/20 transition-colors duration-500" />
 
