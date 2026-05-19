@@ -115,9 +115,14 @@ const unitCategories = [
     units: [
       { name: 'Bit (b)', scale: 'Micro', value: 'Binary Digit', def: 'Smallest piece of digital info (0 or 1).', ex: 'A single switch being ON or OFF.' },
       { name: 'Byte (B)', scale: 'Small', value: '8 bits', def: 'Standard unit for storing one character.', ex: 'The letter "A" takes 1 byte of storage.' },
+      { name: 'Kilobyte (KB)', scale: 'Small', value: '1,000 bytes', def: 'Common unit for small text files and code documents.', ex: 'A page of plain text is about 2 KB.' },
       { name: 'Megabyte (MB)', scale: 'Base', value: '1 million bytes', def: 'Used for photos and documents.', ex: 'A standard smartphone photo is 2-5 MB.' },
       { name: 'Gigabyte (GB)', scale: 'Large', value: '1 billion bytes', def: 'Unit for movies and modern apps.', ex: 'An HD movie is about 4-8 GB.' },
       { name: 'Terabyte (TB)', scale: 'Large', value: '1 trillion bytes', def: 'Capacity of modern computer drives.', ex: 'A 1TB drive can store 250,000 songs.' },
+      { name: 'Petabyte (PB)', scale: 'Large', value: '1 quadrillion bytes', def: 'Used for massive database storage and large-scale cloud operations.', ex: 'All photos on Facebook combined require hundreds of petabytes.' },
+      { name: 'Exabyte (EB)', scale: 'Macro', value: '1 quintillion bytes', def: 'Used to measure internet-scale data traffic and storage.', ex: 'Global internet traffic is measured in hundreds of exabytes per month.' },
+      { name: 'Zettabyte (ZB)', scale: 'Macro', value: '1 sextillion bytes', def: 'Measures the aggregate sum of all data in the digital universe.', ex: 'The total amount of digital data created globally in 2025 was estimated to be around 175 ZB.' },
+      { name: 'Yottabyte (YB)', scale: 'Macro', value: '1 septillion bytes', def: 'The largest officially recognized unit of digital storage.', ex: 'Storing all words ever spoken by humans in HD audio would take about 42 YB.' },
     ]
   }
 ];
@@ -230,7 +235,7 @@ export default function UnitsPage() {
                       <div className="p-6 rounded-3xl bg-foreground/5 border border-border group-hover:bg-primary/5 transition-colors">
                          <p className="text-base font-medium text-foreground/60">
                             <span className="text-secondary font-black uppercase tracking-widest text-[10px] block mb-2 opacity-60">Contextual Example</span>
-                            "{unit.ex}"
+                            &ldquo;{unit.ex}&rdquo;
                          </p>
                       </div>
                    </div>
@@ -246,7 +251,7 @@ export default function UnitsPage() {
               <div className="lg:col-span-7">
                  <h3 className="text-4xl font-heading font-black text-foreground mb-6 uppercase tracking-tight">The Precision of Math</h3>
                  <p className="text-foreground/40 text-xl leading-relaxed font-medium mb-10">
-                    Measurement is the language of the physical world. Without standard units, we couldn't build skyscrapers, navigate the oceans, or understand the expansion of our universe.
+                    Measurement is the language of the physical world. Without standard units, we couldn&rsquo;t build skyscrapers, navigate the oceans, or understand the expansion of our universe.
                  </p>
                  <div className="flex flex-wrap gap-4">
                     {['SI Standard', 'Universal Constants', 'Precision Metrics', 'Metric vs Imperial'].map(label => (
@@ -262,7 +267,7 @@ export default function UnitsPage() {
                     <h4 className="text-2xl font-heading font-black text-foreground">Critical Logic</h4>
                  </div>
                  <p className="text-foreground/50 font-medium text-lg leading-relaxed">
-                    "When you can measure what you are speaking about, and express it in numbers, you know something about it." 
+                    &ldquo;When you can measure what you are speaking about, and express it in numbers, you know something about it.&rdquo; 
                     <span className="block mt-4 text-foreground/40 text-sm font-black">— Lord Kelvin</span>
                  </p>
               </div>
