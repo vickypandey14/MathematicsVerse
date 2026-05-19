@@ -170,7 +170,7 @@ function KidsCornerContent() {
                      <div className="space-y-6">
                         <h2 className="text-xl font-black text-foreground uppercase tracking-[0.2em] flex items-center">
                           <Star className="text-secondary w-5 h-5 mr-3 fill-current" />
-                          Table Maker
+                          {activeView === 'table' ? 'Table Maker' : 'Visual Maker'}
                         </h2>
                         
                         <div className="flex items-center space-x-4">
@@ -260,7 +260,7 @@ function KidsCornerContent() {
                            </div>
                            
                            <p className="mt-8 text-foreground/50 text-center text-xs font-medium italic">
-                             "This is what multiplication looks like! It's just a grid of stars."
+                             &ldquo;This is what multiplication looks like! It&rsquo;s just a grid of stars.&rdquo;
                            </p>
                         </motion.div>
                       ) : activeView === 'challenge' ? (
