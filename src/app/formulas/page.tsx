@@ -15,6 +15,7 @@ export default async function FormulasPage() {
       latex: true,
       explanation: true,
       difficulty: true,
+      featured: true,
       category: {
         select: {
           name: true,
