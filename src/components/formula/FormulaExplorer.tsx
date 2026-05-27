@@ -1,31 +1,58 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useDeferredValue } from 'react';
 import FormulaCard from '@/components/formula/FormulaCard';
-import { Search, Filter, SlidersHorizontal, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Search, X } from 'lucide-react';
 import Fuse from 'fuse.js';
 import { useSearchParams } from 'next/navigation';
 
+interface FormulaListItem {
+  id: string;
+  title: string;
+  slug: string;
+  latex: string;
+  explanation: string;
+  difficulty: string;
+  category: {
+    name: string;
+    slug: string;
+  };
+}
+
+interface FormulaCategory {
+  id: string;
+  name: string;
+  slug: string;
+}
+
 interface FormulaExplorerProps {
-  initialFormulas: any[];
-  categories: any[];
+  initialFormulas: FormulaListItem[];
+  categories: FormulaCategory[];
 }
 
 export default function FormulaExplorer({ initialFormulas, categories }: FormulaExplorerProps) {
   const searchParams = useSearchParams();
-  const initialQuery = searchParams.get('q') || '';
-  
+  const query = searchParams.get('q') || '';
+
+  return (
+    <FormulaExplorerContent
+      key={query}
+      initialFormulas={initialFormulas}
+      categories={categories}
+      initialQuery={query}
+    />
+  );
+}
+
+function FormulaExplorerContent({
+  initialFormulas,
+  categories,
+  initialQuery,
+}: FormulaExplorerProps & { initialQuery: string }) {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
-
-  useEffect(() => {
-    const q = searchParams.get('q');
-    if (q !== null) {
-      setSearchQuery(q);
-    }
-  }, [searchParams]);
 
   const fuse = useMemo(() => new Fuse(initialFormulas, {
     keys: ['title', 'explanation', 'category.name'],
@@ -33,8 +60,9 @@ export default function FormulaExplorer({ initialFormulas, categories }: Formula
   }), [initialFormulas]);
 
   const filteredFormulas = useMemo(() => {
-    let results = searchQuery 
-      ? fuse.search(searchQuery).map(r => r.item)
+    const normalizedQuery = deferredSearchQuery.trim();
+    let results = normalizedQuery
+      ? fuse.search(normalizedQuery).map(r => r.item)
       : initialFormulas;
 
     if (selectedCategory) {
@@ -46,7 +74,7 @@ export default function FormulaExplorer({ initialFormulas, categories }: Formula
     }
 
     return results;
-  }, [searchQuery, selectedCategory, selectedDifficulty, initialFormulas, fuse]);
+  }, [deferredSearchQuery, selectedCategory, selectedDifficulty, initialFormulas, fuse]);
 
   return (
     <div className="space-y-12">
@@ -109,8 +137,8 @@ export default function FormulaExplorer({ initialFormulas, categories }: Formula
 
       {filteredFormulas.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredFormulas.map((formula, index) => (
-            <FormulaCard key={formula.id} formula={formula} index={index} />
+          {filteredFormulas.map((formula) => (
+            <FormulaCard key={formula.id} formula={formula} />
           ))}
         </div>
       ) : (

@@ -82,8 +82,8 @@ export default function BookmarksPage() {
           </div>
         ) : formulas.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {formulas.map((formula, index) => (
-              <FormulaCard key={formula.id} formula={formula} index={index} />
+            {formulas.map((formula) => (
+              <FormulaCard key={formula.id} formula={formula} />
             ))}
           </div>
         ) : (

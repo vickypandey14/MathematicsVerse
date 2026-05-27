@@ -72,8 +72,8 @@ export default async function Home() {
             <h2 className="text-2xl font-heading font-black text-foreground tracking-tight uppercase">Featured Lessons</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredFormulas.map((formula, index) => (
-              <FormulaCard key={formula.id} formula={formula} index={index} />
+            {featuredFormulas.map((formula) => (
+              <FormulaCard key={formula.id} formula={formula} />
             ))}
           </div>
         </section>

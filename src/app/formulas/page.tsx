@@ -7,7 +7,24 @@ import { Suspense } from 'react';
 export default async function FormulasPage() {
   const categories = await getCategories();
   const formulas = await prisma.formula.findMany({
-    include: { category: true },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      latex: true,
+      explanation: true,
+      difficulty: true,
+      category: {
+        select: {
+          name: true,
+          slug: true,
+        },
+      },
+    },
+    orderBy: [
+      { featured: 'desc' },
+      { title: 'asc' },
+    ],
   });
 
   return (

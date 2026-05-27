@@ -1,7 +1,6 @@
 'use client';
 
 import { type CSSProperties, useMemo, useSyncExternalStore } from 'react';
-import { motion } from 'framer-motion';
 import { Bookmark, ArrowUpRight, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import MathRenderer from '../math/MathRenderer';
@@ -20,7 +19,6 @@ interface FormulaCardProps {
       name: string;
     };
   };
-  index: number;
 }
 
 const subscribeToHydration = () => () => {};
@@ -43,7 +41,7 @@ function getSummary(explanation?: string) {
   return explanation.replace(/\s+/g, ' ').trim();
 }
 
-export default function FormulaCard({ formula, index }: FormulaCardProps) {
+export default function FormulaCard({ formula }: FormulaCardProps) {
   const { toggleBookmark, isBookmarked } = useUserStore();
   const hasHydrated = useSyncExternalStore(
     subscribeToHydration,
@@ -56,13 +54,7 @@ export default function FormulaCard({ formula, index }: FormulaCardProps) {
   const summary = useMemo(() => getSummary(formula.explanation), [formula.explanation]);
 
   return (
-    <motion.div
-      className="h-full"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.05 }}
-    >
+    <div className="h-full [content-visibility:auto] [contain-intrinsic-size:430px]">
       <article
         className="formula-card-shell group relative flex h-full overflow-hidden rounded-[34px] p-[1px] transition-all duration-500 ease-out"
         style={{ '--formula-accent': accent } as CSSProperties}
@@ -127,6 +119,6 @@ export default function FormulaCard({ formula, index }: FormulaCardProps) {
           </Link>
         </div>
       </article>
-    </motion.div>
+    </div>
   );
 }
