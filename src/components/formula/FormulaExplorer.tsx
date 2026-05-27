@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import MathRenderer from '@/components/math/MathRenderer';
 import Link from 'next/link';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface FormulaListItem {
   id: string;
@@ -314,12 +315,14 @@ function FormulaExplorerContent({
         </div>
       )}
 
-      {previewFormula && (
-        <FormulaPreviewPanel
-          formula={previewFormula}
-          onClose={() => setPreviewFormula(null)}
-        />
-      )}
+      <AnimatePresence>
+        {previewFormula && (
+          <FormulaPreviewPanel
+            formula={previewFormula}
+            onClose={() => setPreviewFormula(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -333,18 +336,34 @@ function FormulaPreviewPanel({
 }) {
   return (
     <div className="fixed inset-0 z-[90]">
-      <button
+      <motion.button
         aria-label="Close preview"
         className="absolute inset-0 cursor-default bg-background/55 backdrop-blur-sm"
         onClick={onClose}
+        initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+        animate={{ opacity: 1, backdropFilter: 'blur(6px)' }}
+        exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       />
 
-      <aside className="absolute bottom-0 right-0 top-0 flex w-full max-w-2xl flex-col border-l border-border bg-background/92 shadow-2xl backdrop-blur-3xl md:rounded-l-[40px]">
+      <motion.aside
+        className="absolute bottom-0 right-0 top-0 flex w-full max-w-2xl flex-col border-l border-border bg-background/92 shadow-2xl backdrop-blur-3xl md:rounded-l-[40px]"
+        initial={{ x: '100%', opacity: 0.85, scale: 0.985 }}
+        animate={{ x: 0, opacity: 1, scale: 1 }}
+        exit={{ x: '100%', opacity: 0.8, scale: 0.985 }}
+        transition={{ type: 'spring', stiffness: 360, damping: 36, mass: 0.9 }}
+      >
         <div className="relative overflow-hidden border-b border-border p-6 md:p-8">
           <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-[90px]" />
           <div className="absolute -bottom-28 left-12 h-72 w-72 rounded-full bg-accent/10 blur-[90px]" />
 
-          <div className="relative z-10 flex items-start justify-between gap-6">
+          <motion.div
+            className="relative z-10 flex items-start justify-between gap-6"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ delay: 0.08, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+          >
             <div>
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-foreground/55">
                 <Sparkles className="h-4 w-4 text-primary" />
@@ -370,17 +389,38 @@ function FormulaPreviewPanel({
             >
               <X className="h-5 w-5" />
             </button>
-          </div>
+          </motion.div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 md:p-8">
-          <div className="formula-card-preview relative mb-8 flex min-h-[220px] items-center justify-center overflow-hidden rounded-[32px] border px-8 py-12">
+          <motion.div
+            className="formula-card-preview relative mb-8 flex min-h-[220px] items-center justify-center overflow-hidden rounded-[32px] border px-8 py-12"
+            initial={{ opacity: 0, y: 18, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.98 }}
+            transition={{ delay: 0.13, duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+          >
             <div className="relative z-10 max-w-full text-center text-foreground [&_.katex]:text-[1.55em]">
               <MathRenderer latex={formula.latex} />
             </div>
-          </div>
+          </motion.div>
 
-          <div className="space-y-5">
+          <motion.div
+            className="space-y-5"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  delayChildren: 0.18,
+                  staggerChildren: 0.055,
+                },
+              },
+            }}
+          >
             <PreviewSection
               icon={BookOpen}
               label="Core Idea"
@@ -403,10 +443,16 @@ function FormulaPreviewPanel({
                 content={formula.history}
               />
             )}
-          </div>
+          </motion.div>
         </div>
 
-        <div className="border-t border-border p-6 md:p-8">
+        <motion.div
+          className="border-t border-border p-6 md:p-8"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ delay: 0.24, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
           <Link
             href={`/formula/${formula.slug}`}
             className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-5 text-sm font-black uppercase tracking-[0.18em] text-white shadow-xl shadow-primary/25 transition-all hover:bg-primary/90 active:scale-[0.98]"
@@ -414,8 +460,8 @@ function FormulaPreviewPanel({
             Open Full Lesson
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Link>
-        </div>
-      </aside>
+        </motion.div>
+      </motion.aside>
     </div>
   );
 }
@@ -430,7 +476,18 @@ function PreviewSection({
   content: string;
 }) {
   return (
-    <section className="rounded-[28px] border border-border bg-card/45 p-6 shadow-lg shadow-foreground/5 backdrop-blur-md">
+    <motion.section
+      className="rounded-[28px] border border-border bg-card/45 p-6 shadow-lg shadow-foreground/5 backdrop-blur-md"
+      variants={{
+        hidden: { opacity: 0, y: 16, scale: 0.985 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+        },
+      }}
+    >
       <div className="mb-4 flex items-center gap-3">
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
           <Icon className="h-5 w-5" />
@@ -442,6 +499,6 @@ function PreviewSection({
       <p className="text-base font-medium leading-7 text-foreground/68">
         {content}
       </p>
-    </section>
+    </motion.section>
   );
 }
