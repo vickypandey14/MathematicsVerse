@@ -14,6 +14,9 @@ export default async function FormulasPage() {
       slug: true,
       latex: true,
       explanation: true,
+      useCase: true,
+      example: true,
+      history: true,
       difficulty: true,
       featured: true,
       category: {

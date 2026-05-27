@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useMemo, useDeferredValue } from 'react';
+import { useState, useMemo, useDeferredValue, useEffect } from 'react';
 import FormulaCard from '@/components/formula/FormulaCard';
-import { Search, SlidersHorizontal, Sparkles, X } from 'lucide-react';
+import { ArrowRight, BookOpen, Lightbulb, Search, SlidersHorizontal, Sparkles, Target, X } from 'lucide-react';
 import Fuse from 'fuse.js';
 import { useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import MathRenderer from '@/components/math/MathRenderer';
+import Link from 'next/link';
 
 interface FormulaListItem {
   id: string;
@@ -13,6 +15,9 @@ interface FormulaListItem {
   slug: string;
   latex: string;
   explanation: string;
+  useCase: string;
+  example: string;
+  history?: string | null;
   difficulty: string;
   featured: boolean;
   category: {
@@ -67,6 +72,35 @@ function FormulaExplorerContent({
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
   const [scope, setScope] = useState<ScopeMode>('all');
   const [sortMode, setSortMode] = useState<SortMode>('recommended');
+  const [previewFormula, setPreviewFormula] = useState<FormulaListItem | null>(null);
+
+  useEffect(() => {
+    if (!previewFormula) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setPreviewFormula(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [previewFormula]);
+
+  useEffect(() => {
+    if (!previewFormula) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [previewFormula]);
 
   const categoryCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -263,7 +297,11 @@ function FormulaExplorerContent({
       {filteredFormulas.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredFormulas.map((formula) => (
-            <FormulaCard key={formula.id} formula={formula} />
+            <FormulaCard
+              key={formula.id}
+              formula={formula}
+              onPreview={() => setPreviewFormula(formula)}
+            />
           ))}
         </div>
       ) : (
@@ -275,6 +313,135 @@ function FormulaExplorerContent({
           <p className="text-foreground/50 font-medium tracking-tight">Try different keywords or filters.</p>
         </div>
       )}
+
+      {previewFormula && (
+        <FormulaPreviewPanel
+          formula={previewFormula}
+          onClose={() => setPreviewFormula(null)}
+        />
+      )}
     </div>
+  );
+}
+
+function FormulaPreviewPanel({
+  formula,
+  onClose,
+}: {
+  formula: FormulaListItem;
+  onClose: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-[90]">
+      <button
+        aria-label="Close preview"
+        className="absolute inset-0 cursor-default bg-background/55 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      <aside className="absolute bottom-0 right-0 top-0 flex w-full max-w-2xl flex-col border-l border-border bg-background/92 shadow-2xl backdrop-blur-3xl md:rounded-l-[40px]">
+        <div className="relative overflow-hidden border-b border-border p-6 md:p-8">
+          <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-[90px]" />
+          <div className="absolute -bottom-28 left-12 h-72 w-72 rounded-full bg-accent/10 blur-[90px]" />
+
+          <div className="relative z-10 flex items-start justify-between gap-6">
+            <div>
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-foreground/55">
+                <Sparkles className="h-4 w-4 text-primary" />
+                Quick Preview
+              </div>
+              <h2 className="text-4xl font-heading font-black leading-none tracking-tight text-foreground md:text-5xl">
+                {formula.title}
+              </h2>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <span className="rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-primary">
+                  {formula.category.name}
+                </span>
+                <span className="rounded-full border border-border bg-foreground/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-foreground/55">
+                  {formula.difficulty}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-border bg-card/60 text-foreground/50 transition-all hover:border-primary/30 hover:text-foreground"
+              aria-label="Close preview"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6 md:p-8">
+          <div className="formula-card-preview relative mb-8 flex min-h-[220px] items-center justify-center overflow-hidden rounded-[32px] border px-8 py-12">
+            <div className="relative z-10 max-w-full text-center text-foreground [&_.katex]:text-[1.55em]">
+              <MathRenderer latex={formula.latex} />
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <PreviewSection
+              icon={BookOpen}
+              label="Core Idea"
+              content={formula.explanation}
+            />
+            <PreviewSection
+              icon={Target}
+              label="Where It Is Used"
+              content={formula.useCase}
+            />
+            <PreviewSection
+              icon={Lightbulb}
+              label="Example"
+              content={formula.example}
+            />
+            {formula.history && (
+              <PreviewSection
+                icon={Sparkles}
+                label="Historical Note"
+                content={formula.history}
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="border-t border-border p-6 md:p-8">
+          <Link
+            href={`/formula/${formula.slug}`}
+            className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-5 text-sm font-black uppercase tracking-[0.18em] text-white shadow-xl shadow-primary/25 transition-all hover:bg-primary/90 active:scale-[0.98]"
+          >
+            Open Full Lesson
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+function PreviewSection({
+  icon: Icon,
+  label,
+  content,
+}: {
+  icon: typeof BookOpen;
+  label: string;
+  content: string;
+}) {
+  return (
+    <section className="rounded-[28px] border border-border bg-card/45 p-6 shadow-lg shadow-foreground/5 backdrop-blur-md">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+          <Icon className="h-5 w-5" />
+        </div>
+        <h3 className="text-[10px] font-black uppercase tracking-[0.22em] text-foreground/45">
+          {label}
+        </h3>
+      </div>
+      <p className="text-base font-medium leading-7 text-foreground/68">
+        {content}
+      </p>
+    </section>
   );
 }

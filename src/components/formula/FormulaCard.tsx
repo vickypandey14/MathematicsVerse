@@ -1,24 +1,27 @@
 'use client';
 
 import { type CSSProperties, useMemo, useSyncExternalStore } from 'react';
-import { Bookmark, ArrowUpRight, BookOpen } from 'lucide-react';
+import { Bookmark, ArrowUpRight, BookOpen, Eye } from 'lucide-react';
 import Link from 'next/link';
 import MathRenderer from '../math/MathRenderer';
 import { useUserStore } from '@/lib/store/useUserStore';
 import { cn } from '@/lib/utils';
 
-interface FormulaCardProps {
-  formula: {
-    id: string;
-    title: string;
-    slug: string;
-    latex: string;
-    explanation?: string;
-    difficulty: string;
-    category: {
-      name: string;
-    };
+interface FormulaCardFormula {
+  id: string;
+  title: string;
+  slug: string;
+  latex: string;
+  explanation?: string;
+  difficulty: string;
+  category: {
+    name: string;
   };
+}
+
+interface FormulaCardProps {
+  formula: FormulaCardFormula;
+  onPreview?: (formula: FormulaCardFormula) => void;
 }
 
 const subscribeToHydration = () => () => {};
@@ -41,7 +44,7 @@ function getSummary(explanation?: string) {
   return explanation.replace(/\s+/g, ' ').trim();
 }
 
-export default function FormulaCard({ formula }: FormulaCardProps) {
+export default function FormulaCard({ formula, onPreview }: FormulaCardProps) {
   const { toggleBookmark, isBookmarked } = useUserStore();
   const hasHydrated = useSyncExternalStore(
     subscribeToHydration,
@@ -75,6 +78,20 @@ export default function FormulaCard({ formula }: FormulaCardProps) {
           >
             <Bookmark className={cn("w-4 h-4", bookmarked && "fill-current")} />
           </button>
+
+          {onPreview && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onPreview(formula);
+              }}
+              aria-label={`Preview ${formula.title}`}
+              className="absolute right-20 top-7 z-30 flex h-11 w-11 items-center justify-center rounded-2xl border border-border/70 bg-card/70 text-foreground/55 shadow-lg shadow-foreground/5 backdrop-blur-xl transition-all duration-300 hover:border-accent/40 hover:bg-accent/10 hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/35"
+            >
+              <Eye className="h-4 w-4" />
+            </button>
+          )}
 
           <Link href={`/formula/${formula.slug}`} className="relative z-10 flex h-full flex-col rounded-[28px] focus:outline-none focus:ring-2 focus:ring-primary/35">
             <div className="formula-card-preview relative mb-6 flex min-h-[220px] items-center justify-center overflow-hidden rounded-[28px] border px-8 py-12">
