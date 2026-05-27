@@ -14,7 +14,7 @@
   --formula-card-border: rgba(99, 102, 241, 0.22);
   --formula-card-ring: linear-gradient(135deg, color-mix(in srgb, var(--formula-accent) 78%, white), rgba(34, 211, 238, 0.7), rgba(217, 70, 239, 0.7));
   --formula-card-shadow: 0 18px 45px rgba(15, 23, 42, 0.09), 0 1px 0 rgba(255, 255, 255, 0.7) inset;
-  --formula-card-hover-shadow: 0 28px 80px rgba(15, 23, 42, 0.16), 0 0 0 1px color-mix(in srgb, var(--formula-accent) 18%, transparent);
+  --formula-card-hover-shadow: 0 18px 54px color-mix(in srgb, var(--formula-accent) 18%, transparent), 0 12px 28px rgba(15, 23, 42, 0.08), 0 0 0 1px color-mix(in srgb, var(--formula-accent) 18%, transparent);
   --formula-preview-bg: linear-gradient(140deg, rgba(248, 250, 252, 0.96), rgba(238, 242, 255, 0.9));
   --formula-preview-border: rgba(99, 102, 241, 0.18);
   --formula-chip-bg: rgba(255, 255, 255, 0.72);
@@ -37,7 +37,7 @@
   --formula-card-border: rgba(255, 255, 255, 0.1);
   --formula-card-ring: linear-gradient(135deg, color-mix(in srgb, var(--formula-accent) 82%, white), rgba(34, 211, 238, 0.75), rgba(232, 121, 249, 0.78));
   --formula-card-shadow: 0 22px 60px rgba(0, 0, 0, 0.32), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
-  --formula-card-hover-shadow: 0 34px 90px rgba(0, 0, 0, 0.52), 0 0 0 1px color-mix(in srgb, var(--formula-accent) 28%, transparent);
+  --formula-card-hover-shadow: 0 24px 70px rgba(0, 0, 0, 0.38), 0 18px 54px color-mix(in srgb, var(--formula-accent) 18%, transparent), 0 0 0 1px color-mix(in srgb, var(--formula-accent) 28%, transparent);
   --formula-preview-bg: linear-gradient(140deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.84));
   --formula-preview-border: rgba(255, 255, 255, 0.11);
   --formula-chip-bg: rgba(255, 255, 255, 0.08);
@@ -145,6 +145,7 @@ body {
 .formula-card-shell {
   background: var(--formula-card-ring);
   box-shadow: var(--formula-card-shadow);
+  isolation: isolate;
 }
 
 .formula-card-shell::before {
@@ -160,7 +161,7 @@ body {
 
 .formula-card-shell:hover {
   box-shadow: var(--formula-card-hover-shadow);
-  transform: translateY(-8px);
+  transform: translateY(-4px);
 }
 
 .formula-card-shell:hover::before {

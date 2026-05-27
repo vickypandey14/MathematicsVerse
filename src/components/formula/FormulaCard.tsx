@@ -54,7 +54,7 @@ export default function FormulaCard({ formula }: FormulaCardProps) {
   const summary = useMemo(() => getSummary(formula.explanation), [formula.explanation]);
 
   return (
-    <div className="h-full [content-visibility:auto] [contain-intrinsic-size:430px]">
+    <div className="h-full">
       <article
         className="formula-card-shell group relative flex h-full overflow-hidden rounded-[34px] p-[1px] transition-all duration-500 ease-out"
         style={{ '--formula-accent': accent } as CSSProperties}
