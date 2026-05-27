@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calculator as CalcIcon, RefreshCcw, Terminal } from 'lucide-react';
+import { RefreshCcw, Terminal } from 'lucide-react';
 
 interface CalculatorProps {
   formula: {
@@ -12,8 +12,7 @@ interface CalculatorProps {
 }
 
 export default function InteractiveCalculator({ formula }: CalculatorProps) {
-  const [inputs, setInputs] = useState<Record<string, number>>({});
-  const [result, setResult] = useState<number | string | null>(null);
+  const [inputs, setInputs] = useState<Record<string, number | undefined>>({});
 
   const getFields = () => {
     switch (formula.slug) {
@@ -54,7 +53,7 @@ export default function InteractiveCalculator({ formula }: CalculatorProps) {
       vals[f.name] = inputs[f.name] || 0;
     });
 
-    const { a, b, c, r, x, h, w, l } = vals;
+    const { a, b, c, d, r, x, y } = vals;
 
     switch (formula.slug) {
       case 'quadratic-formula':

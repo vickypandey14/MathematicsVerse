@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { type CSSProperties, useMemo, useSyncExternalStore } from 'react';
 import { motion } from 'framer-motion';
-import { Bookmark, Eye, ArrowRight } from 'lucide-react';
+import { Bookmark, ArrowUpRight, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import MathRenderer from '../math/MathRenderer';
 import { useUserStore } from '@/lib/store/useUserStore';
@@ -14,6 +14,7 @@ interface FormulaCardProps {
     title: string;
     slug: string;
     latex: string;
+    explanation?: string;
     difficulty: string;
     category: {
       name: string;
@@ -22,83 +23,110 @@ interface FormulaCardProps {
   index: number;
 }
 
+const subscribeToHydration = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+const categoryAccents: Record<string, string> = {
+  algebra: '#6366f1',
+  geometry: '#0891b2',
+  calculus: '#7c3aed',
+  statistics: '#0f766e',
+  trigonometry: '#db2777',
+};
+
+function getSummary(explanation?: string) {
+  if (!explanation) {
+    return 'A concise reference with the key relationship and practical context.';
+  }
+
+  return explanation.replace(/\s+/g, ' ').trim();
+}
+
 export default function FormulaCard({ formula, index }: FormulaCardProps) {
   const { toggleBookmark, isBookmarked } = useUserStore();
-  const [hasHydrated, setHasHydrated] = useState(false);
-
-  useEffect(() => {
-    setHasHydrated(true);
-  }, []);
+  const hasHydrated = useSyncExternalStore(
+    subscribeToHydration,
+    getClientSnapshot,
+    getServerSnapshot
+  );
 
   const bookmarked = hasHydrated ? isBookmarked(formula.id) : false;
+  const accent = categoryAccents[formula.category.name.toLowerCase()] || '#6366f1';
+  const summary = useMemo(() => getSummary(formula.explanation), [formula.explanation]);
 
   return (
     <motion.div
+      className="h-full"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
     >
-      <div className="relative p-6 md:p-10 rounded-[48px] bg-card/40 border border-border hover:border-primary/40 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)] transition-all duration-500 h-full flex flex-col group backdrop-blur-md shadow-2xl">
-        {/* Bookmark Button */}
-        <div className="absolute top-8 right-8 z-20">
+      <article
+        className="formula-card-shell group relative flex h-full overflow-hidden rounded-[34px] p-[1px] transition-all duration-500 ease-out"
+        style={{ '--formula-accent': accent } as CSSProperties}
+      >
+        <div className="formula-card-surface relative z-10 flex h-full w-full flex-col overflow-hidden rounded-[33px] border p-4">
           <button
             onClick={(e) => {
               e.preventDefault();
               toggleBookmark(formula.id);
             }}
+            aria-label={bookmarked ? 'Remove bookmark' : 'Save formula'}
             className={cn(
-              "p-3 rounded-2xl border transition-all duration-500",
-              bookmarked 
-                ? "bg-primary text-white border-primary shadow-lg shadow-primary/20" 
-                : "bg-foreground/5 text-foreground/50 border-border hover:text-foreground hover:border-primary/30"
+              "absolute right-7 top-7 z-30 flex h-11 w-11 items-center justify-center rounded-2xl border backdrop-blur-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/35",
+              bookmarked
+                ? "bg-primary text-white border-primary shadow-xl shadow-primary/25"
+                : "bg-card/70 text-foreground/55 border-border/70 shadow-lg shadow-foreground/5 hover:text-primary hover:border-primary/35 hover:bg-primary/10"
             )}
           >
             <Bookmark className={cn("w-4 h-4", bookmarked && "fill-current")} />
           </button>
-        </div>
 
-        {/* Category & Difficulty */}
-        <div className="flex items-center space-x-3 mb-8">
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary px-4 py-2 rounded-xl bg-primary/5 border border-primary/10">
-            {formula.category.name}
-          </span>
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/50 px-4 py-2 rounded-xl bg-foreground/5 border border-border">
-            {formula.difficulty}
-          </span>
-        </div>
+          <Link href={`/formula/${formula.slug}`} className="relative z-10 flex h-full flex-col rounded-[28px] focus:outline-none focus:ring-2 focus:ring-primary/35">
+            <div className="formula-card-preview relative mb-6 flex min-h-[220px] items-center justify-center overflow-hidden rounded-[28px] border px-8 py-12">
+              <div
+                className="absolute left-6 top-6 rounded-2xl border border-white/40 bg-white/75 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-foreground/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/10"
+                style={{ color: accent }}
+              >
+                {formula.category.name}
+              </div>
+              <div className="absolute bottom-6 right-6 flex items-center gap-1.5 rounded-full bg-card/70 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-foreground/45 backdrop-blur-xl">
+                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: accent }} />
+                Formula
+              </div>
+              <div className="relative z-10 max-w-full text-center text-foreground drop-shadow-sm transition-transform duration-500 group-hover:scale-[1.04] [&_.katex]:text-[1.42em]">
+                <MathRenderer latex={formula.latex} />
+              </div>
+            </div>
 
-        {/* Title */}
-        <h3 className="text-3xl font-heading font-black mb-10 text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500 leading-tight">
-          {formula.title}
-        </h3>
+            <div className="flex flex-1 flex-col px-2 pb-2">
+              <div className="mb-4 flex items-start justify-between gap-5">
+                <h3 className="text-3xl font-heading font-black leading-[1.04] tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                  {formula.title}
+                </h3>
+                <ArrowUpRight className="mt-1 h-6 w-6 shrink-0 text-foreground/28 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
+              </div>
 
-        {/* LaTeX Preview */}
-        <div className="bg-foreground/5 rounded-[32px] p-12 mb-10 flex items-center justify-center min-h-[180px] border border-border group-hover:border-primary/20 transition-all duration-500 relative overflow-hidden shadow-inner">
-          <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="scale-110 relative z-10">
-             <MathRenderer latex={formula.latex} />
-          </div>
-        </div>
+              <p className="line-clamp-2 min-h-12 text-[15px] font-medium leading-6 text-foreground/58">
+                {summary}
+              </p>
 
-        {/* Improved Action Footer */}
-        <div className="mt-auto pt-4 flex items-center justify-between border-t border-border">
-          <Link
-            href={`/formula/${formula.slug}`}
-            className="flex items-center space-x-3 group/btn"
-          >
-            <div className="px-6 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center space-x-3 transition-all duration-500 shadow-lg shadow-primary/20 group-hover/btn:scale-[1.05] group-hover/btn:shadow-primary/40 active:scale-95">
-              <span>Explore</span>
-              <ArrowRight className="w-4 h-4" />
+              <div className="mt-7 flex items-center justify-between gap-4 border-t border-border/70 pt-5">
+                <span className="formula-chip-muted rounded-2xl border border-border/70 px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-foreground/58">
+                  {formula.difficulty}
+                </span>
+
+                <span className="inline-flex items-center gap-2 rounded-2xl px-1 py-2 text-sm font-black text-primary">
+                  <BookOpen className="h-4 w-4" />
+                  Explore Lesson
+                </span>
+              </div>
             </div>
           </Link>
-          
-          <div className="flex items-center space-x-2 text-foreground/50 group-hover:text-foreground/80 transition-colors">
-            <Eye className="w-4 h-4 text-primary opacity-50 group-hover:opacity-100 transition-opacity" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Insights</span>
-          </div>
         </div>
-      </div>
+      </article>
     </motion.div>
   );
 }

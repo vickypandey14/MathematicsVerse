@@ -1,12 +1,13 @@
 'use client';
 
-import { Download, FileText, Check } from 'lucide-react';
+import { Download, Check } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface DownloadButtonProps {
   formula: {
     title: string;
+    slug: string;
     latex: string;
     explanation: string;
     history?: string | null;
