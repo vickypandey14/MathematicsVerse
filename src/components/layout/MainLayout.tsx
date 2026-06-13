@@ -20,7 +20,8 @@ import {
   Hash,
   Telescope,
   Waves,
-  Sparkles
+  Sparkles,
+  Orbit
 } from 'lucide-react';
 import ThemeSwitcher from './ThemeSwitcher';
 import { cn } from '@/lib/utils';
@@ -35,6 +36,7 @@ const navLinks = [
   { name: 'Library', href: '/formulas', icon: Compass },
   { name: 'Wave Explorer', href: '/wave-explorer', icon: Waves },
   { name: 'Fourier Canvas', href: '/fourier', icon: Sparkles },
+  { name: 'Solar System', href: '/planets', icon: Orbit },
   { name: 'Kids Corner', href: '/kids', icon: GraduationCap },
   { name: 'Roman Numerals', href: '/roman-numerals', icon: Hash },
   { name: 'Units & Measures', href: '/units', icon: Layers },
