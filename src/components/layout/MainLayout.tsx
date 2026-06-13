@@ -19,7 +19,8 @@ import {
   GraduationCap,
   Hash,
   Telescope,
-  Waves
+  Waves,
+  Sparkles
 } from 'lucide-react';
 import ThemeSwitcher from './ThemeSwitcher';
 import { cn } from '@/lib/utils';
@@ -33,6 +34,7 @@ const navLinks = [
   { name: 'Home', href: '/', icon: LayoutDashboard },
   { name: 'Library', href: '/formulas', icon: Compass },
   { name: 'Wave Explorer', href: '/wave-explorer', icon: Waves },
+  { name: 'Fourier Canvas', href: '/fourier', icon: Sparkles },
   { name: 'Kids Corner', href: '/kids', icon: GraduationCap },
   { name: 'Roman Numerals', href: '/roman-numerals', icon: Hash },
   { name: 'Units & Measures', href: '/units', icon: Layers },
