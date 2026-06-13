@@ -9,6 +9,9 @@ interface PlanetCanvasProps {
   rotationSpeed?: number;
 }
 
+const texWidth = 512;
+const texHeight = 256;
+
 // 4-Octave pseudo-noise for organic textures
 function pseudoNoise(x: number, y: number): number {
   return (
@@ -31,13 +34,11 @@ function getCraterInfluence(dist: number, radius: number): { height: number; col
   if (x > 1.25) return { height: 0, colorVal: 0 };
   
   if (x < 0.9) {
-    // Bowl: drops to -0.45 at center, rises to +0.15 at the rim (x = 0.9)
     const t = x / 0.9;
     const h = -0.45 * (1 - t * t) + 0.15 * Math.pow(t, 4);
     const c = -35 * (1 - t * t) + 25 * Math.pow(t, 4);
     return { height: h, colorVal: c };
   } else {
-    // Rim lip and outer slope (0.9 <= x <= 1.25)
     const t = (1.25 - x) / 0.35;
     const h = 0.15 * t * t;
     const c = 35 * t * t;
@@ -67,10 +68,8 @@ function getMercuryCrater(u: number, v: number): { height: number; colorVal: num
       const h2 = hash21(seed, 93.1);
       const h3 = hash21(seed, 45.7);
       
-      // Skip crater in ~20% of cells to keep layout organic
       if (h1 > 0.8) continue;
       
-      // Center coordinates of crater in this cell
       const cx = (wrappedCellI + 0.1 + 0.8 * h2) / Nu;
       const cy = (clampedJ + 0.1 + 0.8 * h3) / Nv;
       
@@ -80,10 +79,10 @@ function getMercuryCrater(u: number, v: number): { height: number; colorVal: num
       const dv = v - cy;
       
       const dist = Math.sqrt(du * du + dv * dv);
-      const radius = 0.012 + 0.026 * h3; // randomized sizes
+      const radius = 0.012 + 0.026 * h3;
       
       const influence = getCraterInfluence(dist, radius);
-      const strength = 0.45 + 0.55 * h1; // randomized depths
+      const strength = 0.45 + 0.55 * h1;
       
       totalH += influence.height * strength;
       totalC += influence.colorVal * strength;
@@ -91,42 +90,6 @@ function getMercuryCrater(u: number, v: number): { height: number; colorVal: num
   }
   
   return { height: totalH, colorVal: totalC };
-}
-
-// Height map generator for rocky planets (for bump mapping)
-function getPlanetHeight(u: number, v: number, planetId: string): number {
-  if (planetId === 'mercury') {
-    const craterData = getMercuryCrater(u, v);
-    const baseNoise = pseudoNoise(u * 15, v * 15) * 0.05;
-    return craterData.height + baseNoise;
-  }
-  
-  if (planetId === 'mars') {
-    const marsNoise = pseudoNoise(u * 11, v * 9);
-    const detail = pseudoNoise(u * 32, v * 32) * 0.08;
-    let h = marsNoise + detail;
-    
-    // Equatorial Canyon: Valles Marineris (trench along the equator)
-    const du = u - 0.4;
-    const dv = v - 0.5;
-    if (Math.abs(du) < 0.15 && Math.abs(dv) < 0.035) {
-      const canyonDepth = (1 - Math.abs(du) / 0.15) * (1 - Math.abs(dv) / 0.035);
-      h -= canyonDepth * 0.32; // deep rift depression
-    }
-    return h;
-  }
-  
-  if (planetId === 'earth') {
-    const landNoise = pseudoNoise(u * 14, v * 10);
-    const isLand = landNoise > -0.04;
-    if (isLand) {
-      const mountains = pseudoNoise(u * 38, v * 38) * 0.12;
-      return landNoise + mountains;
-    }
-    return 0; // Oceans are flat
-  }
-  
-  return 0;
 }
 
 export default function PlanetCanvas({ 
@@ -139,6 +102,11 @@ export default function PlanetCanvas({
   const [lightSource, setLightSource] = useState({ x: -0.6, y: -0.6, z: 0.8 });
   const timeRef = useRef<number>(0);
   const animationFrameId = useRef<number | null>(null);
+
+  // Baked texture buffers stored in refs to avoid CPU re-evaluations
+  const bakedColorRef = useRef<Uint8Array | null>(null);
+  const bakedHeightRef = useRef<Float32Array | null>(null);
+  const bakedPlanetIdRef = useRef<string>('');
 
   // Track mouse position to update the light source (flashlight effect)
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -166,7 +134,7 @@ export default function PlanetCanvas({
     setLightSource({ x: -0.6, y: -0.6, z: 0.8 });
   };
 
-  // Color generator for each planet based on coordinates (u, v) and time
+  // Color generator for each planet based on coordinates (u, v) and time (fallback/dynamic)
   const getPlanetPixel = (
     u: number, 
     v: number, 
@@ -190,26 +158,19 @@ export default function PlanetCanvas({
       case 'mercury': {
         const baseNoise = pseudoNoise(u * 8, v * 8) * 15;
         const craterData = getMercuryCrater(u, v);
-        
-        // Realistic dark slate-grey Mercurian basalt
         let grey = 132 + baseNoise + craterData.colorVal;
-        
-        // Ray systems from giant impact sites (bright streaks)
         const rayNoise = Math.sin(u * 45) * Math.cos(v * 45);
         if (rayNoise > 0.76) {
           grey += 20;
         }
-        
         grey = Math.max(30, Math.min(240, grey));
         return { r: grey, g: grey, b: grey };
       }
       
       case 'venus': {
-        // Runaway sulfur cloud layers
         const cloudNoise = pseudoNoise(u * 6 - time * 0.15, v * 10);
         const waveNoise = Math.sin(u * 18 - v * 12 + time * 0.3) * 0.1;
         const comb = cloudNoise + waveNoise;
-        
         return {
           r: 228 + comb * 22,
           g: 184 + comb * 20,
@@ -220,88 +181,37 @@ export default function PlanetCanvas({
       case 'earth': {
         const landNoise = pseudoNoise(u * 14, v * 10);
         const isLand = landNoise > -0.04;
-        
-        let r = 12, g = 45, b = 130; // Deep Ocean
-        
+        let r = 12, g = 45, b = 130;
         if (isLand) {
           if (v < 0.16 || v > 0.84) {
-            // Polar Ice Caps
             r = 245; g = 245; b = 250;
           } else if ((v > 0.28 && v < 0.38 && landNoise < 0.08) || (v > 0.62 && v < 0.72 && landNoise < 0.08)) {
-            // Desert sands
             r = 188; g = 168; b = 112;
           } else {
-            // Foliage & vegetation
             r = 45; g = 118; b = 48;
           }
         } else {
-          // Coastline shallow shelves
           const depth = landNoise + 0.04;
           if (depth > -0.03) {
             r = 20; g = 90; b = 148;
           }
         }
-        
-        // Cloud shadow on Earth (offsets texture lookup relative to light vector)
-        let cloudShadow = 1.0;
-        const shadowU = u - nlx * 0.015;
-        const shadowV = v - nly * 0.01;
-        const shadowCloudNoise = pseudoNoise(shadowU * 22 + time * 0.4, shadowV * 13);
-        if (shadowCloudNoise > 0.08) {
-          const shadowIntensity = Math.min(0.35, (shadowCloudNoise - 0.08) * 2.5);
-          cloudShadow = 1.0 - shadowIntensity;
-        }
-        
-        // Apply shadow to surface
-        r *= cloudShadow;
-        g *= cloudShadow;
-        b *= cloudShadow;
-        
-        // Earth Atmosphere Clouds (rendered on top of surface)
-        const cloudNoise = pseudoNoise(u * 22 + time * 0.4, v * 13);
-        if (cloudNoise > 0.08) {
-          const cloudIntensity = Math.min(0.9, (cloudNoise - 0.08) * 3);
-          r = r * (1 - cloudIntensity) + 250 * cloudIntensity;
-          g = g * (1 - cloudIntensity) + 250 * cloudIntensity;
-          b = b * (1 - cloudIntensity) + 250 * cloudIntensity;
-        }
-        
         return { r, g, b };
       }
       
       case 'mars': {
         const cap = (v < 0.13 || v > 0.87);
-        if (cap) {
-          return { r: 245, g: 245, b: 248 }; // White polar cap
-        }
+        if (cap) return { r: 245, g: 245, b: 248 };
         
         const marsNoise = pseudoNoise(u * 11, v * 9);
         const detail = pseudoNoise(u * 32, v * 32) * 12;
-        const storm = pseudoNoise(u * 8 - time * 0.05, v * 8) * 8; // Dusty atmosphere swirls
-        
-        let r = 190, g = 90, b = 55; // Iron oxide desert
+        let r = 190, g = 90, b = 55;
         
         if (marsNoise > 0.06) {
-          // Dark volcanic basins (Syrtis Major)
-          r = 108 + detail + storm;
-          g = 60 + detail;
-          b = 48 + detail;
+          r = 108 + detail; g = 60 + detail; b = 48 + detail;
         } else {
-          r = 190 + detail + storm;
-          g = 90 + detail;
-          b = 55 + detail;
+          r = 190 + detail; g = 90 + detail; b = 55 + detail;
         }
-        
-        // Darken Valles Marineris canyon floor (running horizontally along equator)
-        const du = u - 0.4;
-        const dv = v - 0.5;
-        if (Math.abs(du) < 0.15 && Math.abs(dv) < 0.035) {
-          const canyonShadow = (1 - Math.abs(du) / 0.15) * (1 - Math.abs(dv) / 0.035);
-          r -= canyonShadow * 45;
-          g -= canyonShadow * 25;
-          b -= canyonShadow * 15;
-        }
-        
         return { r, g, b };
       }
       
@@ -309,35 +219,25 @@ export default function PlanetCanvas({
         const bandNoise = pseudoNoise(u * 6, v * 20) * 0.3;
         const fineNoise = pseudoNoise(u * 25, v * 40) * 0.08;
         const yCoord = v + bandNoise + fineNoise;
-        
-        // Multi-layered band structure
         const bandValue = Math.sin(yCoord * 22 + Math.cos(u * 4) * 0.15);
         
         let r = 210, g = 180, b = 150;
         
         if (v < 0.18 || v > 0.82) {
-          // Polar regions (slate grey)
           const pFade = v < 0.18 ? (0.18 - v) / 0.18 : (v - 0.82) / 0.18;
-          r = 125 - pFade * 20;
-          g = 130 - pFade * 15;
-          b = 140 - pFade * 5;
+          r = 125 - pFade * 20; g = 130 - pFade * 15; b = 140 - pFade * 5;
         } else {
           if (bandValue > 0.3) {
-            // White Zone (ammonia clouds)
             r = 238; g = 228; b = 214;
           } else if (bandValue > -0.1) {
-            // Light Orange Zone
             r = 212; g = 172; b = 132;
           } else if (bandValue > -0.6) {
-            // Reddish Brown Belt (ammonium hydrosulfide)
             r = 168; g = 112; b = 82;
           } else {
-            // Dark Brown/Red Belt
             r = 135; g = 78; b = 52;
           }
         }
         
-        // Great Red Spot (V is around 0.68, U is around 0.64)
         const spotU = 0.64;
         const spotV = 0.68;
         let du = u - spotU;
@@ -345,21 +245,16 @@ export default function PlanetCanvas({
         else if (du < -0.5) du += 1;
         const dv = v - spotV;
         
-        // Elliptical spot calculation
         const spotDistSq = (du * du) / 0.0028 + (dv * dv) / 0.0009;
         if (spotDistSq < 1) {
           const fade = 1 - spotDistSq;
-          // Red spot color blends in
           r = r * (1 - fade) + 185 * fade;
           g = g * (1 - fade) + 65 * fade;
           b = b * (1 - fade) + 50 * fade;
           
-          // Swirl details inside the spot
           const spotSwirl = pseudoNoise(du * 40, dv * 60);
-          r += spotSwirl * 15;
-          g += spotSwirl * 10;
+          r += spotSwirl * 15; g += spotSwirl * 10;
         }
-        
         return { r, g, b };
       }
       
@@ -367,30 +262,21 @@ export default function PlanetCanvas({
         const bandNoise = pseudoNoise(u * 5, v * 15) * 0.15;
         const bandValue = Math.sin((v + bandNoise) * 18);
         
-        let r = 224, g = 200, b = 158; // Golden butterscotch base
+        let r = 224, g = 200, b = 158;
         
         if (v < 0.16) {
-          // North Polar Hexagon Region (greenish-blue/grey)
           const pFade = (0.16 - v) / 0.16;
-          r = r * (1 - pFade) + 115 * pFade;
-          g = g * (1 - pFade) + 130 * pFade;
-          b = b * (1 - pFade) + 120 * pFade;
+          r = r * (1 - pFade) + 115 * pFade; g = g * (1 - pFade) + 130 * pFade; b = b * (1 - pFade) + 120 * pFade;
         } else if (v > 0.84) {
-          // South Pole (cool grey)
           const pFade = (v - 0.84) / 0.16;
-          r = r * (1 - pFade) + 140 * pFade;
-          g = g * (1 - pFade) + 135 * pFade;
-          b = b * (1 - pFade) + 130 * pFade;
+          r = r * (1 - pFade) + 140 * pFade; g = g * (1 - pFade) + 135 * pFade; b = b * (1 - pFade) + 130 * pFade;
         } else {
           if (bandValue > 0.4) {
-            // Light golden zone
             r = 238; g = 216; b = 178;
           } else if (bandValue < -0.3) {
-            // Darker tan belt
             r = 205; g = 178; b = 136;
           }
         }
-        
         return { r, g, b };
       }
       
@@ -410,16 +296,6 @@ export default function PlanetCanvas({
         let g = 75 + bands * 25;
         let b = 200 + bands * 40;
         
-        // Bright white methane cloud bands (Cirrus clouds)
-        const cloud = pseudoNoise(u * 16 - time * 0.1, v * 14);
-        if (cloud > 0.14) {
-          const intensity = Math.min(0.65, (cloud - 0.14) * 4);
-          r = r * (1 - intensity) + 220 * intensity;
-          g = g * (1 - intensity) + 240 * intensity;
-          b = b * (1 - intensity) + 255 * intensity;
-        }
-        
-        // Great Dark Spot
         const spotU = 0.35;
         const spotV = 0.62;
         let du = u - spotU;
@@ -434,7 +310,6 @@ export default function PlanetCanvas({
           g = g * (1 - fade) + 25 * fade;
           b = b * (1 - fade) + 110 * fade;
         }
-        
         return { r, g, b };
       }
       
@@ -452,18 +327,15 @@ export default function PlanetCanvas({
     canvas.width = size;
     canvas.height = size;
     
-    // Scale Saturn down so its rings fit perfectly within the size bounds
     const R = planetId === 'saturn' ? size / 4.5 : size / 2.4;
     const cx = size / 2;
     const cy = size / 2;
     
-    // Bounding box of sphere
     const minBoundX = Math.max(0, Math.floor(cx - R));
     const maxBoundX = Math.min(size, Math.ceil(cx + R));
     const minBoundY = Math.max(0, Math.floor(cy - R));
     const maxBoundY = Math.min(size, Math.ceil(cy + R));
     
-    // Normalize light vector
     const lx = lightSource.x;
     const ly = lightSource.y;
     const lz = lightSource.z;
@@ -471,6 +343,109 @@ export default function PlanetCanvas({
     const nlx = lx / lLength;
     const nly = ly / lLength;
     const nlz = lz / lLength;
+
+    // --- BAKING STEP ---
+    // Bake static planet texture layers into memory to guarantee smooth 60fps performance
+    if (bakedPlanetIdRef.current !== planetId) {
+      const colorBuf = new Uint8Array(texWidth * texHeight * 3);
+      const heightBuf = new Float32Array(texWidth * texHeight);
+      
+      for (let ty = 0; ty < texHeight; ty++) {
+        const v = ty / (texHeight - 1);
+        for (let tx = 0; tx < texWidth; tx++) {
+          const u = tx / (texWidth - 1);
+          
+          let r = 120, g = 120, b = 120, h = 0;
+          
+          if (planetId === 'mercury') {
+            const baseNoise = pseudoNoise(u * 8, v * 8) * 15;
+            const craterData = getMercuryCrater(u, v);
+            let grey = 132 + baseNoise + craterData.colorVal;
+            const rayNoise = Math.sin(u * 45) * Math.cos(v * 45);
+            if (rayNoise > 0.76) grey += 20;
+            grey = Math.max(30, Math.min(240, grey));
+            r = g = b = grey;
+            h = craterData.height + pseudoNoise(u * 15, v * 15) * 0.05;
+          } else if (planetId === 'earth') {
+            const landNoise = pseudoNoise(u * 14, v * 10);
+            const isLand = landNoise > -0.04;
+            if (isLand) {
+              if (v < 0.16 || v > 0.84) {
+                r = 245; g = 245; b = 250;
+              } else if ((v > 0.28 && v < 0.38 && landNoise < 0.08) || (v > 0.62 && v < 0.72 && landNoise < 0.08)) {
+                r = 188; g = 168; b = 112;
+              } else {
+                r = 45; g = 118; b = 48;
+              }
+              h = landNoise + pseudoNoise(u * 38, v * 38) * 0.12;
+            } else {
+              r = 12; g = 45; b = 130;
+              const depth = landNoise + 0.04;
+              if (depth > -0.03) r = 20; g = 90; b = 148;
+              h = 0;
+            }
+          } else if (planetId === 'mars') {
+            const marsNoise = pseudoNoise(u * 11, v * 9);
+            const detail = pseudoNoise(u * 32, v * 32) * 12;
+            if (marsNoise > 0.06) {
+              r = 108 + detail; g = 60 + detail; b = 48 + detail;
+            } else {
+              r = 190 + detail; g = 90 + detail; b = 55 + detail;
+            }
+            h = marsNoise + pseudoNoise(u * 32, v * 32) * 0.08;
+            
+            const du = u - 0.4;
+            const dv = v - 0.5;
+            if (Math.abs(du) < 0.15 && Math.abs(dv) < 0.035) {
+              const canyonDepth = (1 - Math.abs(du) / 0.15) * (1 - Math.abs(dv) / 0.035);
+              h -= canyonDepth * 0.32;
+              r -= canyonDepth * 45;
+              g -= canyonDepth * 25;
+              b -= canyonDepth * 15;
+            }
+          } else {
+            // Static lookup base
+            const c = getPlanetPixel(u, v, planetId, 0, -0.6, -0.6);
+            r = c.r; g = c.g; b = c.b;
+            h = 0;
+          }
+          
+          const idx = (ty * texWidth + tx) * 3;
+          colorBuf[idx] = Math.max(0, Math.min(255, r));
+          colorBuf[idx + 1] = Math.max(0, Math.min(255, g));
+          colorBuf[idx + 2] = Math.max(0, Math.min(255, b));
+          
+          heightBuf[ty * texWidth + tx] = h;
+        }
+      }
+      
+      bakedColorRef.current = colorBuf;
+      bakedHeightRef.current = heightBuf;
+      bakedPlanetIdRef.current = planetId;
+    }
+
+    const lookupHeight = (u: number, v: number): number => {
+      if (!bakedHeightRef.current) return 0;
+      const uu = ((u % 1) + 1) % 1;
+      const vv = Math.max(0, Math.min(1, v));
+      const tx = Math.floor(uu * (texWidth - 1));
+      const ty = Math.floor(vv * (texHeight - 1));
+      return bakedHeightRef.current[ty * texWidth + tx];
+    };
+    
+    const lookupColor = (u: number, v: number): { r: number; g: number; b: number } => {
+      if (!bakedColorRef.current) return { r: 120, g: 120, b: 120 };
+      const uu = ((u % 1) + 1) % 1;
+      const vv = Math.max(0, Math.min(1, v));
+      const tx = Math.floor(uu * (texWidth - 1));
+      const ty = Math.floor(vv * (texHeight - 1));
+      const idx = (ty * texWidth + tx) * 3;
+      return {
+        r: bakedColorRef.current[idx],
+        g: bakedColorRef.current[idx + 1],
+        b: bakedColorRef.current[idx + 2]
+      };
+    };
     
     const renderFrame = () => {
       ctx.clearRect(0, 0, size, size);
@@ -479,9 +454,8 @@ export default function PlanetCanvas({
       if (planetId === 'saturn') {
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate((26 * Math.PI) / 180); // Tilt rings 26 deg
+        ctx.rotate((26 * Math.PI) / 180);
         
-        // Clip to upper half to draw back rings (behind the sphere)
         ctx.beginPath();
         ctx.rect(-size, -size, size * 2, size);
         ctx.clip();
@@ -493,7 +467,6 @@ export default function PlanetCanvas({
       // 2. Render Planet Sphere (Ray-cast pixels)
       const img = ctx.createImageData(size, size);
       const data = img.data;
-      
       const isSun = planetId === 'sun';
       
       for (let y = minBoundY; y < maxBoundY; y++) {
@@ -507,121 +480,164 @@ export default function PlanetCanvas({
           if (distSq <= R * R) {
             const dz = Math.sqrt(R * R - distSq);
             
-            // Sphere surface normal vector (perfect sphere)
             let nx = dx / R;
             let ny = dy / R;
             let nz = dz / R;
             
-            // Translate normals into spherical (lon/lat) coords mapped to texture (u,v)
             const lat = Math.asin(ny);
             const lon = Math.atan2(nz, nx) + timeRef.current;
             
             const u = (lon + Math.PI) / (Math.PI * 2);
             const v = (lat + Math.PI / 2) / Math.PI;
             
-            // Procedural Bump Mapping for rocky planets
+            // Fast O(1) Bump Mapping
             const hasBump = planetId === 'mercury' || planetId === 'mars' || planetId === 'earth';
             if (hasBump) {
               const eps = 0.005;
-              const h = getPlanetHeight(u, v, planetId);
-              const hu = getPlanetHeight(u + eps, v, planetId);
-              const hv = getPlanetHeight(u, v + eps, planetId);
+              const h = lookupHeight(u, v);
+              const hu = lookupHeight(u + eps, v);
+              const hv = lookupHeight(u, v + eps);
               
-              // Slopes along horizontal and vertical texture planes
               const dh_du = (hu - h) / eps;
               const dh_dv = (hv - h) / eps;
               
               const bumpStrength = planetId === 'earth' ? 0.07 : 0.14;
               
-              // Perturb the normals
               nx = nx - dh_du * bumpStrength;
               ny = ny - dh_dv * bumpStrength;
               
-              // Normalize perturbed normal
               const len = Math.sqrt(nx*nx + ny*ny + nz*nz) || 1;
               nx /= len;
               ny /= len;
               nz /= len;
             }
             
-            // Fetch color (passing nlx/nly for earth cloud shadows)
-            const baseColor = getPlanetPixel(u, v, planetId, timeRef.current, nlx, nly);
+            // Texture lookup & Dynamic overlay layers
+            let baseColor = lookupColor(u, v);
+            
+            if (planetId === 'earth') {
+              // Dynamic Earth clouds and shadow
+              let cloudShadow = 1.0;
+              const shadowU = u - nlx * 0.015;
+              const shadowV = v - nly * 0.01;
+              const shadowCloudNoise = pseudoNoise(shadowU * 22 + timeRef.current * 0.4, shadowV * 13);
+              if (shadowCloudNoise > 0.08) {
+                const shadowIntensity = Math.min(0.35, (shadowCloudNoise - 0.08) * 2.5);
+                cloudShadow = 1.0 - shadowIntensity;
+              }
+              
+              let r = baseColor.r * cloudShadow;
+              let g = baseColor.g * cloudShadow;
+              let b = baseColor.b * cloudShadow;
+              
+              const cloudNoise = pseudoNoise(u * 22 + timeRef.current * 0.4, v * 13);
+              if (cloudNoise > 0.08) {
+                const cloudIntensity = Math.min(0.9, (cloudNoise - 0.08) * 3);
+                r = r * (1 - cloudIntensity) + 250 * cloudIntensity;
+                g = g * (1 - cloudIntensity) + 250 * cloudIntensity;
+                b = b * (1 - cloudIntensity) + 250 * cloudIntensity;
+              }
+              baseColor = { r, g, b };
+            } else if (planetId === 'mars') {
+              // Dynamic Mars dust storm layer
+              const storm = pseudoNoise(u * 8 - timeRef.current * 0.05, v * 8) * 8;
+              baseColor = {
+                r: Math.max(0, Math.min(255, baseColor.r + storm)),
+                g: Math.max(0, Math.min(255, baseColor.g)),
+                b: Math.max(0, Math.min(255, baseColor.b))
+              };
+            } else if (planetId === 'sun') {
+              // Full dynamic convective cell plasma (Sun)
+              const plasma = pseudoNoise(u * 14 + timeRef.current * 1.5, v * 14 - timeRef.current * 1.2);
+              const cell = pseudoNoise(u * 35, v * 35) * 0.15;
+              const temp = plasma + cell;
+              baseColor = {
+                r: 255,
+                g: Math.max(0, Math.min(255, 150 + temp * 85)),
+                b: Math.max(0, Math.min(255, 10 + temp * 25))
+              };
+            } else if (planetId === 'neptune') {
+              // Dynamic methane cloud bands
+              const cloud = pseudoNoise(u * 16 - timeRef.current * 0.1, v * 14);
+              if (cloud > 0.14) {
+                const intensity = Math.min(0.65, (cloud - 0.14) * 4);
+                baseColor = {
+                  r: baseColor.r * (1 - intensity) + 220 * intensity,
+                  g: baseColor.g * (1 - intensity) + 240 * intensity,
+                  b: baseColor.b * (1 - intensity) + 255 * intensity
+                };
+              }
+            } else if (planetId === 'venus') {
+              // Dynamic runaway sulfur clouds
+              const cloudNoise = pseudoNoise(u * 6 - timeRef.current * 0.15, v * 10);
+              const waveNoise = Math.sin(u * 18 - v * 12 + timeRef.current * 0.3) * 0.1;
+              const comb = cloudNoise + waveNoise;
+              baseColor = {
+                r: Math.max(0, Math.min(255, 228 + comb * 22)),
+                g: Math.max(0, Math.min(255, 184 + comb * 20)),
+                b: Math.max(0, Math.min(255, 122 + comb * 10))
+              };
+            }
             
             // Compute Shading (Lambertian diffuse)
             let shading = nx * nlx + ny * nly + nz * nlz;
-            
-            // Ambient factor (Sun does not have shading, it shines)
             const ambient = isSun ? 1.0 : 0.08;
             shading = Math.max(ambient, shading);
             
-            // Add a specular highlight (shininess) on liquid oceans or atmospheres
             let spec = 0;
             if (!isSun) {
               const specPower = planetId === 'earth' ? 24 : 10;
               const specIntensity = planetId === 'earth' ? 0.38 : 0.06;
-              
-              // Reflection vector R = 2*(N.L)*N - L
               const rx = 2 * shading * nx - nlx;
               const ry = 2 * shading * ny - nly;
               const rz = 2 * shading * nz - nlz;
-              
-              // Dot with View vector (0, 0, 1)
               const rView = Math.max(0, rz);
               spec = Math.pow(rView, specPower) * specIntensity * 255;
             }
             
-            // Atmospheric Limb Darkening (making the edges look realistically volumetric)
+            // Atmospheric Limb Darkening
             let limbDarkening = 1.0;
             if (isSun) {
-              limbDarkening = 0.35 + 0.65 * Math.pow(nz, 0.85); // Blazing solar disk
+              limbDarkening = 0.35 + 0.65 * Math.pow(nz, 0.85);
             } else if (planetId === 'jupiter' || planetId === 'saturn') {
-              limbDarkening = 0.55 + 0.45 * Math.pow(nz, 0.45); // Thick atmospheres
+              limbDarkening = 0.55 + 0.45 * Math.pow(nz, 0.45);
             } else if (planetId === 'venus') {
               limbDarkening = 0.48 + 0.52 * Math.pow(nz, 0.55);
             } else if (planetId === 'neptune' || planetId === 'uranus') {
               limbDarkening = 0.4 + 0.6 * Math.pow(nz, 0.65);
             } else {
-              limbDarkening = 0.82 + 0.18 * nz; // Rocky planets
+              limbDarkening = 0.82 + 0.18 * nz;
             }
             
-            // Internal Limb Glow (atmospheric scattering color blend right at the edge)
+            // Internal Limb Glow (atmospheric scattering)
             let glowR = 0, glowG = 0, glowB = 0, glowIntensity = 0;
             if (!isSun && planetId !== 'mercury') {
               const edge = Math.pow(1 - nz, 4.2);
               if (planetId === 'earth') {
-                glowR = 140; glowG = 180; glowB = 255;
-                glowIntensity = edge * 0.75;
+                glowR = 140; glowG = 180; glowB = 255; glowIntensity = edge * 0.75;
               } else if (planetId === 'venus') {
-                glowR = 245; glowG = 210; glowB = 150;
-                glowIntensity = edge * 0.6;
+                glowR = 245; glowG = 210; glowB = 150; glowIntensity = edge * 0.6;
               } else if (planetId === 'mars') {
-                glowR = 240; glowG = 115; glowB = 95;
-                glowIntensity = edge * 0.38;
+                glowR = 240; glowG = 115; glowB = 95; glowIntensity = edge * 0.38;
               } else if (planetId === 'jupiter') {
-                glowR = 230; glowG = 180; glowB = 140;
-                glowIntensity = edge * 0.32;
+                glowR = 230; glowG = 180; glowB = 140; glowIntensity = edge * 0.32;
               } else if (planetId === 'saturn') {
-                glowR = 242; glowG = 220; glowB = 180;
-                glowIntensity = edge * 0.35;
+                glowR = 242; glowG = 220; glowB = 180; glowIntensity = edge * 0.35;
               } else if (planetId === 'neptune' || planetId === 'uranus') {
-                glowR = 100; glowG = 225; glowB = 255;
-                glowIntensity = edge * 0.75;
+                glowR = 100; glowG = 225; glowB = 255; glowIntensity = edge * 0.75;
               }
             }
             
             const idx = (y * size + x) * 4;
             
-            // Apply Base Color scaling with shading and specular
             let pixelR = baseColor.r * shading + spec;
             let pixelG = baseColor.g * shading + spec;
             let pixelB = baseColor.b * shading + spec;
             
-            // Apply volumetric limb darkening
             pixelR *= limbDarkening;
             pixelG *= limbDarkening;
             pixelB *= limbDarkening;
             
-            // Blend light-direction-dependent atmospheric limb glow
             if (glowIntensity > 0) {
               const finalGlow = glowIntensity * Math.max(0.18, shading);
               pixelR = pixelR * (1 - finalGlow) + glowR * finalGlow;
@@ -637,7 +653,6 @@ export default function PlanetCanvas({
         }
       }
       
-      // Temporary canvas to write imageData efficiently
       const tempCanvas = document.createElement('canvas');
       tempCanvas.width = size;
       tempCanvas.height = size;
@@ -647,13 +662,12 @@ export default function PlanetCanvas({
         ctx.drawImage(tempCanvas, 0, 0);
       }
       
-      // 3. Draw Front half of Saturn's Rings (drawn AFTER sphere to layer correctly)
+      // 3. Draw Front half of Saturn's Rings
       if (planetId === 'saturn') {
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate((26 * Math.PI) / 180);
         
-        // Clip to lower half to draw front rings (in front of planet)
         ctx.beginPath();
         ctx.rect(-size, 0, size * 2, size);
         ctx.clip();
@@ -667,7 +681,7 @@ export default function PlanetCanvas({
         ctx.save();
         const glowRad = ctx.createRadialGradient(cx, cy, R * 0.96, cx, cy, R * 1.08);
         
-        let glowColor = 'rgba(99, 102, 241, 0.38)'; // Light blue for Earth
+        let glowColor = 'rgba(99, 102, 241, 0.38)';
         if (planetId === 'venus') glowColor = 'rgba(234, 179, 8, 0.28)';
         else if (planetId === 'mars') glowColor = 'rgba(239, 68, 68, 0.18)';
         else if (planetId === 'neptune' || planetId === 'uranus') glowColor = 'rgba(6, 182, 212, 0.35)';
@@ -684,7 +698,6 @@ export default function PlanetCanvas({
         ctx.restore();
       }
 
-      // Update rotation time if playing
       if (isPlaying) {
         timeRef.current += 0.0035 * rotationSpeed;
       }
@@ -699,7 +712,6 @@ export default function PlanetCanvas({
     };
   }, [planetId, size, isPlaying, rotationSpeed, lightSource]);
 
-  // Helper to draw Saturn's rings
   const drawRings = (
     ctx: CanvasRenderingContext2D, 
     R: number, 
@@ -711,8 +723,6 @@ export default function PlanetCanvas({
     const outerR = R * 2.15;
     const isDark = document.documentElement.classList.contains('dark');
     
-    // Draw rings (concentric bands)
-    
     // Cassini division / Outer Ring A
     ctx.strokeStyle = isDark ? 'rgba(215, 185, 135, 0.65)' : 'rgba(180, 155, 110, 0.6)';
     ctx.lineWidth = R * 0.15;
@@ -720,21 +730,20 @@ export default function PlanetCanvas({
     ctx.ellipse(0, 0, outerR - R * 0.1, (outerR - R * 0.1) * 0.24, 0, 0, Math.PI * 2);
     ctx.stroke();
     
-    // Middle Ring B (thickest & brightest)
+    // Middle Ring B
     ctx.strokeStyle = isDark ? 'rgba(242, 222, 179, 0.85)' : 'rgba(212, 192, 149, 0.8)';
     ctx.lineWidth = R * 0.35;
     ctx.beginPath();
     ctx.ellipse(0, 0, innerR + R * 0.28, (innerR + R * 0.28) * 0.24, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Inner Ring C (faint, close to planet)
+    // Inner Ring C
     ctx.strokeStyle = isDark ? 'rgba(165, 135, 95, 0.3)' : 'rgba(135, 110, 75, 0.3)';
     ctx.lineWidth = R * 0.15;
     ctx.beginPath();
     ctx.ellipse(0, 0, innerR, innerR * 0.24, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Apply planet shadow onto the rings
     if (drawShadow) {
       ctx.save();
       ctx.globalCompositeOperation = 'source-atop';
