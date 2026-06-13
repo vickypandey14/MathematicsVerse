@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Calculator, Search, Bookmark, History, Menu, X } from 'lucide-react';
+import { Calculator, Search, Bookmark, History, Menu, X, Waves } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
   { name: 'Explore', href: '/formulas', icon: Search },
+  { name: 'Wave Explorer', href: '/wave-explorer', icon: Waves },
   { name: 'Bookmarks', href: '/bookmarks', icon: Bookmark },
   { name: 'Recently Viewed', href: '/recent', icon: History },
 ];
