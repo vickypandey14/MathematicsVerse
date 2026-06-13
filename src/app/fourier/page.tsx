@@ -550,30 +550,30 @@ export default function FourierCanvasPage() {
 
   return (
     <MainLayout>
-      <div className="space-y-10">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] font-black uppercase tracking-widest">
-              <Activity className="w-3.5 h-3.5" />
-              <span>Interactive Wave Epicycles</span>
+      <div className="space-y-12">
+        {/* Header aligned with other page themes */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-4">
+            <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
+              <Activity className="w-3 h-3" />
+              <span>Interactive Math & Drawing</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-heading font-black text-foreground tracking-tighter uppercase leading-none">
-              Fourier Canvas
+            <h1 className="text-5xl md:text-6xl font-heading font-black text-foreground tracking-tighter">
+              Fourier <span className="gradient-text">Canvas</span>
             </h1>
-            <p className="text-foreground/60 font-medium text-base">
-              Draw custom shapes and watch spinning complex orbits reconstruct your design using waves.
+            <p className="text-foreground/55 font-medium text-lg max-w-2xl">
+              Draw custom shapes and watch spinning complex orbits reconstruct your design using wave frequencies.
             </p>
           </div>
           
           <button
             onClick={() => setShowHelp(!showHelp)}
-            className="flex items-center space-x-2 px-4 py-2 bg-foreground/5 hover:bg-foreground/10 border border-border text-[10px] font-black uppercase tracking-wider rounded-xl transition-all w-fit"
+            className="flex items-center space-x-2 px-5 py-3 bg-foreground/5 hover:bg-foreground/10 border border-border text-[10px] font-black uppercase tracking-wider rounded-xl transition-all w-fit h-fit md:mb-1 cursor-pointer"
           >
             <HelpCircle className="w-4 h-4 text-primary" />
             <span>How it Works</span>
           </button>
-        </div>
+        </header>
 
         {/* Explain Card */}
         <AnimatePresence>
@@ -608,6 +608,30 @@ export default function FourierCanvasPage() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Presets Library (Horizontal Top Bar - Full Width) */}
+        <div className="p-6 rounded-[32px] bg-card/45 border border-border/70 shadow-xl backdrop-blur-md space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-black uppercase tracking-[0.25em] text-foreground/50 flex items-center gap-2">
+              <Sparkles className="text-secondary w-4 h-4" />
+              Quick Launch Mathematical Presets
+            </h3>
+            <span className="text-[10px] font-bold text-foreground/40 hidden sm:inline">Select a shape to instantly simulate its waves</span>
+          </div>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {Object.entries(PRESETS).map(([key, p]) => (
+              <button
+                key={key}
+                onClick={() => loadPreset(key)}
+                className="w-full px-5 py-4 text-center rounded-2xl bg-foreground/[0.03] border border-border/50 hover:bg-foreground/[0.06] hover:border-primary/40 text-foreground font-black text-xs transition-all flex flex-col items-center justify-center gap-1 group hover:scale-[1.02] active:scale-[0.98] shadow-sm cursor-pointer"
+              >
+                <span className="group-hover:text-primary transition-colors">{p.name}</span>
+                <span className="text-[8px] uppercase tracking-widest text-primary/60 font-bold opacity-0 group-hover:opacity-100 transition-opacity">Simulate &rarr;</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Interactive Workspace */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -658,7 +682,7 @@ export default function FourierCanvasPage() {
                     <button
                       onClick={() => setIsPlaying(!isPlaying)}
                       className={cn(
-                        "w-12 h-12 rounded-xl border flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-md",
+                        "w-12 h-12 rounded-xl border flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer",
                         isPlaying 
                           ? "bg-amber-500/10 border-amber-500/20 text-amber-500" 
                           : "bg-green-500/10 border-green-500/20 text-green-500"
@@ -672,7 +696,7 @@ export default function FourierCanvasPage() {
                         tracedPathRef.current = [];
                         if (!isPlaying) drawStatic();
                       }}
-                      className="w-12 h-12 rounded-xl bg-foreground/5 border border-border text-foreground/60 hover:text-foreground flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+                      className="w-12 h-12 rounded-xl bg-foreground/5 border border-border text-foreground/60 hover:text-foreground flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
                     >
                       <RotateCcw className="w-5 h-5" />
                     </button>
@@ -693,7 +717,7 @@ export default function FourierCanvasPage() {
                       setIsPlaying(false);
                       tracedPathRef.current = [];
                     }}
-                    className="px-6 py-3 bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md shadow-primary/20 flex items-center gap-2"
+                    className="px-6 py-3 bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md shadow-primary/20 flex items-center gap-2 cursor-pointer"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                     <span>Redraw Shape</span>
@@ -701,7 +725,7 @@ export default function FourierCanvasPage() {
                 )}
                 <button
                   onClick={clearCanvas}
-                  className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                  className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Clear All</span>
@@ -713,27 +737,6 @@ export default function FourierCanvasPage() {
           {/* Right Side: Math Config Panel */}
           <div className="lg:col-span-4 space-y-6">
             
-            {/* Presets Library */}
-            <div className="p-6 rounded-[32px] bg-card/45 border border-border/70 shadow-xl backdrop-blur-md space-y-6">
-              <h3 className="text-xs font-black uppercase tracking-[0.25em] text-foreground/50 flex items-center gap-2">
-                <Sparkles className="text-secondary w-4 h-4" />
-                Select a Preset Pattern
-              </h3>
-              
-              <div className="flex flex-col gap-2">
-                {Object.entries(PRESETS).map(([key, p]) => (
-                  <button
-                    key={key}
-                    onClick={() => loadPreset(key)}
-                    className="w-full px-4 py-3 text-left rounded-xl bg-foreground/[0.03] border border-border/50 hover:bg-foreground/[0.06] hover:border-primary/30 text-foreground font-bold text-xs transition-all flex items-center justify-between group"
-                  >
-                    <span>{p.name}</span>
-                    <span className="text-[9px] uppercase tracking-widest text-primary opacity-0 group-hover:opacity-100 transition-opacity">Simulate &rarr;</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* Control Params */}
             <div className="p-6 rounded-[32px] bg-card/45 border border-border/70 shadow-xl backdrop-blur-md space-y-8">
               <h3 className="text-xs font-black uppercase tracking-[0.25em] text-foreground/50 flex items-center gap-2">
@@ -793,7 +796,7 @@ export default function FourierCanvasPage() {
                       type="checkbox"
                       checked={showCircles}
                       onChange={(e) => setShowCircles(e.target.checked)}
-                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary"
+                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary cursor-pointer"
                     />
                   </label>
                   
@@ -803,7 +806,7 @@ export default function FourierCanvasPage() {
                       type="checkbox"
                       checked={showVectors}
                       onChange={(e) => setShowVectors(e.target.checked)}
-                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary"
+                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary cursor-pointer"
                     />
                   </label>
 
@@ -813,7 +816,7 @@ export default function FourierCanvasPage() {
                       type="checkbox"
                       checked={showTracedPath}
                       onChange={(e) => setShowTracedPath(e.target.checked)}
-                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary"
+                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary cursor-pointer"
                     />
                   </label>
 
@@ -823,7 +826,7 @@ export default function FourierCanvasPage() {
                       type="checkbox"
                       checked={showTarget}
                       onChange={(e) => setShowTarget(e.target.checked)}
-                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary"
+                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary accent-primary cursor-pointer"
                     />
                   </label>
                 </div>
