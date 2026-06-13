@@ -793,249 +793,245 @@ export default function WaveExplorer() {
               {/* Grid for Sandbox */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Left Column - Controls (5 Cols) */}
-              <div className="lg:col-span-5 space-y-6">
+              <div className="lg:col-span-5">
                 
-                {/* Master Audio Controller Card */}
-                <div className="p-6 md:p-8 rounded-[36px] bg-card/40 border border-border shadow-xl backdrop-blur-md relative overflow-hidden">
-                  <h3 className="text-xs font-black uppercase tracking-widest text-foreground/40 mb-6 flex items-center">
-                    <Sparkles className="w-4 h-4 mr-2 text-primary fill-current" />
-                    Audio Output & Preset Controls
-                  </h3>
+                {/* Unified Sound Mixer Console Card */}
+                <div className="p-6 md:p-8 rounded-[36px] bg-card/45 border border-border shadow-xl backdrop-blur-md relative overflow-hidden space-y-8">
+                  
+                  {/* Master Section */}
+                  <div className="space-y-6">
+                    <h3 className="text-sm font-black uppercase tracking-widest text-foreground/50 flex items-center">
+                      <Sparkles className="w-5 h-5 mr-2 text-primary fill-current" />
+                      Master Sound Controls
+                    </h3>
 
-                  <div className="flex flex-wrap gap-4 items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <button
-                        onClick={togglePlayback}
-                        className={cn(
-                          'w-16 h-16 rounded-2xl flex items-center justify-center text-white transition-all transform active:scale-95 shadow-lg',
-                          isPlaying 
-                            ? 'bg-red-500 shadow-red-500/20 hover:bg-red-600' 
-                            : 'bg-primary shadow-primary/20 hover:bg-primary/95'
-                        )}
-                        title={isPlaying ? 'Pause Synthesis' : 'Start Synthesis'}
-                      >
-                        {isPlaying ? <Pause className="w-7 h-7 fill-current" /> : <Play className="w-7 h-7 fill-current ml-1" />}
-                      </button>
-
-                      <button
-                        onClick={toggleMic}
-                        className={cn(
-                          'w-16 h-16 rounded-2xl border flex items-center justify-center transition-all transform active:scale-95 shadow-md',
-                          isMicEnabled
-                            ? 'bg-cyan-500 border-cyan-500/20 text-white shadow-cyan-500/20'
-                            : 'bg-foreground/5 border-border text-foreground hover:bg-foreground/10'
-                        )}
-                        title={isMicEnabled ? 'Turn Off Microphone' : 'Enable Microphone Analysis'}
-                      >
-                        {isMicEnabled ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
-                      </button>
-                    </div>
-
-                    {/* Volume Slider */}
-                    <div className="flex items-center space-x-3 bg-foreground/5 p-3 rounded-2xl border border-border/50 flex-grow max-w-[200px]">
-                      <Volume2 className="w-4.5 h-4.5 text-foreground/40" />
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={volume}
-                        onChange={(e) => setVolume(parseFloat(e.target.value))}
-                        className="w-full accent-primary h-1 bg-border rounded-lg appearance-none cursor-pointer"
-                      />
-                      <span className="text-[10px] font-black font-mono text-foreground/60 w-8 text-right">
-                        {Math.round(volume * 100)}%
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Math Wave Presets */}
-                  <div className="mt-8 pt-6 border-t border-border/60">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-foreground/40 block mb-3">Fourier Approximations</span>
-                    <div className="flex flex-wrap gap-2.5">
-                      {[
-                        { id: PRESET_SIREN, label: 'Pure Sine' },
-                        { id: PRESET_SQUARE, label: 'Square Wave' },
-                        { id: PRESET_SAWTOOTH, label: 'Sawtooth' },
-                        { id: PRESET_TRIANGLE, label: 'Triangle' },
-                        { id: PRESET_CHORD, label: 'C-E-G Chord' },
-                      ].map((preset) => (
+                    <div className="flex flex-wrap gap-4 items-center justify-between">
+                      <div className="flex items-center space-x-3">
                         <button
-                          key={preset.id}
-                          onClick={() => applyPreset(preset.id)}
-                          className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider bg-foreground/5 hover:bg-foreground/10 border border-border/60 transition-colors"
+                          onClick={togglePlayback}
+                          className={cn(
+                            'w-16 h-16 rounded-2xl flex items-center justify-center text-white transition-all transform active:scale-95 shadow-lg',
+                            isPlaying 
+                              ? 'bg-red-500 shadow-red-500/20 hover:bg-red-600' 
+                              : 'bg-primary shadow-primary/20 hover:bg-primary/95'
+                          )}
+                          title={isPlaying ? 'Pause Synthesis' : 'Start Synthesis'}
                         >
-                          {preset.label}
+                          {isPlaying ? <Pause className="w-7 h-7 fill-current" /> : <Play className="w-7 h-7 fill-current ml-1" />}
                         </button>
-                      ))}
+
+                        <button
+                          onClick={toggleMic}
+                          className={cn(
+                            'w-16 h-16 rounded-2xl border flex items-center justify-center transition-all transform active:scale-95 shadow-md',
+                            isMicEnabled
+                              ? 'bg-cyan-500 border-cyan-500/20 text-white shadow-cyan-500/20'
+                              : 'bg-foreground/5 border-border text-foreground hover:bg-foreground/10'
+                          )}
+                          title={isMicEnabled ? 'Turn Off Microphone' : 'Enable Microphone Analysis'}
+                        >
+                          {isMicEnabled ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+                        </button>
+                      </div>
+
+                      {/* Volume Slider */}
+                      <div className="flex items-center space-x-3 bg-foreground/5 p-3 rounded-2xl border border-border/50 flex-grow max-w-[200px]">
+                        <Volume2 className="w-5 h-5 text-foreground/45" />
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={volume}
+                          onChange={(e) => setVolume(parseFloat(e.target.value))}
+                          className="w-full accent-primary h-1.5 bg-border rounded-lg appearance-none cursor-pointer"
+                        />
+                        <span className="text-xs font-black font-mono text-foreground/70 w-10 text-right">
+                          {Math.round(volume * 100)}%
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Presets */}
+                    <div className="pt-4 border-t border-border/40">
+                      <span className="text-xs font-black uppercase tracking-widest text-foreground/50 block mb-3">Sound Presets</span>
+                      <div className="flex flex-wrap gap-2.5">
+                        {[
+                          { id: PRESET_SIREN, label: 'Pure Sine' },
+                          { id: PRESET_SQUARE, label: 'Square Wave' },
+                          { id: PRESET_SAWTOOTH, label: 'Sawtooth' },
+                          { id: PRESET_TRIANGLE, label: 'Triangle' },
+                          { id: PRESET_CHORD, label: 'C-E-G Chord' },
+                        ].map((preset) => (
+                          <button
+                            key={preset.id}
+                            onClick={() => applyPreset(preset.id)}
+                            className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-foreground/5 hover:bg-foreground/10 border border-border/60 transition-colors cursor-pointer"
+                          >
+                            {preset.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Individual Harmonics Controller Cards */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between px-3">
-                    <span className="text-xs font-black uppercase tracking-widest text-foreground/40">Wave Synthesis Mixer</span>
-                    <button
-                      onClick={() => setShowIndividual(!showIndividual)}
-                      className={cn(
-                        'text-[10px] font-black uppercase tracking-wider transition-colors',
-                        showIndividual ? 'text-primary' : 'text-foreground/40'
-                      )}
-                    >
-                      {showIndividual ? 'Hide Harmonics Lines' : 'Show Harmonics Lines'}
-                    </button>
+                  {/* Mixer Channels Section */}
+                  <div className="pt-6 border-t border-border/40 space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-black uppercase tracking-widest text-foreground/50">Wave Channels (Mixer)</h3>
+                      <button
+                        onClick={() => setShowIndividual(!showIndividual)}
+                        className={cn(
+                          'text-xs font-black uppercase tracking-wider transition-colors cursor-pointer',
+                          showIndividual ? 'text-primary' : 'text-foreground/45'
+                        )}
+                      >
+                        {showIndividual ? 'Hide Harmonics' : 'Show Harmonics'}
+                      </button>
+                    </div>
+
+                    <div className="space-y-8">
+                      {waves.map((wave, idx) => {
+                        const freqPct = ((wave.frequency - 100) / (1200 - 100)) * 100;
+                        const ampPct = wave.amplitude * 100;
+                        const phasePct = (wave.phase / 360) * 100;
+
+                        return (
+                          <div
+                            key={idx}
+                            className={cn(
+                              "space-y-4 pt-6 border-t border-border/40 first:border-t-0 first:pt-0 transition-opacity duration-300 relative",
+                              wave.enabled ? 'opacity-100' : 'opacity-50'
+                            )}
+                          >
+                            {/* Wave Header */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
+                                <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-foreground/5 border border-border/50">
+                                  <Waves className="w-4.5 h-4.5" style={{ color: wave.color }} />
+                                </div>
+                                <div>
+                                  <span className="font-heading font-black text-sm uppercase text-foreground tracking-tight block">
+                                    {wave.label}
+                                  </span>
+                                  <span className="text-[10px] font-mono text-foreground/40 uppercase tracking-widest block mt-0.5">
+                                    {wave.enabled ? 'Active' : 'Muted'}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Toggle Switch */}
+                              <div className="relative inline-flex items-center">
+                                <input
+                                  type="checkbox"
+                                  checked={wave.enabled}
+                                  onChange={(e) => handleWaveChange(idx, 'enabled', e.target.checked)}
+                                  className="sr-only"
+                                  id={`wave-toggle-${idx}`}
+                                />
+                                <label
+                                  htmlFor={`wave-toggle-${idx}`}
+                                  className={cn(
+                                    "w-10 h-5.5 rounded-full cursor-pointer transition-all duration-300 relative border flex items-center p-0.5",
+                                    wave.enabled 
+                                      ? "border-transparent" 
+                                      : "bg-foreground/5 border-border/60"
+                                  )}
+                                  style={wave.enabled ? { backgroundColor: wave.color, boxShadow: `0 0 10px ${wave.color}40` } : {}}
+                                >
+                                  <motion.div
+                                    layout
+                                    className="w-4 h-4 rounded-full bg-white shadow-md"
+                                    animate={{ x: wave.enabled ? 16 : 0 }}
+                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                  />
+                                </label>
+                              </div>
+                            </div>
+
+                            {/* Sliders Area */}
+                            <div className={cn('space-y-4 transition-opacity duration-300', wave.enabled ? 'opacity-100' : 'opacity-20 pointer-events-none')}>
+                              
+                              {/* Frequency slider */}
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-bold text-foreground/60">Pitch / Speed (Frequency)</span>
+                                  <div className="px-2.5 py-1 rounded-md bg-foreground/[0.04] border border-border/60 text-xs font-mono text-foreground font-bold">
+                                    {Math.round(wave.frequency)} Hz
+                                  </div>
+                                </div>
+                                <div className="relative flex items-center">
+                                  <input
+                                    type="range"
+                                    min="100"
+                                    max="1200"
+                                    step="10"
+                                    value={wave.frequency}
+                                    onChange={(e) => handleWaveChange(idx, 'frequency', parseInt(e.target.value))}
+                                    className="w-full h-2 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
+                                    style={{
+                                      background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${freqPct}%, rgba(120,120,120,0.15) ${freqPct}%, rgba(120,120,120,0.15) 100%)`
+                                    }}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Amplitude slider */}
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-bold text-foreground/60">Volume / Height (Amplitude)</span>
+                                  <div className="px-2.5 py-1 rounded-md bg-foreground/[0.04] border border-border/60 text-xs font-mono text-foreground font-bold">
+                                    {Math.round(wave.amplitude * 100)}%
+                                  </div>
+                                </div>
+                                <div className="relative flex items-center">
+                                  <input
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value={wave.amplitude}
+                                    onChange={(e) => handleWaveChange(idx, 'amplitude', parseFloat(e.target.value))}
+                                    className="w-full h-2 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
+                                    style={{
+                                      background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${ampPct}%, rgba(120,120,120,0.15) ${ampPct}%, rgba(120,120,120,0.15) 100%)`
+                                    }}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Phase slider */}
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-bold text-foreground/60">Horizontal Shift (Phase)</span>
+                                  <div className="px-2.5 py-1 rounded-md bg-foreground/[0.04] border border-border/60 text-xs font-mono text-foreground font-bold">
+                                    {Math.round(wave.phase)}°
+                                  </div>
+                                </div>
+                                <div className="relative flex items-center">
+                                  <input
+                                    type="range"
+                                    min="0"
+                                    max="360"
+                                    step="15"
+                                    value={wave.phase}
+                                    onChange={(e) => handleWaveChange(idx, 'phase', parseInt(e.target.value))}
+                                    className="w-full h-2 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
+                                    style={{
+                                      background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${phasePct}%, rgba(120,120,120,0.15) ${phasePct}%, rgba(120,120,120,0.15) 100%)`
+                                    }}
+                                  />
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  {waves.map((wave, idx) => {
-                    const freqPct = ((wave.frequency - 100) / (1200 - 100)) * 100;
-                    const ampPct = wave.amplitude * 100;
-                    const phasePct = (wave.phase / 360) * 100;
-
-                    return (
-                      <div
-                        key={idx}
-                        className="p-[1px] rounded-[32px] bg-gradient-to-br from-border/40 via-transparent to-transparent hover:from-primary/20 hover:to-secondary/10 transition-all duration-500 shadow-xl relative overflow-hidden group/wavecard"
-                      >
-                        {/* Interactive Background Glow */}
-                        <div 
-                          className="absolute -right-10 -top-10 w-28 h-28 rounded-full blur-[40px] opacity-[0.03] group-hover/wavecard:opacity-[0.08] transition-opacity duration-500 pointer-events-none"
-                          style={{ backgroundColor: wave.color }}
-                        />
-
-                        {/* Inner Content */}
-                        <div className={cn(
-                          'bg-card/45 border border-border/70 backdrop-blur-md rounded-[31px] p-6 space-y-6 transition-all duration-300 relative z-10',
-                          wave.enabled ? 'opacity-100 shadow-md' : 'opacity-60'
-                        )}
-                        >
-                          {/* Card Header */}
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-foreground/5 border border-border/50">
-                                <Waves className="w-4 h-4" style={{ color: wave.color }} />
-                              </div>
-                              <div>
-                                <span className="font-heading font-black text-xs uppercase text-foreground tracking-tight block">
-                                  {wave.label}
-                                </span>
-                                <span className="text-[9px] font-mono text-foreground/40 uppercase tracking-widest block mt-0.5">
-                                  {wave.enabled ? 'Channel Active' : 'Channel Muted'}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Custom Switch Toggle */}
-                            <div className="relative inline-flex items-center">
-                              <input
-                                type="checkbox"
-                                checked={wave.enabled}
-                                onChange={(e) => handleWaveChange(idx, 'enabled', e.target.checked)}
-                                className="sr-only"
-                                id={`wave-toggle-${idx}`}
-                              />
-                              <label
-                                htmlFor={`wave-toggle-${idx}`}
-                                className={cn(
-                                  "w-10 h-5.5 rounded-full cursor-pointer transition-all duration-300 relative border flex items-center p-0.5",
-                                  wave.enabled 
-                                    ? "border-transparent" 
-                                    : "bg-foreground/5 border-border/60"
-                                )}
-                                style={wave.enabled ? { backgroundColor: wave.color, boxShadow: `0 0 10px ${wave.color}40` } : {}}
-                              >
-                                <motion.div
-                                  layout
-                                  className="w-4 h-4 rounded-full bg-white shadow-md"
-                                  animate={{ x: wave.enabled ? 16 : 0 }}
-                                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                />
-                              </label>
-                            </div>
-                          </div>
-
-                          {/* Controls (Disabled overlay if wave not enabled) */}
-                          <div className={cn('space-y-4 transition-opacity duration-300', wave.enabled ? 'opacity-100' : 'opacity-25 pointer-events-none')}>
-                            
-                            {/* Frequency slider */}
-                            <div className="space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-[9px] font-black uppercase tracking-wider text-foreground/40">Pitch / Speed (Frequency)</span>
-                                <div className="px-2 py-0.5 rounded-md bg-foreground/[0.04] border border-border/60 text-[9px] font-mono text-foreground font-bold">
-                                  {Math.round(wave.frequency)} Hz
-                                </div>
-                              </div>
-                              <div className="relative flex items-center">
-                                <input
-                                  type="range"
-                                  min="100"
-                                  max="1200"
-                                  step="10"
-                                  value={wave.frequency}
-                                  onChange={(e) => handleWaveChange(idx, 'frequency', parseInt(e.target.value))}
-                                  className="w-full h-1.5 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
-                                  style={{
-                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${freqPct}%, rgba(120,120,120,0.15) ${freqPct}%, rgba(120,120,120,0.15) 100%)`
-                                  }}
-                                />
-                              </div>
-                            </div>
-
-                            {/* Amplitude slider */}
-                            <div className="space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-[9px] font-black uppercase tracking-wider text-foreground/40">Volume / Height (Amplitude)</span>
-                                <div className="px-2 py-0.5 rounded-md bg-foreground/[0.04] border border-border/60 text-[9px] font-mono text-foreground font-bold">
-                                  {Math.round(wave.amplitude * 100)}%
-                                </div>
-                              </div>
-                              <div className="relative flex items-center">
-                                <input
-                                  type="range"
-                                  min="0"
-                                  max="1"
-                                  step="0.05"
-                                  value={wave.amplitude}
-                                  onChange={(e) => handleWaveChange(idx, 'amplitude', parseFloat(e.target.value))}
-                                  className="w-full h-1.5 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
-                                  style={{
-                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${ampPct}%, rgba(120,120,120,0.15) ${ampPct}%, rgba(120,120,120,0.15) 100%)`
-                                  }}
-                                />
-                              </div>
-                            </div>
-
-                            {/* Phase slider */}
-                            <div className="space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-[9px] font-black uppercase tracking-wider text-foreground/40">Horizontal Shift (Phase)</span>
-                                <div className="px-2 py-0.5 rounded-md bg-foreground/[0.04] border border-border/60 text-[9px] font-mono text-foreground font-bold">
-                                  {Math.round(wave.phase)}°
-                                </div>
-                              </div>
-                              <div className="relative flex items-center">
-                                <input
-                                  type="range"
-                                  min="0"
-                                  max="360"
-                                  step="15"
-                                  value={wave.phase}
-                                  onChange={(e) => handleWaveChange(idx, 'phase', parseInt(e.target.value))}
-                                  className="w-full h-1.5 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
-                                  style={{
-                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${phasePct}%, rgba(120,120,120,0.15) ${phasePct}%, rgba(120,120,120,0.15) 100%)`
-                                  }}
-                                />
-                              </div>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
                 </div>
-
               </div>
 
               {/* Right Column - Visualizers Stack (7 Cols) */}
