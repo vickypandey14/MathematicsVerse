@@ -32,6 +32,7 @@ export default function WaveExplorer() {
   const [volume, setVolume] = useState(0.5);
   const [showIndividual, setShowIndividual] = useState(true);
   const [activeTab, setActiveTab] = useState<'visuals' | 'theory'>('visuals');
+  const [showGuide, setShowGuide] = useState(true);
   
   // Wave state
   const [waves, setWaves] = useState<WaveConfig[]>([
@@ -696,8 +697,101 @@ export default function WaveExplorer() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8"
+              className="space-y-8"
             >
+              {/* Interactive Quick-Guide Card */}
+              <div className="p-6 md:p-8 rounded-[36px] bg-card/60 border border-border shadow-xl backdrop-blur-md relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                      <Info className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base md:text-lg font-heading font-black text-foreground uppercase tracking-tight">
+                        🔊 What is this app & How to use it?
+                      </h2>
+                      <p className="text-xs text-foreground/50 font-medium">Read this quick 1-minute guide to see why wave math is so fascinating!</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowGuide(!showGuide)}
+                    className="self-start sm:self-auto px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-wider bg-foreground/5 hover:bg-foreground/10 border border-border/60 transition-colors"
+                  >
+                    {showGuide ? 'Hide Guide' : 'Show Guide'}
+                  </button>
+                </div>
+
+                <AnimatePresence initial={false}>
+                  {showGuide && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden space-y-6 pt-4 border-t border-border/40"
+                    >
+                      <p className="text-sm text-foreground/70 leading-relaxed font-medium">
+                        Did you know that <strong>every sound you hear</strong>—your voice, a piano note, or waves in the ocean—is actually built from simple, mathematical repeating waves? 
+                        This explorer lets you play with these waves, listen to them, and watch them combine in real time!
+                      </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-xs text-foreground/60">
+                        <div className="space-y-2 p-4 rounded-2xl bg-foreground/[0.02] border border-border/40">
+                          <h4 className="font-black text-foreground uppercase tracking-wider text-[10px] flex items-center text-primary">
+                            <span className="w-5 h-5 rounded-lg bg-primary/10 flex items-center justify-center mr-2 font-bold font-mono">1</span>
+                            Hear the Wave Math
+                          </h4>
+                          <p className="leading-relaxed font-medium">
+                            Click the blue <strong>Play Button (▶)</strong>. You will hear a pure tone. Slide the **Volume Slider** next to it to adjust the sound.
+                          </p>
+                        </div>
+
+                        <div className="space-y-2 p-4 rounded-2xl bg-foreground/[0.02] border border-border/40">
+                          <h4 className="font-black text-foreground uppercase tracking-wider text-[10px] flex items-center text-secondary">
+                            <span className="w-5 h-5 rounded-lg bg-secondary/10 flex items-center justify-center mr-2 font-bold font-mono">2</span>
+                            Combine Multiple Waves
+                          </h4>
+                          <p className="leading-relaxed font-medium">
+                            Enable <strong>Wave 2</strong> or <strong>Wave 3</strong> using their switches. Move their sliders to change their speed (**Frequency**), volume (**Amplitude**), or shift them horizontally (**Phase**).
+                          </p>
+                        </div>
+
+                        <div className="space-y-2 p-4 rounded-2xl bg-foreground/[0.02] border border-border/40">
+                          <h4 className="font-black text-foreground uppercase tracking-wider text-[10px] flex items-center text-accent">
+                            <span className="w-5 h-5 rounded-lg bg-accent/10 flex items-center justify-center mr-2 font-bold font-mono">3</span>
+                            Watch the Superposition
+                          </h4>
+                          <p className="leading-relaxed font-medium">
+                            The dotted lines on the top graph show the individual waves. The <strong>thick glowing purple line</strong> shows the combined sound. Watch how shifting the waves can reinforce or cancel them out!
+                          </p>
+                        </div>
+
+                        <div className="space-y-2 p-4 rounded-2xl bg-foreground/[0.02] border border-border/40">
+                          <h4 className="font-black text-foreground uppercase tracking-wider text-[10px] flex items-center text-yellow-500">
+                            <span className="w-5 h-5 rounded-lg bg-yellow-500/10 flex items-center justify-center mr-2 font-bold font-mono">4</span>
+                            Try Preset Combinations
+                          </h4>
+                          <p className="leading-relaxed font-medium">
+                            Click <strong>Square Wave</strong>, <strong>Sawtooth</strong>, or <strong>Triangle</strong> to automatically combine frequencies to build geometric wave shapes, or play a <strong>C-E-G Chord</strong>!
+                          </p>
+                        </div>
+
+                        <div className="space-y-2 p-4 rounded-2xl bg-foreground/[0.02] border border-border/40">
+                          <h4 className="font-black text-foreground uppercase tracking-wider text-[10px] flex items-center text-cyan-500">
+                            <span className="w-5 h-5 rounded-lg bg-cyan-500/10 flex items-center justify-center mr-2 font-bold font-mono">5</span>
+                            Analyze Your Voice
+                          </h4>
+                          <p className="leading-relaxed font-medium">
+                            Click the <strong>Microphone (🎤)</strong> icon and sing or whistle. The bottom graph (FFT) will mathematically break down your voice and highlight your pitch peaks!
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Grid for Sandbox */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Left Column - Controls (5 Cols) */}
               <div className="lg:col-span-5 space-y-6">
                 
@@ -840,7 +934,7 @@ export default function WaveExplorer() {
                         {/* Frequency slider */}
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-foreground/40">
-                            <span>Frequency</span>
+                            <span>Pitch / Speed (Frequency)</span>
                             <span className="font-mono text-foreground">{Math.round(wave.frequency)} Hz</span>
                           </div>
                           <input
@@ -858,7 +952,7 @@ export default function WaveExplorer() {
                         {/* Amplitude slider */}
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-foreground/40">
-                            <span>Amplitude (Gain)</span>
+                            <span>Volume / Height (Amplitude)</span>
                             <span className="font-mono text-foreground">{Math.round(wave.amplitude * 100)}%</span>
                           </div>
                           <input
@@ -875,7 +969,7 @@ export default function WaveExplorer() {
                         {/* Phase slider */}
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-foreground/40">
-                            <span>Phase Shift</span>
+                            <span>Horizontal Shift (Phase)</span>
                             <span className="font-mono text-foreground">{Math.round(wave.phase)}°</span>
                           </div>
                           <input
@@ -953,6 +1047,7 @@ export default function WaveExplorer() {
                   </div>
                 </div>
 
+              </div>
               </div>
             </motion.div>
           ) : (
