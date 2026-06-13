@@ -5,7 +5,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import MathRenderer from '@/components/math/MathRenderer';
 import { 
   Waves, Play, Pause, Activity, Volume2, 
-  Mic, MicOff, Info, Sparkles, RefreshCw, Check 
+  Mic, MicOff, Info, Sparkles, RefreshCw, Check, Sliders
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -658,7 +658,7 @@ export default function WaveExplorer() {
             <h1 className="text-5xl md:text-6xl font-heading font-black text-foreground tracking-tighter">
               Harmonic Wave <span className="gradient-text">Explorer</span>
             </h1>
-            <p className="text-foreground/50 font-medium text-lg max-w-3xl">
+            <p className="text-foreground/50 font-medium text-lg max-w-none lg:whitespace-nowrap w-full">
               Create your own sounds by mixing different wave speeds and volume, and see the science of sound waves in action.
             </p>
           </div>
@@ -801,7 +801,7 @@ export default function WaveExplorer() {
                   {/* Master Section */}
                   <div className="space-y-6">
                     <h3 className="text-sm font-black uppercase tracking-widest text-foreground/50 flex items-center">
-                      <Sparkles className="w-5 h-5 mr-2 text-primary fill-current" />
+                      <Sliders className="w-5 h-5 mr-2 text-primary" />
                       Master Sound Controls
                     </h3>
 
