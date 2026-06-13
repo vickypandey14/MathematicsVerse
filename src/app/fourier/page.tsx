@@ -8,12 +8,20 @@ import {
   Edit3, 
   Sliders, 
   Activity, 
-  Sparkles, 
   Info, 
   Trash2,
   HelpCircle,
   TrendingUp,
-  Award
+  Award,
+  Compass,
+  Heart,
+  Infinity as InfinityIcon,
+  Square,
+  Star,
+  Atom,
+  Sun,
+  Waves,
+  Orbit
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -32,9 +40,16 @@ interface Point {
 }
 
 // Preset Definitions
-const PRESETS: Record<string, { name: string; generator: (count?: number) => Point[] }> = {
+interface Preset {
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  generator: (count?: number) => Point[];
+}
+
+const PRESETS: Record<string, Preset> = {
   heart: {
     name: 'Heart',
+    icon: Heart,
     generator: (count = 200) => {
       const points: Point[] = [];
       for (let i = 0; i < count; i++) {
@@ -49,6 +64,7 @@ const PRESETS: Record<string, { name: string; generator: (count?: number) => Poi
   },
   infinity: {
     name: 'Infinity Loop',
+    icon: InfinityIcon,
     generator: (count = 200) => {
       const points: Point[] = [];
       for (let i = 0; i < count; i++) {
@@ -64,6 +80,7 @@ const PRESETS: Record<string, { name: string; generator: (count?: number) => Poi
   },
   trefoil: {
     name: 'Trefoil Knot',
+    icon: Orbit,
     generator: (count = 240) => {
       const points: Point[] = [];
       for (let i = 0; i < count; i++) {
@@ -77,6 +94,7 @@ const PRESETS: Record<string, { name: string; generator: (count?: number) => Poi
   },
   square: {
     name: 'Square Outline',
+    icon: Square,
     generator: (count = 200) => {
       const points: Point[] = [];
       const side = count / 4;
@@ -90,6 +108,7 @@ const PRESETS: Record<string, { name: string; generator: (count?: number) => Poi
   },
   star: {
     name: 'Five-Point Star',
+    icon: Star,
     generator: (count = 200) => {
       const points: Point[] = [];
       const outerR = 15;
@@ -101,6 +120,51 @@ const PRESETS: Record<string, { name: string; generator: (count?: number) => Poi
         const r = isOuter ? outerR : innerR;
         const x = r * Math.sin(t);
         const y = -r * Math.cos(t);
+        points.push({ x, y });
+      }
+      return points;
+    }
+  },
+  butterfly: {
+    name: 'Butterfly Curve',
+    icon: Atom,
+    generator: (count = 240) => {
+      const points: Point[] = [];
+      for (let i = 0; i < count; i++) {
+        const t = (i / count) * Math.PI * 2;
+        // Butterfly Curve formula
+        const r = Math.exp(Math.cos(t)) - 2 * Math.cos(4 * t) + Math.pow(Math.sin(t / 12), 5);
+        const x = Math.sin(t) * r * 4.5;
+        const y = -Math.cos(t) * r * 4.5;
+        points.push({ x, y });
+      }
+      return points;
+    }
+  },
+  rose: {
+    name: 'Rose Flower',
+    icon: Sun,
+    generator: (count = 200) => {
+      const points: Point[] = [];
+      for (let i = 0; i < count; i++) {
+        const t = (i / count) * Math.PI * 2;
+        const r = 16 * Math.cos(4 * t); // 8 petals
+        const x = r * Math.cos(t);
+        const y = r * Math.sin(t);
+        points.push({ x, y });
+      }
+      return points;
+    }
+  },
+  lissajous: {
+    name: 'Lissajous Wave',
+    icon: Waves,
+    generator: (count = 200) => {
+      const points: Point[] = [];
+      for (let i = 0; i < count; i++) {
+        const t = (i / count) * Math.PI * 2;
+        const x = 16 * Math.sin(3 * t);
+        const y = 16 * Math.sin(4 * t);
         points.push({ x, y });
       }
       return points;
@@ -585,7 +649,7 @@ export default function FourierCanvasPage() {
               className="p-6 rounded-[28px] bg-card border border-border/80 shadow-xl space-y-4"
             >
               <h3 className="text-base font-heading font-black text-foreground uppercase flex items-center gap-2">
-                <Sparkles className="text-secondary w-5 h-5" />
+                <Info className="text-secondary w-5 h-5" />
                 The Magic of Fourier Series
               </h3>
               <p className="text-foreground/70 text-sm leading-relaxed">
@@ -613,23 +677,27 @@ export default function FourierCanvasPage() {
         <div className="p-6 rounded-[32px] bg-card/45 border border-border/70 shadow-xl backdrop-blur-md space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-black uppercase tracking-[0.25em] text-foreground/50 flex items-center gap-2">
-              <Sparkles className="text-secondary w-4 h-4" />
+              <Compass className="text-secondary w-4 h-4" />
               Quick Launch Mathematical Presets
             </h3>
             <span className="text-[10px] font-bold text-foreground/40 hidden sm:inline">Select a shape to instantly simulate its waves</span>
           </div>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            {Object.entries(PRESETS).map(([key, p]) => (
-              <button
-                key={key}
-                onClick={() => loadPreset(key)}
-                className="w-full px-5 py-4 text-center rounded-2xl bg-foreground/[0.03] border border-border/50 hover:bg-foreground/[0.06] hover:border-primary/40 text-foreground font-black text-xs transition-all flex flex-col items-center justify-center gap-1 group hover:scale-[1.02] active:scale-[0.98] shadow-sm cursor-pointer"
-              >
-                <span className="group-hover:text-primary transition-colors">{p.name}</span>
-                <span className="text-[8px] uppercase tracking-widest text-primary/60 font-bold opacity-0 group-hover:opacity-100 transition-opacity">Simulate &rarr;</span>
-              </button>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+            {Object.entries(PRESETS).map(([key, p]) => {
+              const Icon = p.icon;
+              return (
+                <button
+                  key={key}
+                  onClick={() => loadPreset(key)}
+                  className="px-4 py-4 text-center rounded-2xl bg-foreground/[0.02] hover:bg-foreground/[0.05] border border-border/60 hover:border-primary/40 text-foreground transition-all flex flex-col items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md cursor-pointer relative overflow-hidden h-24"
+                >
+                  <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                  <Icon className="w-5 h-5 text-foreground/45 group-hover:text-primary transition-colors duration-300" />
+                  <span className="font-black text-[10px] tracking-tight uppercase leading-tight text-foreground/70 group-hover:text-foreground">{p.name}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
