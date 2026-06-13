@@ -905,10 +905,9 @@ export default function WaveExplorer() {
 
                         {/* Inner Content */}
                         <div className={cn(
-                          'bg-[#0b0e17]/95 backdrop-blur-md rounded-[31px] p-6 space-y-6 transition-all duration-300 relative z-10',
-                          wave.enabled ? 'border-l-4' : 'opacity-60'
+                          'bg-card/45 border border-border/70 backdrop-blur-md rounded-[31px] p-6 space-y-6 transition-all duration-300 relative z-10',
+                          wave.enabled ? 'opacity-100 shadow-md' : 'opacity-60'
                         )}
-                        style={wave.enabled ? { borderLeftColor: wave.color } : undefined}
                         >
                           {/* Card Header */}
                           <div className="flex items-center justify-between">
@@ -962,7 +961,7 @@ export default function WaveExplorer() {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <span className="text-[9px] font-black uppercase tracking-wider text-foreground/40">Pitch / Speed (Frequency)</span>
-                                <div className="px-2 py-0.5 rounded-md bg-black/40 border border-border/20 text-[9px] font-mono text-foreground/80 font-bold">
+                                <div className="px-2 py-0.5 rounded-md bg-foreground/[0.04] border border-border/60 text-[9px] font-mono text-foreground font-bold">
                                   {Math.round(wave.frequency)} Hz
                                 </div>
                               </div>
@@ -976,7 +975,7 @@ export default function WaveExplorer() {
                                   onChange={(e) => handleWaveChange(idx, 'frequency', parseInt(e.target.value))}
                                   className="w-full h-1.5 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
                                   style={{
-                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${freqPct}%, rgba(255,255,255,0.03) ${freqPct}%, rgba(255,255,255,0.03) 100%)`
+                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${freqPct}%, rgba(120,120,120,0.15) ${freqPct}%, rgba(120,120,120,0.15) 100%)`
                                   }}
                                 />
                               </div>
@@ -986,7 +985,7 @@ export default function WaveExplorer() {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <span className="text-[9px] font-black uppercase tracking-wider text-foreground/40">Volume / Height (Amplitude)</span>
-                                <div className="px-2 py-0.5 rounded-md bg-black/40 border border-border/20 text-[9px] font-mono text-foreground/80 font-bold">
+                                <div className="px-2 py-0.5 rounded-md bg-foreground/[0.04] border border-border/60 text-[9px] font-mono text-foreground font-bold">
                                   {Math.round(wave.amplitude * 100)}%
                                 </div>
                               </div>
@@ -1000,7 +999,7 @@ export default function WaveExplorer() {
                                   onChange={(e) => handleWaveChange(idx, 'amplitude', parseFloat(e.target.value))}
                                   className="w-full h-1.5 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
                                   style={{
-                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${ampPct}%, rgba(255,255,255,0.03) ${ampPct}%, rgba(255,255,255,0.03) 100%)`
+                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${ampPct}%, rgba(120,120,120,0.15) ${ampPct}%, rgba(120,120,120,0.15) 100%)`
                                   }}
                                 />
                               </div>
@@ -1010,7 +1009,7 @@ export default function WaveExplorer() {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <span className="text-[9px] font-black uppercase tracking-wider text-foreground/40">Horizontal Shift (Phase)</span>
-                                <div className="px-2 py-0.5 rounded-md bg-black/40 border border-border/20 text-[9px] font-mono text-foreground/80 font-bold">
+                                <div className="px-2 py-0.5 rounded-md bg-foreground/[0.04] border border-border/60 text-[9px] font-mono text-foreground font-bold">
                                   {Math.round(wave.phase)}°
                                 </div>
                               </div>
@@ -1024,7 +1023,7 @@ export default function WaveExplorer() {
                                   onChange={(e) => handleWaveChange(idx, 'phase', parseInt(e.target.value))}
                                   className="w-full h-1.5 bg-foreground/5 rounded-lg appearance-none cursor-pointer focus:outline-none transition-all duration-200 hover:bg-foreground/10"
                                   style={{
-                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${phasePct}%, rgba(255,255,255,0.03) ${phasePct}%, rgba(255,255,255,0.03) 100%)`
+                                    background: `linear-gradient(to right, ${wave.color} 0%, ${wave.color} ${phasePct}%, rgba(120,120,120,0.15) ${phasePct}%, rgba(120,120,120,0.15) 100%)`
                                   }}
                                 />
                               </div>
