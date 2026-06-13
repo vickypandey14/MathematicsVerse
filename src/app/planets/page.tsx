@@ -556,24 +556,25 @@ export default function SolarSystemPage() {
               </div>
             </div>
 
-            {/* Fact Logs */}
-            <div className="p-6 rounded-[32px] bg-card/45 border border-border/70 shadow-xl backdrop-blur-md space-y-6">
-              <h3 className="text-xs font-black uppercase tracking-[0.25em] text-foreground/50 flex items-center gap-2">
-                <Info className="text-primary w-4 h-4" />
-                Planetary Fact logs
-              </h3>
+          </div>
+        </div>
 
-              <div className="space-y-3.5">
-                {selectedPlanet.facts.map((fact, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-4 rounded-2xl bg-foreground/[0.02] border border-border/40 text-xs text-foreground/75 leading-relaxed">
-                    <div className="w-5 h-5 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-black shrink-0 mt-0.5">
-                      {idx + 1}
-                    </div>
-                    <span>{fact}</span>
-                  </div>
-                ))}
+        {/* Fact Logs */}
+        <div className="p-8 rounded-[32px] bg-card/45 border border-border/70 shadow-xl backdrop-blur-md space-y-6">
+          <h3 className="text-xs font-black uppercase tracking-[0.25em] text-foreground/50 flex items-center gap-2">
+            <Info className="text-primary w-4 h-4" />
+            Planetary Fact logs
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {selectedPlanet.facts.map((fact, idx) => (
+              <div key={idx} className="flex items-start gap-4 p-5 rounded-2xl bg-foreground/[0.02] border border-border/40 text-xs text-foreground/75 leading-relaxed hover:bg-foreground/[0.04] hover:border-primary/20 transition-all">
+                <div className="w-6 h-6 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-black shrink-0 mt-0.5">
+                  {idx + 1}
+                </div>
+                <span>{fact}</span>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
