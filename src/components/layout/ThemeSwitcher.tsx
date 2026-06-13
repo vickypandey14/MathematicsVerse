@@ -4,8 +4,13 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
-export default function ThemeSwitcher() {
+interface ThemeSwitcherProps {
+  className?: string;
+}
+
+export default function ThemeSwitcher({ className }: ThemeSwitcherProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -15,7 +20,7 @@ export default function ThemeSwitcher() {
   }, []);
 
   if (!mounted) {
-    return <div className="w-10 h-10 rounded-full bg-foreground/5" />;
+    return <div className={cn("w-10 h-10 rounded-full bg-foreground/5", className)} />;
   }
 
   const isDark = theme === 'dark';
@@ -23,7 +28,10 @@ export default function ThemeSwitcher() {
   return (
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      className="relative w-10 h-10 flex items-center justify-center rounded-full glass hover:bg-foreground/10 transition-colors focus:outline-none focus:ring-2 focus:ring-primary overflow-hidden"
+      className={cn(
+        "relative w-10 h-10 flex items-center justify-center rounded-full glass hover:bg-foreground/10 transition-colors focus:outline-none focus:ring-2 focus:ring-primary overflow-hidden",
+        className
+      )}
       aria-label="Toggle theme"
     >
       <AnimatePresence mode="wait" initial={false}>

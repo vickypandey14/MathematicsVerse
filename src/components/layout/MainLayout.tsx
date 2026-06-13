@@ -11,6 +11,7 @@ import {
   History, 
   LayoutDashboard, 
   ChevronRight,
+  ChevronLeft,
   Menu,
   X,
   Compass,
@@ -99,13 +100,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
             exit={isMobile ? { x: -300 } : undefined}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className={cn(
-              "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-border bg-background/80 backdrop-blur-3xl",
+              "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border-r border-border bg-background/80 backdrop-blur-3xl shadow-xl shadow-primary/5",
               isMobile 
                 ? "w-72" 
                 : (isSidebarOpen ? "w-72" : "w-24")
             )}
           >
-        <div className={cn("p-8 flex items-center", (isMobile || isSidebarOpen) ? "justify-between" : "justify-center")}>
+        <div className={cn("p-8 flex items-center shrink-0", (isMobile || isSidebarOpen) ? "justify-between" : "justify-center")}>
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 bg-gradient-to-tr from-primary via-secondary to-accent rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">
               <Calculator className="text-white w-6 h-6" />
@@ -122,7 +123,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </Link>
         </div>
 
-        <div className={cn("px-6 py-4", !isSidebarOpen && "flex justify-center px-0")}>
+        <div className={cn("px-6 py-4 shrink-0", !isSidebarOpen && "flex justify-center px-0")}>
            <form onSubmit={handleSearch} className="relative">
               <Search 
                 className={cn(
@@ -149,7 +150,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
            </form>
         </div>
 
-        <nav className="flex-grow px-4 py-4 space-y-2">
+        <nav className="flex-grow min-h-0 px-4 py-4 space-y-2 overflow-y-auto overflow-x-hidden no-scrollbar">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
@@ -157,15 +158,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
               <Link
                 key={link.name}
                 href={link.href}
+                title={!isSidebarOpen ? link.name : undefined}
                 className={cn(
                   "flex items-center py-4 rounded-2xl transition-all duration-300 group relative",
                   isSidebarOpen ? "px-4 space-x-4" : "justify-center",
                   isActive 
-                    ? "bg-foreground/5 text-foreground" 
-                    : "text-foreground/50 hover:text-foreground hover:bg-foreground/5"
+                    ? "bg-primary/5 text-primary dark:bg-primary/10" 
+                    : "text-foreground/60 hover:text-foreground hover:bg-foreground/5"
                 )}
               >
-                <Icon className={cn("w-6 h-6 shrink-0", isActive ? "text-primary" : "group-hover:text-primary transition-colors")} />
+                <Icon className={cn("w-6 h-6 shrink-0", isActive ? "text-primary drop-shadow-[0_0_8px_rgba(99,102,241,0.55)]" : "group-hover:text-primary transition-colors")} />
                 {mounted && (isMobile || isSidebarOpen) && (
                   <motion.span 
                     initial={{ opacity: 0, x: -10 }}
@@ -178,7 +180,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 {isActive && (
                   <motion.div 
                     layoutId="active-nav"
-                    className="absolute left-0 w-1 h-6 bg-primary rounded-r-full"
+                    className="absolute left-0 w-1 h-6 bg-primary rounded-r-full shadow-lg shadow-primary/50"
                   />
                 )}
               </Link>
@@ -186,16 +188,24 @@ export default function MainLayout({ children }: MainLayoutProps) {
           })}
         </nav>
 
-        <div className={cn("p-6 flex items-center gap-2", !isSidebarOpen && "flex-col p-4")}>
-          <ThemeSwitcher />
+        <div className={cn("p-6 flex items-center gap-2 shrink-0 w-full", !isSidebarOpen && "flex-col p-4")}>
+          <ThemeSwitcher 
+            className="flex items-center justify-center rounded-2xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all shadow-sm w-12 h-12 shrink-0"
+          />
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className={cn(
-              "flex items-center justify-center rounded-2xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all group",
-              (isMobile || isSidebarOpen) ? "flex-grow p-4" : "w-12 h-12"
+              "flex items-center justify-center rounded-2xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all shadow-sm group h-12 shrink-0",
+              (isMobile || isSidebarOpen) ? "flex-grow" : "w-12"
             )}
           >
-            {mounted && (isMobile || isSidebarOpen) ? <X className="w-5 h-5 text-foreground/40 group-hover:text-foreground" /> : <Menu className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />}
+            {mounted && (
+              isMobile ? (
+                isSidebarOpen ? <X className="w-5 h-5 text-foreground/40 group-hover:text-foreground" /> : <Menu className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />
+              ) : (
+                isSidebarOpen ? <ChevronLeft className="w-5 h-5 text-foreground/40 group-hover:text-foreground" /> : <ChevronRight className="w-5 h-5 text-foreground/40 group-hover:text-foreground" />
+              )
+            )}
           </button>
         </div>
       </motion.aside>
