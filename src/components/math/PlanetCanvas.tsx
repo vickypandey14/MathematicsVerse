@@ -19,25 +19,101 @@ function pseudoNoise(x: number, y: number): number {
   );
 }
 
+// Deterministic 2D -> 1D hash returning [0, 1]
+function hash21(p1: number, p2: number): number {
+  const val = Math.sin(p1 * 12.9898 + p2 * 78.233) * 43758.5453123;
+  return val - Math.floor(val);
+}
+
+// Crater profile function of x = dist / radius
+function getCraterInfluence(dist: number, radius: number): { height: number; colorVal: number } {
+  const x = dist / radius;
+  if (x > 1.25) return { height: 0, colorVal: 0 };
+  
+  if (x < 0.9) {
+    // Bowl: drops to -0.45 at center, rises to +0.15 at the rim (x = 0.9)
+    const t = x / 0.9;
+    const h = -0.45 * (1 - t * t) + 0.15 * Math.pow(t, 4);
+    const c = -35 * (1 - t * t) + 25 * Math.pow(t, 4);
+    return { height: h, colorVal: c };
+  } else {
+    // Rim lip and outer slope (0.9 <= x <= 1.25)
+    const t = (1.25 - x) / 0.35;
+    const h = 0.15 * t * t;
+    const c = 35 * t * t;
+    return { height: h, colorVal: c };
+  }
+}
+
+// Organic scattered crater generator for Mercury using cell noise grid
+function getMercuryCrater(u: number, v: number): { height: number; colorVal: number } {
+  let totalH = 0;
+  let totalC = 0;
+  
+  const Nu = 12; // divisions along longitude
+  const Nv = 6;  // divisions along latitude
+  
+  const cu = Math.floor(u * Nu);
+  const cv = Math.floor(v * Nv);
+  
+  for (let dj = -1; dj <= 1; dj++) {
+    const clampedJ = Math.max(0, Math.min(Nv - 1, cv + dj));
+    
+    for (let di = -1; di <= 1; di++) {
+      const wrappedCellI = (cu + di + Nu) % Nu;
+      
+      const seed = wrappedCellI + clampedJ * 57;
+      const h1 = hash21(seed, 12.5);
+      const h2 = hash21(seed, 93.1);
+      const h3 = hash21(seed, 45.7);
+      
+      // Skip crater in ~20% of cells to keep layout organic
+      if (h1 > 0.8) continue;
+      
+      // Center coordinates of crater in this cell
+      const cx = (wrappedCellI + 0.1 + 0.8 * h2) / Nu;
+      const cy = (clampedJ + 0.1 + 0.8 * h3) / Nv;
+      
+      let du = u - cx;
+      if (du > 0.5) du -= 1;
+      else if (du < -0.5) du += 1;
+      const dv = v - cy;
+      
+      const dist = Math.sqrt(du * du + dv * dv);
+      const radius = 0.012 + 0.026 * h3; // randomized sizes
+      
+      const influence = getCraterInfluence(dist, radius);
+      const strength = 0.45 + 0.55 * h1; // randomized depths
+      
+      totalH += influence.height * strength;
+      totalC += influence.colorVal * strength;
+    }
+  }
+  
+  return { height: totalH, colorVal: totalC };
+}
+
 // Height map generator for rocky planets (for bump mapping)
 function getPlanetHeight(u: number, v: number, planetId: string): number {
   if (planetId === 'mercury') {
-    const craterNoise = pseudoNoise(u * 22, v * 22);
-    const detail = pseudoNoise(u * 45, v * 45) * 0.05;
-    let h = craterNoise + detail;
-    
-    // Impact crater bowls
-    const bowl = Math.sin(u * 15.3) * Math.cos(v * 15.3);
-    if (bowl > 0.45) {
-      h -= 0.16; // crater dip
-    }
-    return h;
+    const craterData = getMercuryCrater(u, v);
+    const baseNoise = pseudoNoise(u * 15, v * 15) * 0.05;
+    return craterData.height + baseNoise;
   }
   
   if (planetId === 'mars') {
     const marsNoise = pseudoNoise(u * 11, v * 9);
     const detail = pseudoNoise(u * 32, v * 32) * 0.08;
-    return marsNoise + detail;
+    let h = marsNoise + detail;
+    
+    // Equatorial Canyon: Valles Marineris (trench along the equator)
+    const du = u - 0.4;
+    const dv = v - 0.5;
+    if (Math.abs(du) < 0.15 && Math.abs(dv) < 0.035) {
+      const canyonDepth = (1 - Math.abs(du) / 0.15) * (1 - Math.abs(dv) / 0.035);
+      h -= canyonDepth * 0.32; // deep rift depression
+    }
+    return h;
   }
   
   if (planetId === 'earth') {
@@ -47,7 +123,7 @@ function getPlanetHeight(u: number, v: number, planetId: string): number {
       const mountains = pseudoNoise(u * 38, v * 38) * 0.12;
       return landNoise + mountains;
     }
-    return 0; // Oceans are smooth
+    return 0; // Oceans are flat
   }
   
   return 0;
@@ -112,20 +188,19 @@ export default function PlanetCanvas({
       }
       
       case 'mercury': {
-        const craterNoise = pseudoNoise(u * 22, v * 22);
-        const detail = pseudoNoise(u * 45, v * 45) * 0.08;
-        let grey = 130 + craterNoise * 35 + detail * 255;
+        const baseNoise = pseudoNoise(u * 8, v * 8) * 15;
+        const craterData = getMercuryCrater(u, v);
         
-        // Impact ray ejecta systems
-        const rayNoise = Math.sin(u * 42) * Math.cos(v * 42);
-        if (rayNoise > 0.74) {
-          grey += 25; // Bright ray marks
+        // Realistic dark slate-grey Mercurian basalt
+        let grey = 132 + baseNoise + craterData.colorVal;
+        
+        // Ray systems from giant impact sites (bright streaks)
+        const rayNoise = Math.sin(u * 45) * Math.cos(v * 45);
+        if (rayNoise > 0.76) {
+          grey += 20;
         }
         
-        if (Math.sin(u * 15.3) * Math.cos(v * 15.3) > 0.45) {
-          grey -= 25; // Dark rim
-        }
-        
+        grey = Math.max(30, Math.min(240, grey));
         return { r: grey, g: grey, b: grey };
       }
       
@@ -204,13 +279,30 @@ export default function PlanetCanvas({
         const detail = pseudoNoise(u * 32, v * 32) * 12;
         const storm = pseudoNoise(u * 8 - time * 0.05, v * 8) * 8; // Dusty atmosphere swirls
         
+        let r = 190, g = 90, b = 55; // Iron oxide desert
+        
         if (marsNoise > 0.06) {
           // Dark volcanic basins (Syrtis Major)
-          return { r: 108 + detail + storm, g: 60 + detail, b: 48 + detail };
+          r = 108 + detail + storm;
+          g = 60 + detail;
+          b = 48 + detail;
         } else {
-          // Iron oxide desert dunes
-          return { r: 190 + detail + storm, g: 90 + detail, b: 55 + detail };
+          r = 190 + detail + storm;
+          g = 90 + detail;
+          b = 55 + detail;
         }
+        
+        // Darken Valles Marineris canyon floor (running horizontally along equator)
+        const du = u - 0.4;
+        const dv = v - 0.5;
+        if (Math.abs(du) < 0.15 && Math.abs(dv) < 0.035) {
+          const canyonShadow = (1 - Math.abs(du) / 0.15) * (1 - Math.abs(dv) / 0.035);
+          r -= canyonShadow * 45;
+          g -= canyonShadow * 25;
+          b -= canyonShadow * 15;
+        }
+        
+        return { r, g, b };
       }
       
       case 'jupiter': {
