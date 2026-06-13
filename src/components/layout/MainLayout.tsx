@@ -17,7 +17,8 @@ import {
   Layers,
   GraduationCap,
   Hash,
-  Telescope
+  Telescope,
+  Waves
 } from 'lucide-react';
 import ThemeSwitcher from './ThemeSwitcher';
 import { cn } from '@/lib/utils';
@@ -30,6 +31,7 @@ interface MainLayoutProps {
 const navLinks = [
   { name: 'Home', href: '/', icon: LayoutDashboard },
   { name: 'Library', href: '/formulas', icon: Compass },
+  { name: 'Wave Explorer', href: '/wave-explorer', icon: Waves },
   { name: 'Kids Corner', href: '/kids', icon: GraduationCap },
   { name: 'Roman Numerals', href: '/roman-numerals', icon: Hash },
   { name: 'Units & Measures', href: '/units', icon: Layers },
