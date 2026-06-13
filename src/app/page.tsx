@@ -70,7 +70,7 @@ export default async function Home() {
                   Harmonic Wave Explorer
                 </h3>
                 <p className="text-foreground/60 font-medium text-sm md:text-base leading-relaxed">
-                  Deconstruct sound. Customize fundamental wave pitches, amplitude, and phase offsets, and visually watch the mathematics of wave superposition and Fourier series come to life.
+                  Play with frequencies, blend waves together, and see how they combine to create different sounds.
                 </p>
                 <div className="pt-2">
                   <Link 

@@ -32,7 +32,7 @@ export default function WaveExplorer() {
   const [volume, setVolume] = useState(0.5);
   const [showIndividual, setShowIndividual] = useState(true);
   const [activeTab, setActiveTab] = useState<'visuals' | 'theory'>('visuals');
-  const [showGuide, setShowGuide] = useState(true);
+  const [showGuide, setShowGuide] = useState(false);
   
   // Wave state
   const [waves, setWaves] = useState<WaveConfig[]>([
@@ -659,7 +659,7 @@ export default function WaveExplorer() {
               Harmonic Wave <span className="gradient-text">Explorer</span>
             </h1>
             <p className="text-foreground/50 font-medium text-lg max-w-3xl">
-              Deconstruct complexity. Play with individual sine frequencies, customize amplitude and phase, and watch how they sum to construct complex mathematical wave structures.
+              Create your own sounds by mixing different wave speeds and volume, and see the science of sound waves in action.
             </p>
           </div>
         </header>
@@ -708,7 +708,7 @@ export default function WaveExplorer() {
                     </div>
                     <div>
                       <h2 className="text-base md:text-lg font-heading font-black text-foreground uppercase tracking-tight">
-                        🔊 What is this app & How to use it?
+                        What is this app & How to use it?
                       </h2>
                       <p className="text-xs text-foreground/50 font-medium">Read this quick 1-minute guide to see why wave math is so fascinating!</p>
                     </div>
@@ -730,7 +730,7 @@ export default function WaveExplorer() {
                       className="overflow-hidden space-y-6 pt-4 border-t border-border/40"
                     >
                       <p className="text-sm text-foreground/70 leading-relaxed font-medium">
-                        Did you know that <strong>every sound you hear</strong>—your voice, a piano note, or waves in the ocean—is actually built from simple, mathematical repeating waves? 
+                        Did you know that <strong>every sound you hear</strong> (such as your voice, a piano note, or waves in the ocean) is actually built from simple, mathematical repeating waves? 
                         This explorer lets you play with these waves, listen to them, and watch them combine in real time!
                       </p>
 
@@ -741,7 +741,7 @@ export default function WaveExplorer() {
                             Hear the Wave Math
                           </h4>
                           <p className="leading-relaxed font-medium">
-                            Click the blue <strong>Play Button (▶)</strong>. You will hear a pure tone. Slide the **Volume Slider** next to it to adjust the sound.
+                            Click the blue <strong>Play Button</strong>. You will hear a pure tone. Slide the **Volume Slider** next to it to adjust the sound.
                           </p>
                         </div>
 
@@ -781,7 +781,7 @@ export default function WaveExplorer() {
                             Analyze Your Voice
                           </h4>
                           <p className="leading-relaxed font-medium">
-                            Click the <strong>Microphone (🎤)</strong> icon and sing or whistle. The bottom graph (FFT) will mathematically break down your voice and highlight your pitch peaks!
+                            Click the <strong>Microphone</strong> icon and sing or whistle. The bottom graph (FFT) will mathematically break down your voice and highlight your pitch peaks!
                           </p>
                         </div>
                       </div>
