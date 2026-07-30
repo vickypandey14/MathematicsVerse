@@ -6,7 +6,7 @@ GitHub Repository: https://github.com/vickypandey14/MathematicsVerse
 
 ---
 
-## Core Features
+## Application Core Features
 
 ### Math Library
 A collection of formulas and principles ranging from basic algebra to advanced physics. Every page includes:
