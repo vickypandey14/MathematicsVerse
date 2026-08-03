@@ -1,4 +1,4 @@
-# MathematicsVerse
+# MathematicsVerse - Completed
 
 MathematicsVerse is a platform built to make exploring mathematical concepts clear and interactive. It uses a modern, technical design language called Aetheric Flux to provide a focused environment for students, teachers, and anyone interested in the logic of the universe.
 
